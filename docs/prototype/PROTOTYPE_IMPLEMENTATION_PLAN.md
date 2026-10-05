@@ -93,11 +93,11 @@ Implement headless commands/resolution for turn order, initiative, actions, move
 
 Implement active Function execution, visibility state, analysis, interrupt outcomes and downstream cancellation. Add one Ashfang training pattern with a real Weak Node outcome: interrupting LockTarget changes or cancels Pounce. Add pure Dart scenario tests and accessible UI state distinctions that are not color-only.
 
-### M7 — End-to-end first playable — IN PROGRESS
+### M7 — End-to-end first playable — PARTIAL; ACCEPTANCE PENDING
 
 From fresh install, complete onboarding, Life Quest, reward, Training, scenes/tutorial, Deck setup, training encounters and post-battle feedback without debug menus. Save/resume across app restart. Add integration coverage for the full chain and error/retry paths. Validate that character build changes combat decisions and Life completion is meaningful without coercion.
 
-### M8 — Pilot and measurement
+### M8 — Pilot and measurement — IMPLEMENTATION IN PROGRESS; HUMAN PILOT PENDING
 
 After privacy-safe event contracts are approved, instrument semantic milestones: character created, life quest completed, reward granted, training converted, deck confirmed, Function revealed, Weak Node exploited, battle completed and prototype completed. Run a seven-day pilot with feedback/interviews. Do not upload raw notes, evidence or health data. Decide next scope from observed activation and player understanding.
 

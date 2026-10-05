@@ -14,7 +14,7 @@ skills/astraea-orchestrator/SKILL.md
 
 ## Current milestone
 
-M0–M2 are implemented: Flutter foundation, pure Dart domain foundation, and the persisted Life Quest vertical path. M3 character creation and the M4 Scene 1–5 / Prepared Deck prototype excerpt are implemented. Training values and complete narrative scenes remain open; the deterministic M5 combat engine is implemented, with player-facing battle content pending balance review. M6 adds the Ashfang Weak Node tutorial; M7 save/resume and cross-feature integration remain in progress. See the [implementation roadmap](docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md) and [M0 verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
+M0–M2 are implemented: Flutter foundation, pure Dart domain foundation, and the persisted Life Quest vertical path. M3 character creation and the M4 Scene 1–5 / Prepared Deck prototype excerpt are implemented. Training values and complete narrative scenes remain open; the deterministic M5 combat engine is implemented, with player-facing battle content pending balance review. M6 adds the Ashfang Weak Node tutorial; M7 widget integration covers character, Life reward, Scenes 1–5, Deck, and Story restoration; full Training and battle acceptance remains open. See the [implementation roadmap](docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md) and [M0 verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
 
 The M0 execution contract is in:
 

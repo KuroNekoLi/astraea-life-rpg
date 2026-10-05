@@ -97,6 +97,31 @@ void main() {
       await tester.pumpAndSettle();
       expect((await database.recordsOf('preparedDeck')).length, 1);
       expect(tester.takeException(), isNull);
+
+      container.dispose();
+      final resumedContainer = ProviderContainer(
+        overrides: [databaseProvider.overrideWith((ref) async => database)],
+      );
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: resumedContainer,
+          child: const AstraeaApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      resumedContainer.read(routerProvider).go('/story');
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Scene 1–5 complete. Your Prepared Deck is saved.'),
+        findsOneWidget,
+      );
+      expect(
+        (await database.recordsOf(
+          'preparedDeck',
+        )).single.read<String>('payload'),
+        contains('spellIds'),
+      );
+      resumedContainer.dispose();
     },
   );
 }
