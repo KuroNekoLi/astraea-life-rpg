@@ -1,0 +1,15 @@
+{
+  "contentVersion": "mvp-quests-1",
+  "formulaVersion": "mvp-prototype-1",
+  "durationAnchors": [[10,10000],[20,18000],[30,25000],[60,40000],[120,55000]],
+  "difficultyFactors": {"easy":10000,"normal":10000,"hard":10000,"epic":10000},
+  "evidenceFactors": {"selfReport":10000,"lightweight":10500,"connected":11000,"outcome":10000},
+  "growthPotentialFactors": {"fitness":10000,"learning":10000,"languages":8572},
+  "templates": [
+    {"id":"fitness.walk10","domain":"fitness","title":"Walk 10 minutes","durationMinutes":10,"group":"fitness","difficulty":"easy"},
+    {"id":"fitness.exercise20","domain":"fitness","title":"Exercise 20 minutes","durationMinutes":20,"group":"fitness","difficulty":"normal"},
+    {"id":"learning.read20","domain":"learning","title":"Read 20 minutes","durationMinutes":20,"group":"learning","difficulty":"normal"},
+    {"id":"learning.study20","domain":"learning","title":"Study 20 minutes","durationMinutes":20,"group":"learning","difficulty":"normal"},
+    {"id":"languages.practice15","domain":"languages","title":"Practice a language 15 minutes","durationMinutes":15,"group":"languages","difficulty":"normal"}
+  ]
+}

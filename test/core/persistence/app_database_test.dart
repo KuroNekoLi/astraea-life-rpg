@@ -14,7 +14,7 @@ void main() {
       final row = await database
           .customSelect('PRAGMA user_version')
           .getSingle();
-      expect(row.read<int>('user_version'), 1);
+      expect(row.read<int>('user_version'), 2);
     } finally {
       await database.close();
     }
@@ -23,7 +23,7 @@ void main() {
       final row = await reopened
           .customSelect('PRAGMA user_version')
           .getSingle();
-      expect(row.read<int>('user_version'), 1);
+      expect(row.read<int>('user_version'), 2);
     } finally {
       await reopened.close();
     }

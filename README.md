@@ -14,7 +14,7 @@ skills/astraea-orchestrator/SKILL.md
 
 ## Current milestone
 
-M0 — Project Bootstrap complete; M1 — Domain Foundation complete. M2 is next. See the [implementation roadmap](docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md) and [M0 verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
+M0–M2 are implemented: Flutter foundation, pure Dart domain foundation, and the persisted Life Quest vertical path. M3 is next. See the [implementation roadmap](docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md) and [M0 verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
 
 The M0 execution contract is in:
 
@@ -55,14 +55,13 @@ flutter run
 The generated Drift source and application `pubspec.lock` are committed.
 Regenerate after changing the database declaration. `freezed` and
 `json_serializable` are installed for later immutable state/DTOs; M0 does not
-invent models just to exercise generators. Drift schema 1 contains no domain
-tables. Its native SQLite connection opens lazily through `databaseProvider`,
+invent models just to exercise generators. Drift schema 2 contains a versioned local record store for M2 quest activity, evidence, timer state, grants and projections. Its native SQLite connection opens lazily through `databaseProvider`,
 uses the application support directory and closes when the provider scope ends.
 The shell performs no database writes.
 
 Ownership:
 
-- `lib/app/`: bootstrap, Riverpod composition and go_router lifecycle (`/` → `/home`).
+- `lib/app/`: bootstrap, Riverpod composition and go_router lifecycle (`/` → `/home`; `/life` opens Life Quest list/detail/timer/completion).
 - `lib/core/persistence/`: Drift database and mobile native connection.
 - `lib/design_system/theme/`: provisional Material theme entry; not approved final UI.
 - `lib/game_engine/rng/`: injected pure Dart RNG; same-seed repeatability on the pinned runtime, without a cross-runtime replay guarantee.

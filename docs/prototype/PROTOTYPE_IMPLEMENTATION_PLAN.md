@@ -59,7 +59,7 @@ Acceptance:
 - Every unresolved formula/content rate is an explicit input, not a guessed default.
 - Pure Dart unit tests exercise happy paths, invalid data, retries and projections.
 
-### M2 — Life Quest vertical path
+### M2 — Life Quest vertical path — DONE (prototype scope)
 
 Screens: list, detail, timer, completion. Application state handles active timer lifecycle and restoration; repositories persist quest/activity/evidence and transactionally record the reward ledger and projections.
 
@@ -75,7 +75,7 @@ Complete a configured quest through timer or self-report
 
 Retrying completion must not duplicate activity or grant. Timer duration survives pause/resume and process restoration according to mobile lifecycle support. Evidence level communicates what the timer can verify. Test crash/retry and SQLite transaction boundaries. No connected health integrations in this milestone.
 
-### M3 — Character and Training path
+### M3 — Character and Training path — IN PROGRESS
 
 Character creation validates eight attributes, 32 allocation points, Base 8 and allocation cap 15. Fate reroll uses injected deterministic randomness, and the player accepts the replacement result. Authored weapon choices remain content data.
 
@@ -123,4 +123,4 @@ For cross-feature journeys, run the relevant integration suite. Player-facing mi
 
 ## Current next action
 
-M1 implementation and required Flutter/pure Dart checks pass. An independent reviewer agent was unavailable in this execution context, so code review is a primary-agent review. Next, implement M2 as the first persisted player-facing flow.
+M2 is implemented with versioned quest/reward content, a Drift-backed Life Quest flow, timer restoration, self-report/timer evidence, idempotent completion, reward confirmation and projection rebuilds. Flutter format/analyze/test gates pass. M3 is next; Training balance values remain explicit authored inputs.
