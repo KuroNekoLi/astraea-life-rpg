@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # M0 has no tables, so a generated table manager has no responsibility.
+          generate_manager: false
