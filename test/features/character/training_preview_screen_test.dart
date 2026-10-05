@@ -72,13 +72,23 @@ void main() {
     expect(find.text('18 Cognitive Potential'), findsOneWidget);
     expect(find.text('Analysis 12 → 13'), findsOneWidget);
 
+    await tester.ensureVisible(find.text('Train Analysis'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Train Analysis'));
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 100));
     await tester.pumpAndSettle();
 
     expect(
       find.text('Training complete. Analysis increased permanently.'),
       findsOneWidget,
     );
+    await tester.scrollUntilVisible(
+      find.text('Analysis growth is active'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
     expect(find.text('Analysis growth is active'), findsOneWidget);
     expect(find.text('+1 permanent Analysis from Training'), findsOneWidget);
     expect((await database.recordsOf('trainingConversion')).length, 1);

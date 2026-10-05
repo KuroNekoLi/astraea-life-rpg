@@ -71,8 +71,7 @@ void main() {
                 ),
               )
               as Map<String, dynamic>;
-      final graphJson =
-          encounter['functionGraph'] as Map<String, dynamic>;
+      final graphJson = encounter['functionGraph'] as Map<String, dynamic>;
       final graph = FunctionGraph(
         id: graphJson['id'] as String,
         nodes: (graphJson['nodes'] as List<dynamic>)

@@ -258,37 +258,37 @@ final class TrainingRepository {
     final attributes = character['attributes'] as Map<String, dynamic>;
     return {
       for (final attribute in AttributeType.values)
-        attribute: AttributeValue(
-          baseValue: attributes[attribute.name] as int,
-        ),
+        attribute: AttributeValue(baseValue: attributes[attribute.name] as int),
     };
   }
 
   Future<List<TrainingConversion>> _conversions() async {
     final rows = await database.recordsOf('trainingConversion');
-    return rows.map((row) {
-      final data =
-          jsonDecode(row.read<String>('payload')) as Map<String, dynamic>;
-      final deltas = data['attributeDeltas'] as Map<String, dynamic>;
-      return TrainingConversion(
-        id: data['id'] as String,
-        userId: data['userId'] as String,
-        characterId: data['characterId'] as String,
-        trainingDefinitionId: data['trainingDefinitionId'] as String,
-        trainingContentVersion: data['trainingContentVersion'] as String,
-        potentialCategory: GrowthPotentialCategory.values.byName(
-          data['potentialCategory'] as String,
-        ),
-        amountSpent: data['amountSpent'] as int,
-        attributeDeltas: {
-          for (final entry in deltas.entries)
-            AttributeType.values.byName(entry.key): entry.value as int,
-        },
-        idempotencyKey: data['idempotencyKey'] as String,
-        createdAt: DateTime.parse(data['createdAt'] as String),
-        schemaVersion: data['schemaVersion'] as int? ?? 1,
-      );
-    }).toList(growable: false);
+    return rows
+        .map((row) {
+          final data =
+              jsonDecode(row.read<String>('payload')) as Map<String, dynamic>;
+          final deltas = data['attributeDeltas'] as Map<String, dynamic>;
+          return TrainingConversion(
+            id: data['id'] as String,
+            userId: data['userId'] as String,
+            characterId: data['characterId'] as String,
+            trainingDefinitionId: data['trainingDefinitionId'] as String,
+            trainingContentVersion: data['trainingContentVersion'] as String,
+            potentialCategory: GrowthPotentialCategory.values.byName(
+              data['potentialCategory'] as String,
+            ),
+            amountSpent: data['amountSpent'] as int,
+            attributeDeltas: {
+              for (final entry in deltas.entries)
+                AttributeType.values.byName(entry.key): entry.value as int,
+            },
+            idempotencyKey: data['idempotencyKey'] as String,
+            createdAt: DateTime.parse(data['createdAt'] as String),
+            schemaVersion: data['schemaVersion'] as int? ?? 1,
+          );
+        })
+        .toList(growable: false);
   }
 
   Map<String, dynamic> _conversionPayload(TrainingConversion conversion) => {

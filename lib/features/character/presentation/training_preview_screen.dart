@@ -13,8 +13,7 @@ class TrainingPreviewScreen extends ConsumerStatefulWidget {
       _TrainingPreviewScreenState();
 }
 
-class _TrainingPreviewScreenState
-    extends ConsumerState<TrainingPreviewScreen> {
+class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
   static const _labels = {
     GrowthPotentialCategory.physical: 'Physical Potential',
     GrowthPotentialCategory.cognitive: 'Cognitive Potential',
@@ -163,9 +162,7 @@ class _TrainingPreviewScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              'Training complete. Analysis increased permanently.',
-            ),
+            content: Text('Training complete. Analysis increased permanently.'),
           ),
         );
       }

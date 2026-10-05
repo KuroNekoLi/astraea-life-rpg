@@ -85,7 +85,9 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
     var effectiveAnalysis = 8;
     try {
       final database = await ref.read(databaseProvider.future);
-      effectiveAnalysis = await TrainingRepository(database).effectiveAnalysis();
+      effectiveAnalysis = await TrainingRepository(
+        database,
+      ).effectiveAnalysis();
     } catch (_) {
       // The standalone tutorial remains usable before character creation.
     }

@@ -16,19 +16,8 @@ jobs:
           cache: true
       - run: flutter pub get --enforce-lockfile
       - run: dart run build_runner build
-      - name: Format sources
-        run: dart format .
-      - name: Upload formatted Golden Path files
-        uses: actions/upload-artifact@v4
-        with:
-          name: formatted-golden-path
-          path: |
-            lib/features/character/application/training_preview_provider.dart
-            lib/features/character/data/training_repository.dart
-            lib/features/character/presentation/training_preview_screen.dart
-            lib/features/story/presentation/function_lab_screen.dart
-            test/features/character/training_repository_test.dart
-            test/integration/golden_path_progression_test.dart
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
       - run: dart test test/domain test/game_engine
