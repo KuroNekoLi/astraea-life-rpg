@@ -6,12 +6,17 @@ import '../features/story/presentation/story_screen.dart';
 import '../features/story/presentation/function_lab_screen.dart';
 import '../features/character/presentation/character_creation_screen.dart';
 import '../features/life_quest/presentation/life_screen.dart';
+import '../features/character/presentation/training_preview_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     routes: [
       GoRoute(path: '/', redirect: (_, _) => '/home'),
       GoRoute(path: '/story', builder: (_, _) => const StoryScreen()),
+      GoRoute(
+        path: '/training',
+        builder: (_, _) => const TrainingPreviewScreen(),
+      ),
       GoRoute(
         path: '/function-lab',
         builder: (_, _) => const FunctionLabScreen(),

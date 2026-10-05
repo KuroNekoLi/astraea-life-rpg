@@ -75,11 +75,11 @@ Complete a configured quest through timer or self-report
 
 Retrying completion must not duplicate activity or grant. Timer duration survives pause/resume and process restoration according to mobile lifecycle support. Evidence level communicates what the timer can verify. Test crash/retry and SQLite transaction boundaries. No connected health integrations in this milestone.
 
-### M3 — Character and Training path — IN PROGRESS
+### M3 — Character and Training path — PARTIAL; POLICY DECISION REQUIRED
 
-Character creation validates eight attributes, 32 allocation points, Base 8 and allocation cap 15. Fate reroll uses injected deterministic randomness, and the player accepts the replacement result. Authored weapon choices remain content data.
+Character creation validates eight attributes, 32 allocation points, Base 8 and allocation cap 15. Authored weapon choices remain content data. A read-only Training preview displays persisted Growth Potential projections without spending them.
 
-Training reads available potential, previews an authored TrainingDefinition, and commits a single idempotent TrainingConversion. Rebuild AttributeState from its base values and conversion history. Training costs, aptitude modifiers, efficiency curves and growth values require approved content/policy inputs where source specifications still say TBD.
+Training conversion remains unavailable until costs, aptitude modifiers, efficiency curves, Fate/Aptitude rules, and growth values have approved content/policy inputs where source specifications still say TBD. Once approved, Training must preview an authored TrainingDefinition and commit one idempotent TrainingConversion. Rebuild AttributeState from base values and conversion history.
 
 ### M4 — Story runtime, Scene 1–5 and Prepared Deck — IMPLEMENTED PROTOTYPE EXCERPT
 
@@ -129,4 +129,4 @@ For cross-feature journeys, run the relevant integration suite. Player-facing mi
 - M7: partial. Character → Life reward → story/deck journey and persistence checks exist; Training, playable integrated battle, post-battle feedback, and battle resume UI remain incomplete.
 - M8: local opt-in measurement and a draft pilot protocol are implemented. Human pilot has not been run; owner decisions and M3/M7 completion are prerequisites to meaningful pilot validation.
 
-The next product decision is to approve Training/Aptitude/Fate policy values. Then complete the M3 conversion flow and M7 integrated encounter before recruiting pilot participants. Never report the MVP or human-pilot acceptance as complete while those gaps remain.
+The next product decision is to approve Training/Aptitude/Fate policy values. The Home screen now links to a read-only Training preview so players can see accumulated Potential and understand why it has not changed their Attributes. Then complete the M3 conversion flow and M7 integrated encounter before recruiting pilot participants. Never report the MVP or human-pilot acceptance as complete while those gaps remain.
