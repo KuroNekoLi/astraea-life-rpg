@@ -97,7 +97,7 @@ Implement active Function execution, visibility state, analysis, interrupt outco
 
 From fresh install, complete onboarding, Life Quest, reward, Training, scenes/tutorial, Deck setup, training encounters and post-battle feedback without debug menus. Save/resume across app restart. Add integration coverage for the full chain and error/retry paths. Validate that character build changes combat decisions and Life completion is meaningful without coercion.
 
-### M8 — Pilot and measurement — IMPLEMENTATION IN PROGRESS; HUMAN PILOT PENDING
+### M8 — Pilot and measurement — MEASUREMENT FOUNDATION IMPLEMENTED; HUMAN PILOT PENDING
 
 After privacy-safe event contracts are approved, instrument semantic milestones: character created, life quest completed, reward granted, training converted, deck confirmed, Function revealed, Weak Node exploited, battle completed and prototype completed. Run a seven-day pilot with feedback/interviews. Do not upload raw notes, evidence or health data. Decide next scope from observed activation and player understanding.
 
@@ -121,6 +121,12 @@ dart test test/domain test/game_engine
 
 For cross-feature journeys, run the relevant integration suite. Player-facing milestones also require visual evidence and real-player review before acceptance. CI must run the same applicable gates.
 
-## Current next action
+## Delivery status
 
-M2 is implemented with versioned quest/reward content, a Drift-backed Life Quest flow, timer restoration, self-report/timer evidence, idempotent completion, reward confirmation and projection rebuilds. Flutter format/analyze/test gates pass. M3 is next; Training balance values remain explicit authored inputs.
+- M0–M2: implemented and pushed.
+- M3: character creation is implemented; Aptitude/Fate and Training conversion remain blocked on unspecified policy values.
+- M4–M6: prototype story/deck excerpt, deterministic combat core, and standalone Weak Node tutorial are implemented. These are not the full authored narrative or integrated battle experience.
+- M7: partial. Character → Life reward → story/deck journey and persistence checks exist; Training, playable integrated battle, post-battle feedback, and battle resume UI remain incomplete.
+- M8: local opt-in measurement and a draft pilot protocol are implemented. Human pilot has not been run; owner decisions and M3/M7 completion are prerequisites to meaningful pilot validation.
+
+The next product decision is to approve Training/Aptitude/Fate policy values. Then complete the M3 conversion flow and M7 integrated encounter before recruiting pilot participants. Never report the MVP or human-pilot acceptance as complete while those gaps remain.

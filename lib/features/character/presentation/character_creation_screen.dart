@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_providers.dart';
+import '../../../core/measurement/prototype_event_recorder.dart';
 import '../domain/attribute.dart';
 
 class CharacterCreationScreen extends ConsumerStatefulWidget {
@@ -153,6 +154,15 @@ class _CharacterCreationScreenState
         payload: jsonEncode(payload),
         createdAt: now,
       );
+      try {
+        await PrototypeEventRecorder(database, DateTime.now).record(
+          type: PrototypeEventType.characterCreated,
+          properties: {'contentVersion': 'character-creation-1'},
+          idempotencyKey: id,
+        );
+      } catch (_) {
+        // Measurement is optional and cannot block character creation.
+      }
       if (mounted) context.go('/life');
     } finally {
       if (mounted) setState(() => _saving = false);

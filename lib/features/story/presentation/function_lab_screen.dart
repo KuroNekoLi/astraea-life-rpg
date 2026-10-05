@@ -1,20 +1,24 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 
+import '../../../app/app_providers.dart';
+import '../../../core/measurement/prototype_event_recorder.dart';
 import '../../../game_engine/function_graph/function_graph.dart';
 import '../../../game_engine/function_graph/function_runtime.dart';
 import '../../../game_engine/rng/rng.dart';
 
-class FunctionLabScreen extends StatefulWidget {
+class FunctionLabScreen extends ConsumerStatefulWidget {
   const FunctionLabScreen({super.key});
 
   @override
-  State<FunctionLabScreen> createState() => _FunctionLabScreenState();
+  ConsumerState<FunctionLabScreen> createState() => _FunctionLabScreenState();
 }
 
-class _FunctionLabScreenState extends State<FunctionLabScreen> {
+class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
   late Future<_AshfangData> _data;
   FunctionKnowledge _knowledge = FunctionKnowledge();
   ActiveFunctionState? _function;
@@ -205,36 +209,70 @@ class _FunctionLabScreenState extends State<FunctionLabScreen> {
         'LockTarget is active. It is interruptible, but its role is not yet analyzed.';
   });
 
-  void _analyze(_AshfangData data) => setState(() {
-    final result = const FunctionRuntimeEngine().analyze(
-      graph: data.graph,
-      nodeId: 'lock-target',
-      analysisRoll:
-          SeededRng(data.tutorialSeed + _analysisAttempt++).nextInt(20) + 1,
-      analysisModifier: 0,
-      difficulty: data.analysisDifficulty,
-      knowledge: _knowledge,
-      rules: data.rules,
-    );
-    _knowledge = result.knowledge;
-    _feedback = result.revealed
-        ? 'Weak Node found: interrupting LockTarget cancels downstream Pounce.'
-        : 'Analysis did not reveal the node. Try again.';
-  });
+  void _analyze(_AshfangData data) {
+    var revealed = false;
+    setState(() {
+      final result = const FunctionRuntimeEngine().analyze(
+        graph: data.graph,
+        nodeId: 'lock-target',
+        analysisRoll:
+            SeededRng(data.tutorialSeed + _analysisAttempt++).nextInt(20) + 1,
+        analysisModifier: 0,
+        difficulty: data.analysisDifficulty,
+        knowledge: _knowledge,
+        rules: data.rules,
+      );
+      _knowledge = result.knowledge;
+      revealed = result.revealed;
+      _feedback = result.revealed
+          ? 'Weak Node found: interrupting LockTarget cancels downstream Pounce.'
+          : 'Analysis did not reveal the node. Try again.';
+    });
+    if (revealed) {
+      unawaited(
+        _record(PrototypeEventType.functionRevealed, 'ashfang-lock-target'),
+      );
+    }
+  }
 
-  void _interrupt(_AshfangData data) => setState(() {
-    final result = const FunctionRuntimeEngine().interrupt(
-      graph: data.graph,
-      function: _function!,
-      nodeId: 'lock-target',
-      knowledge: _knowledge,
-      rules: data.rules,
-    );
-    _function = result.function;
-    _feedback = result.success
-        ? 'LockTarget interrupted. Pounce is cancelled.'
-        : 'This Function could not be interrupted.';
-  });
+  void _interrupt(_AshfangData data) {
+    var exploited = false;
+    setState(() {
+      final result = const FunctionRuntimeEngine().interrupt(
+        graph: data.graph,
+        function: _function!,
+        nodeId: 'lock-target',
+        knowledge: _knowledge,
+        rules: data.rules,
+      );
+      _function = result.function;
+      exploited = result.success;
+      _feedback = result.success
+          ? 'LockTarget interrupted. Pounce is cancelled.'
+          : 'This Function could not be interrupted.';
+    });
+    if (exploited) {
+      unawaited(
+        _record(PrototypeEventType.weakNodeExploited, 'ashfang-lock-target'),
+      );
+    }
+  }
+
+  Future<void> _record(PrototypeEventType type, String key) async {
+    try {
+      final database = await ref.read(databaseProvider.future);
+      await PrototypeEventRecorder(database, DateTime.now).record(
+        type: type,
+        properties: {
+          'encounterId': 'ashfang-training',
+          'contentVersion': 'ashfang-training-1',
+        },
+        idempotencyKey: key,
+      );
+    } catch (_) {
+      // Optional local measurement must not interrupt the tutorial.
+    }
+  }
 }
 
 final class _AshfangData {

@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/persistence/app_database.dart';
+import '../../../core/measurement/prototype_event_recorder.dart';
 
 final class QuestTemplateData {
   const QuestTemplateData({
@@ -243,6 +244,29 @@ final class LifeQuestRepository {
         'timer-active',
       ]);
     });
+    final recorder = PrototypeEventRecorder(database, clock);
+    try {
+      await recorder.record(
+        type: PrototypeEventType.lifeQuestCompleted,
+        properties: {
+          'lifeDomain': quest['domain'] as String,
+          'questTemplateId': quest['id'] as String,
+        },
+        idempotencyKey: activityId,
+      );
+      if (confirmReward) {
+        await recorder.record(
+          type: PrototypeEventType.rewardGranted,
+          properties: {
+            'lifeDomain': quest['domain'] as String,
+            'contentVersion': catalogData['formulaVersion'] as String,
+          },
+          idempotencyKey: activityId,
+        );
+      }
+    } catch (_) {
+      // Local measurement must never undo or block an already committed quest.
+    }
   }
 
   Future<void> _rebuildProjections(DateTime now) async {

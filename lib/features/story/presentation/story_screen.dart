@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import '../../../app/app_providers.dart';
 import '../../../core/persistence/app_database.dart';
+import '../../../core/measurement/prototype_event_recorder.dart';
 import '../domain/story_state.dart';
 import '../../../game_engine/function_graph/function_graph.dart';
 
@@ -245,6 +246,19 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
         );
       }
     });
+    if (scene['id'] == 'scene-5') {
+      try {
+        await PrototypeEventRecorder(view.database, DateTime.now).record(
+          type: PrototypeEventType.deckConfirmed,
+          properties: {
+            'contentVersion': view.spells['contentVersion'] as String,
+          },
+          idempotencyKey: 'prepared-deck-main',
+        );
+      } catch (_) {
+        // Measurement is optional and cannot block story progression.
+      }
+    }
   }
 }
 
