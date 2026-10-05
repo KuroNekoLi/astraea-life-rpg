@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/home/presentation/home_screen.dart';
+import '../features/story/presentation/story_screen.dart';
 import '../features/character/presentation/character_creation_screen.dart';
 import '../features/life_quest/presentation/life_screen.dart';
 
@@ -9,6 +10,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     routes: [
       GoRoute(path: '/', redirect: (_, _) => '/home'),
+      GoRoute(path: '/story', builder: (_, _) => const StoryScreen()),
       GoRoute(
         path: '/character/create',
         builder: (_, _) => const CharacterCreationScreen(),

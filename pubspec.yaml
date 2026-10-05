@@ -31,3 +31,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/content/quests/mvp_v1.json
+    - assets/content/story/scene_1_5_v1.json
+    - assets/content/spells/mvp_pool_v1.json

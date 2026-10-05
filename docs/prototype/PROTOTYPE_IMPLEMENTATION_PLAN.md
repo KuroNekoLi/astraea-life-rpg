@@ -81,11 +81,11 @@ Character creation validates eight attributes, 32 allocation points, Base 8 and 
 
 Training reads available potential, previews an authored TrainingDefinition, and commits a single idempotent TrainingConversion. Rebuild AttributeState from its base values and conversion history. Training costs, aptitude modifiers, efficiency curves and growth values require approved content/policy inputs where source specifications still say TBD.
 
-### M4 — Story runtime, Scene 1–5 and Prepared Deck
+### M4 — Story runtime, Scene 1–5 and Prepared Deck — IMPLEMENTED PROTOTYPE EXCERPT
 
 Load versioned story/content data separately from player state. Implement dialogue/narration/choice steps, revision-checked transitions, objective flags, Function Theory interaction, Chant/Chantless teaching, Spell Card explanation and six-slot Prepared Deck selection. Do not reveal restricted canon. Narrative copy and reveal timing follow the narrative source documents and narrative review; no engineering-authored canon.
 
-### M5 — Deterministic combat core
+### M5 — Deterministic combat core — IN PROGRESS
 
 Implement headless commands/resolution for turn order, initiative, actions, movement, reactions, Mana, weapon/spell use, defeat and victory. Inject seeded RNG; the same initial state, seed and command sequence must produce identical state and events. Implement one training encounter only after combat mechanics match the approved combat spec. Numerical balance formulas marked TBD remain content/policy inputs.
 

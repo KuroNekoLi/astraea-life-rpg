@@ -14,7 +14,7 @@ skills/astraea-orchestrator/SKILL.md
 
 ## Current milestone
 
-M0–M2 are implemented: Flutter foundation, pure Dart domain foundation, and the persisted Life Quest vertical path. M3 character creation is underway; executable Training remains pending authored balance values. See the [implementation roadmap](docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md) and [M0 verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
+M0–M2 are implemented: Flutter foundation, pure Dart domain foundation, and the persisted Life Quest vertical path. M3 character creation and the M4 Scene 1–5 / Prepared Deck prototype excerpt are implemented. Training balance and complete narrative scenes remain in progress. See the [implementation roadmap](docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md) and [M0 verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
 
 The M0 execution contract is in:
 

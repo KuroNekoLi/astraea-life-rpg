@@ -1,0 +1,11 @@
+{
+  "contentVersion":"story-scene-1-5-1",
+  "status":"prototype-excerpt",
+  "scenes":[
+    {"id":"scene-1","title":"Astraea Academy","beats":["星環中央魔導學院。","集魔法教育、研究與異形應對人才培育於一身，世界上最重要的魔導學府之一。","……終於。真的考上了。從那一天開始，我就一直想來這裡。總有一天……我也想成為能夠用魔法保護別人的人。先去報到吧。","目標：新生報到 · 前往學院正門與佐伯悠真交談。"],"flags":["arrived_at_academy"]},
+    {"id":"scene-2","title":"Aptitude Assessment","beats":["建立你的 Astraea 自我：配置八項能力，選擇初始武器。","每項能力 Base 8；配置 32 點；初始值上限 15。","Life Progress 表示投入歷史，不等同於現實能力評級。"],"flags":["character_created"]},
+    {"id":"scene-3","title":"Function Theory","beats":["Magic is not a wish. Magic is a method of transforming World State A into B.","f(S0)=S1","Function Graph：Gather(Energy) → Shape(Bolt) → Move(Target). 點選節點查看其在術式序列中的作用。"],"flags":["function_theory_learned"]},
+    {"id":"scene-4","title":"Full Chant and Chantless","beats":["Full Chant: Human → Chant → Magic System","Chantless: Human → Mental Encoding → Magic System","Chantless 並非省略處理；編碼由施術者內化。"],"flags":["chant_methods_learned"]},
+    {"id":"scene-5","title":"Spell Cards and Prepared Deck","beats":["Function Graph → Encode → Spell Card → Prepared Deck → Cast","Spell Card 保存已構築的術式 request structure；Prepared Deck 是預先載入的術式，不是隨機抽牌。","選擇六張術式卡加入 Prepared Deck。"],"flags":["deck_confirmed"]}
+  ]
+}

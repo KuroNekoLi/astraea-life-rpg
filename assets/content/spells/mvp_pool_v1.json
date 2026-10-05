@@ -1,0 +1,15 @@
+{
+  "contentVersion":"spell-pool-proposal-1",
+  "status":"prototype-content-names-from-MVP-proposal",
+  "spells":[
+    {"id":"arc_bolt","name":"Arc Bolt","role":"Attack"},
+    {"id":"focused_shot","name":"Focused Shot","role":"Attack"},
+    {"id":"energy_burst","name":"Energy Burst","role":"Attack"},
+    {"id":"barrier","name":"Barrier","role":"Defense"},
+    {"id":"deflect","name":"Deflect","role":"Defense"},
+    {"id":"step_shift","name":"Step Shift","role":"Mobility"},
+    {"id":"weak_node_scan","name":"Weak Node Scan","role":"Analysis"},
+    {"id":"mana_stabilize","name":"Mana Stabilize","role":"Support"},
+    {"id":"interrupt_pulse","name":"Interrupt Pulse","role":"Counter"}
+  ]
+}
