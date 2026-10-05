@@ -34,6 +34,10 @@ class HomeScreen extends StatelessWidget {
             onPressed: () => context.push('/story'),
             child: const Text('Continue Academy Story'),
           ),
+          OutlinedButton(
+            onPressed: () => context.push('/function-lab'),
+            child: const Text('Function Analysis Tutorial'),
+          ),
         ],
       ),
     ),

@@ -1,0 +1,17 @@
+{
+  "contentVersion":"ashfang-training-1",
+  "balanceStatus":"illustrative-inputs-awaiting-playtest",
+  "analysisDifficulty":12,
+  "tutorialSeed":417,
+  "enemy":"Ashfang Training Construct",
+  "functionGraph": {
+    "id":"ashfang.pounce.v1",
+    "nodes":[
+      {"id":"detect-target","type":"DetectTarget","interruptible":false},
+      {"id":"lock-target","type":"LockTarget","interruptible":true},
+      {"id":"pounce","type":"Pounce","interruptible":false}
+    ],
+    "edges":[["detect-target","lock-target"],["lock-target","pounce"]],
+    "weakNodeRules":[{"id":"lock-target-weak-node","nodeId":"lock-target","cancelNodes":["pounce"]}]
+  }
+}

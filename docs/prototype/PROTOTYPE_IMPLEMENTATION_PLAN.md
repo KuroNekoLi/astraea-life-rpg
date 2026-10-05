@@ -89,11 +89,11 @@ Load versioned story/content data separately from player state. Implement dialog
 
 Implement headless commands/resolution for turn order, initiative, actions, movement, reactions, Mana, weapon/spell use, defeat and victory. Inject seeded RNG; the same initial state, seed and command sequence must produce identical state and events. Implement one training encounter only after combat mechanics match the approved combat spec. Numerical balance formulas marked TBD remain content/policy inputs.
 
-### M6 — Function Graph / Weak Node — IN PROGRESS
+### M6 — Function Graph / Weak Node — IMPLEMENTED TUTORIAL SCENARIO
 
 Implement active Function execution, visibility state, analysis, interrupt outcomes and downstream cancellation. Add one Ashfang training pattern with a real Weak Node outcome: interrupting LockTarget changes or cancels Pounce. Add pure Dart scenario tests and accessible UI state distinctions that are not color-only.
 
-### M7 — End-to-end first playable
+### M7 — End-to-end first playable — IN PROGRESS
 
 From fresh install, complete onboarding, Life Quest, reward, Training, scenes/tutorial, Deck setup, training encounters and post-battle feedback without debug menus. Save/resume across app restart. Add integration coverage for the full chain and error/retry paths. Validate that character build changes combat decisions and Life completion is meaningful without coercion.
 
