@@ -756,6 +756,26 @@ Must respect spoiler timing.
 
 ---
 
+## OD-026 — MVP Training, Aptitude, and Fate Prototype Values
+
+**Status:** ACCEPTED
+**Priority:** P0
+**Scope:** MVP prototype content only; not canon or final launch balance.
+
+### Decision
+
+The owner approved a concrete versioned prototype policy in `assets/content/progression/character_growth_mvp_v1.json` (`character-growth-mvp-1`):
+
+- Training base cost 18 Potential for +1 permanent growth to one authored Attribute.
+- Aptitude is one injected `1d6` per Attribute, affecting that Attribute's Training cost only: ratings 1–2 add 2 Potential, 3–4 add 0, 5–6 subtract 2.
+- Training has a per-Attribute soft cost curve: prior growth 0–4 costs ×1; 5–9 costs ×2; 10+ costs ×3, applied after the Aptitude adjustment.
+- Once per character, Fate may reroll one chosen Aptitude with `1d6`; the new result must be accepted, including a tie or lower result.
+- Aptitude never directly modifies the Attribute value. Roll outcomes and conversions retain the content version and deterministic RNG state needed for replay.
+
+Review these values after MVP playtesting. Updating the values requires a new content version; existing conversions remain bound to the version they recorded.
+
+---
+
 # Recommended Decision Order
 
 Resolve in this exact order:

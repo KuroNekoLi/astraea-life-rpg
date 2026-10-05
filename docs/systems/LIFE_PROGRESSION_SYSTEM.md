@@ -981,6 +981,8 @@ Convert Potential
 Character Growth
 ```
 
+MVP prototype conversion costs, growth amounts, Aptitude adjustments, and Fate reroll rules are versioned in `assets/content/progression/character_growth_mvp_v1.json` (`character-growth-mvp-1`). They do not change the rule that Life activity grants Potential rather than Attributes directly.
+
 ---
 
 # 34. Training Session Goal

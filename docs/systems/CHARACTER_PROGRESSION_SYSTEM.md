@@ -135,6 +135,29 @@ Physical Potential
 
 Training 的作用是讓玩家做 build choice，而不是直接自由點數。
 
+## 6.1 MVP Prototype Balance — Accepted for `character-growth-mvp-1`
+
+These are explicit prototype values for the MVP and are not canon or launch balance. The policy lives in `assets/content/progression/character_growth_mvp_v1.json`; each TrainingConversion records the policy/content version used.
+
+| Training | Potential category | Attribute gained |
+| --- | --- | --- |
+| Reaction Drill | Physical | Processing |
+| Precision Movement | Physical | Precision |
+| Function Analysis Drill | Cognitive | Analysis |
+| Complexity Exercise | Cognitive | Computation |
+| Mana Control Drill | Cognitive | Efficiency |
+| Intent Encoding Drill | Communication | Mana Output |
+
+Each completed Training session spends the quoted Potential and grants **+1 permanent growth** to the listed Attribute. The base cost is **18 Potential**. Apply Aptitude adjustment first (`1–2: +2`, `3–4: +0`, `5–6: −2`), then multiply by the growth tier for the same Attribute (`0–4 prior growth: ×1`, `5–9: ×2`, `10+: ×3`). For example, neutral Aptitude costs 18/36/54 Potential across those tiers. Costs remain positive at all configured ratings.
+
+### Aptitude and Fate
+
+- Roll one injected-RNG `1d6` for each of the eight Attributes in canonical attribute order. Store all eight ratings and the policy content version.
+- Aptitude affects Training cost only. It does not alter Base Attributes or directly add/subtract effective Attribute value.
+- Once per character, after viewing the profile, the player may choose one Attribute and reroll its `1d6`. The replacement is mandatory, even if it is equal or lower. No second reroll is allowed.
+- Persist the resulting values, Fate-used flag, RNG state/seed, and policy version so save/resume and replay preserve the result.
+- Growth cost tiers are a prototype soft cap; they are not a world/canon hard cap. Revisit all balance values after player testing.
+
 # 7. Attribute Progress
 
 **GDD Proposal**
@@ -158,7 +181,7 @@ base_value
 + temporary_modifier
 ```
 
-精確成長曲線：**TBD**。
+正式版精確成長曲線仍待 playtest/balance；MVP prototype 暫用第 6.1 節與 `character-growth-mvp-1` 的版本化曲線。
 
 # 8. No Direct Life-to-Stat Mapping
 
@@ -212,7 +235,7 @@ Scene 2 Aptitude Roll 應影響：
 - 初始 build identity
 - 特定 Training 的成本
 
-但不能讓低 Roll 變成「角色報廢」。
+但不能讓低 Roll 變成「角色報廢」。MVP prototype 使用第 6.1 節的 `1d6` 成本調整：低 Roll 僅使相應訓練多花 2 Potential，不降低 Attribute，也不封鎖訓練。
 
 # 12. Build
 
@@ -516,11 +539,11 @@ Proposal：
 # 29. Major TBD
 
 1. Attribute modifier formula
-2. growth curve
-3. soft cap thresholds
+2. final/launch growth curve (MVP prototype curve is versioned in `character-growth-mvp-1`)
+3. final/launch soft-cap tuning (MVP prototype thresholds are versioned in `character-growth-mvp-1`)
 4. hard cap
-5. aptitude math
-6. training cost
+5. final/launch aptitude tuning (MVP prototype cost adjustment is versioned in `character-growth-mvp-1`)
+6. final/launch training-cost tuning (MVP prototype cost is versioned in `character-growth-mvp-1`)
 7. Character Level formula
 8. Spell requirement tolerance
 9. respec policy
@@ -574,4 +597,3 @@ AttributeState.permanent_growth
 - created_at
 
 `AttributeState` 是 materialized projection，可重建。
-

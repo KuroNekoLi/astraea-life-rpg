@@ -12,7 +12,7 @@
 
 No seven-day human pilot has been conducted. The protocol in `pilot/PILOT_PROTOCOL.md` is a draft ready for product-owner review, with participant count, consent/retention ownership, success thresholds, and next-scope decision still open. Do not treat M8 as validated or make product decisions from synthetic data.
 
-M3 Training policy and the integrated M7 battle/feedback journey remain incomplete. Those flows require approved content and implementation before a meaningful end-to-end pilot can begin.
+MVP prototype Training/Aptitude/Fate policy is now approved and versioned. M3 still lacks persisted Aptitude/Fate creation and executable TrainingConversion UI; M7 lacks the integrated battle/feedback journey. Those implementations and player review are prerequisites for a meaningful end-to-end pilot.
 
 ## Verification
 

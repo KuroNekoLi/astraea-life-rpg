@@ -11,7 +11,7 @@
 
 The planned M7 acceptance chain includes TrainingConversion, a playable deterministic encounter, Weak Node tactical payoff inside that battle, post-battle feedback, and resuming the battle itself after app restart. The current integration journey stops after character → Life reward → story/deck; the checkpoint is tested at repository level and the Function scenario is a separate tutorial screen.
 
-Training policy and combat balance values remain unresolved in the specifications. Do not claim first-playable acceptance until those content decisions are approved, a training/battle UI is connected, and a player-facing end-to-end test covers the full chain.
+MVP prototype Training/Aptitude/Fate values are now approved and versioned in `character-growth-mvp-1`; these still require balance review after playtesting. Training conversion UI/persistence and combat encounter balance are not complete. Do not claim first-playable acceptance until Training and battle UI are connected, and a player-facing end-to-end test covers the full chain.
 
 ## Verification
 

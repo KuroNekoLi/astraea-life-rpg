@@ -64,7 +64,7 @@ class TrainingPreviewScreen extends ConsumerWidget {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Training costs, Attribute growth, Aptitude, and Fate rules are awaiting an approved design. Your potential remains available; no points are spent on this screen.',
+                      'MVP prototype Training, Aptitude, and Fate rules are set. Training conversion is still being implemented, so your potential remains available; no points are spent on this screen.',
                     ),
                   ],
                 ),

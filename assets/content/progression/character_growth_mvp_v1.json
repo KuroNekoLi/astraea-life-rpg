@@ -1,0 +1,37 @@
+{
+  "contentVersion": "character-growth-mvp-1",
+  "status": "prototype-balance",
+  "approvalScope": "MVP prototype only; review after player testing",
+  "aptitude": {
+    "dieSides": 6,
+    "rollsPerAttribute": 1,
+    "trainingCostAdjustments": [
+      { "min": 1, "max": 2, "potentialDelta": 2 },
+      { "min": 3, "max": 4, "potentialDelta": 0 },
+      { "min": 5, "max": 6, "potentialDelta": -2 }
+    ],
+    "directAttributeModifier": 0
+  },
+  "fate": {
+    "rerollsPerCharacter": 1,
+    "dieSides": 6,
+    "mustAcceptNewResult": true
+  },
+  "training": {
+    "basePotentialCost": 18,
+    "attributeGrowthPerSession": 1,
+    "growthCostTiers": [
+      { "minPriorGrowth": 0, "maxPriorGrowth": 4, "multiplier": 1 },
+      { "minPriorGrowth": 5, "maxPriorGrowth": 9, "multiplier": 2 },
+      { "minPriorGrowth": 10, "maxPriorGrowth": null, "multiplier": 3 }
+    ],
+    "definitions": [
+      { "id": "reaction-drill", "potentialCategory": "physical", "attribute": "processing" },
+      { "id": "precision-movement", "potentialCategory": "physical", "attribute": "precision" },
+      { "id": "function-analysis-drill", "potentialCategory": "cognitive", "attribute": "analysis" },
+      { "id": "complexity-exercise", "potentialCategory": "cognitive", "attribute": "computation" },
+      { "id": "mana-control-drill", "potentialCategory": "cognitive", "attribute": "efficiency" },
+      { "id": "intent-encoding-drill", "potentialCategory": "communication", "attribute": "manaOutput" }
+    ]
+  }
+}

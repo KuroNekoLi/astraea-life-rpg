@@ -20,7 +20,7 @@
 
 ## Product values left configurable
 
-Life XP, evidence bonus, diminishing return, Growth Potential conversion, aptitude and Training costs/Attribute deltas are not given final numeric values in their source specifications. M1 requires explicit, versioned policy/content inputs and supplies no defaults. M2 must use approved authored values before it can present or canonically commit a reward.
+At the M1 milestone, Life XP, evidence bonus, diminishing return, Growth Potential conversion, aptitude and Training costs/Attribute deltas had no final numeric values in their source specifications. M1 required explicit, versioned policy/content inputs and supplied no defaults. Subsequent MVP prototype values are tracked in their own approved, versioned content assets; they are not retroactive changes to this milestone.
 
 ## Review
 
