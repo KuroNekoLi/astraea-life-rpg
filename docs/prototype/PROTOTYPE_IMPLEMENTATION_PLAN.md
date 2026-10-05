@@ -85,11 +85,11 @@ Training reads available potential, previews an authored TrainingDefinition, and
 
 Load versioned story/content data separately from player state. Implement dialogue/narration/choice steps, revision-checked transitions, objective flags, Function Theory interaction, Chant/Chantless teaching, Spell Card explanation and six-slot Prepared Deck selection. Do not reveal restricted canon. Narrative copy and reveal timing follow the narrative source documents and narrative review; no engineering-authored canon.
 
-### M5 — Deterministic combat core — IN PROGRESS
+### M5 — Deterministic combat core — ENGINE COMPLETE; PLAYER ENCOUNTER PENDING BALANCE
 
 Implement headless commands/resolution for turn order, initiative, actions, movement, reactions, Mana, weapon/spell use, defeat and victory. Inject seeded RNG; the same initial state, seed and command sequence must produce identical state and events. Implement one training encounter only after combat mechanics match the approved combat spec. Numerical balance formulas marked TBD remain content/policy inputs.
 
-### M6 — Function Graph / Weak Node
+### M6 — Function Graph / Weak Node — IN PROGRESS
 
 Implement active Function execution, visibility state, analysis, interrupt outcomes and downstream cancellation. Add one Ashfang training pattern with a real Weak Node outcome: interrupting LockTarget changes or cancels Pounce. Add pure Dart scenario tests and accessible UI state distinctions that are not color-only.
 

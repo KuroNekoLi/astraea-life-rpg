@@ -47,7 +47,7 @@ No architecture deviation. No speculative feature directories or domain tables.
 Drift table-manager generation disabled for the empty schema to avoid an unused
 generated field. Freezed/JSON generators configured without invented DTOs.
 Native SQLite targets the intended mobile platforms; web is not an M0 target.
-Seeded RNG is repeatable on the pinned runtime, not a cross-SDK replay contract.
+M0 used Dart Random, repeatable on its pinned runtime. M5 replaced this with a serializable 32-bit deterministic generator, enabling cross-runtime replay tests for combat.
 Tool caches and Android/JDK setup are environment-only, outside the repository.
 
 ## Open decisions

@@ -1,17 +1,21 @@
-import 'dart:math';
-
 /// Inject into simulations; never create unseeded randomness inside game rules.
 abstract interface class Rng {
   int nextInt(int max);
 }
 
-/// Repeatable for the same seed and calls on the pinned Dart runtime.
-/// Cross-runtime replay stability is intentionally not promised by M0.
+/// Serializable 32-bit LCG for deterministic same-seed replay across runtimes.
 final class SeededRng implements Rng {
-  SeededRng(int seed) : _random = Random(seed);
+  SeededRng(int seed) : _state = seed & 0xffffffff;
 
-  final Random _random;
+  SeededRng.fromState(int state) : _state = state & 0xffffffff;
+
+  int _state;
+  int get state => _state;
 
   @override
-  int nextInt(int max) => _random.nextInt(max);
+  int nextInt(int max) {
+    if (max <= 0) throw RangeError.value(max, 'max', 'Must be positive');
+    _state = (1664525 * _state + 1013904223) & 0xffffffff;
+    return _state % max;
+  }
 }
