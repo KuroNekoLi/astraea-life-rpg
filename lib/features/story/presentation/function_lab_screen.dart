@@ -89,7 +89,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
     } catch (_) {
       // The standalone tutorial remains usable before character creation.
     }
-    final analysisModifier = (effectiveAnalysis - 8).clamp(0, 99);
+    final analysisModifier = (effectiveAnalysis - 8).clamp(0, 99).toInt();
     return _AshfangData(
       content['enemy'] as String,
       graph,
