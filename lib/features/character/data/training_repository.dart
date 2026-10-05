@@ -114,6 +114,11 @@ final class TrainingRepository {
       final aptitude = _aptitude(character);
       final baseValues = _baseValues(character);
       final history = await _conversions();
+      for (final prior in history) {
+        if (prior.idempotencyKey == idempotencyKey) {
+          return TrainingAlreadyConverted(prior);
+        }
+      }
       final projected = projectAttributeState(
         characterId: characterId,
         baseValues: baseValues,
