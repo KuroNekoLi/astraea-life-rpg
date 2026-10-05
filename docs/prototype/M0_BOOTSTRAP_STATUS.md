@@ -64,4 +64,4 @@ this placeholder contains no onboarding, gameplay or major navigation flow.
 
 ## Verdict
 
-DONE — M0 source foundation, mandatory local gates, Android debug build and independent review pass. iOS/device execution remains explicitly NOT_VERIFIED.
+DONE — M0 source foundation, mandatory local gates, Android debug build and independent review pass. iOS/device execution remains explicitly NOT_VERIFIED. M1 work subsequently added its first pure Dart domain foundation; the current milestone record is maintained in `PROTOTYPE_IMPLEMENTATION_PLAN.md`.

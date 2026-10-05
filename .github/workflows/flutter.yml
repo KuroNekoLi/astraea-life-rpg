@@ -19,4 +19,4 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
-      - run: dart test test/game_engine
+      - run: dart test test/domain test/game_engine

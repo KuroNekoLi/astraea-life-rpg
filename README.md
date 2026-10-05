@@ -14,7 +14,7 @@ skills/astraea-orchestrator/SKILL.md
 
 ## Current milestone
 
-M0 — Project Bootstrap implemented. See [verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
+M0 — Project Bootstrap complete; M1 — Domain Foundation complete. M2 is next. See the [implementation roadmap](docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md) and [M0 verification status](docs/prototype/M0_BOOTSTRAP_STATUS.md).
 
 The M0 execution contract is in:
 
