@@ -5,10 +5,11 @@
 - Character name, canonical eight attributes, Base 8, exactly 32 allocation points, per-attribute cap 15, and four authored initial weapon choices are implemented and persisted locally.
 - The character creation screen is accessible from Home. A widget-level first-playable test completes this step.
 - Pure Dart allocation validation remains covered by domain tests.
-- A read-only Training preview now displays the persisted Physical, Cognitive, and Communication Potential projections from confirmed Life Quest rewards. It spends nothing and does not imply that Potential directly changes Attributes.
+- Training displays the persisted Physical, Cognitive, and Communication Potential balances and all six authored drills. Each drill quotes its matching Potential cost, Aptitude, prior Attribute growth, and resulting Attribute value.
+- TrainingConversion is persisted idempotently from the versioned policy and rebuilds both Potential and Attribute projections. Matching Physical drills are available immediately when the player has enough Physical Potential.
 - Versioned MVP prototype rules are approved for Training cost/growth, Aptitude, and Fate (`character-growth-mvp-1`).
-- A pure Dart policy loader quotes Training costs from authored definitions, Aptitude ratings, and prior growth; it implements injected Aptitude rolls and a one-use mandatory Fate replacement.
-- Training preview remains read-only while the persistence/UI flow for Aptitude creation and TrainingConversion is implemented.
+- A pure Dart policy loader quotes Training costs from authored definitions, Aptitude ratings, and prior growth; it implements injected Aptitude rolls and a one-use mandatory Fate replacement. Character creation persists the rolled profile and seed.
+- Fate replacement UI and a richer display of a character's Aptitude profile remain incomplete.
 
 ## Approved policy
 
@@ -17,14 +18,14 @@ The `character-growth-mvp-1` asset is explicitly prototype-only. It sets 18 base
 ## Verification
 
 - Character allocation source-of-truth: pure Dart CharacterInitialAllocation.
-- First-playable widget integration: PASS for character creation, Life completion/reward, and six-card deck (M7 test path; combat/training not included).
-- Training preview widget: displays saved balances, zero balances for absent categories, and the no-conversion boundary.
+- First-playable widget integration: PASS for character creation, Life completion/reward, and six-card deck (M7 test path; integrated combat is not included).
+- Training widget/repository tests: PASS for authored Analysis training and matching Physical reward → Reaction Drill conversion, including persisted cost, Attribute delta, and projection rebuild.
 - Pure Dart policy tests cover version loading, cost tiers, injected Aptitude rolls, mandatory one-time Fate replacement, and policy/profile version checks.
-- Real-player/device review: NOT_VERIFIED.
+- Human Android emulator playtest report received on 2026-10-06; the original findings and follow-up are recorded in `docs/prototype/playtests/2026-10-06-real-player-playtest.md`.
+- Physical Android/iOS hardware verification and post-fix human retest: NOT_VERIFIED.
 
 ## Next implementation sequence
 
-1. Persist the Aptitude profile and Fate-used flag during character creation, using the approved versioned policy and serializable RNG.
-2. Add an idempotent Training Conversion flow that only accepts quoted values from the approved policy and updates the Attribute projection.
-3. Connect the prepared character/deck and approved encounter inputs to a resumable battle UI with Weak Node payoff and post-battle feedback.
-4. Run the full first-playable flow with real players, review balance, and version any policy changes before beginning the seven-day pilot.
+1. Add Fate replacement UI and make the persisted Aptitude profile understandable on the Character screen.
+2. Connect the prepared character/deck and approved encounter inputs to a resumable battle UI with Weak Node payoff and post-battle feedback.
+3. Retest the corrected Life → Training → Character → Adventure journey with players on Android and iOS; review balance and version any policy changes before beginning the seven-day pilot.

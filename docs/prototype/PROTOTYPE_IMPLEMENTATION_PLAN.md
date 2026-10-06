@@ -77,9 +77,9 @@ Retrying completion must not duplicate activity or grant. Timer duration survive
 
 ### M3 — Character and Training path — PARTIAL; PROTOTYPE POLICY APPROVED
 
-Character creation validates eight attributes, 32 allocation points, Base 8 and allocation cap 15. Authored weapon choices remain content data. A read-only Training preview displays persisted Growth Potential projections without spending them.
+Character creation validates eight attributes, 32 allocation points, Base 8 and allocation cap 15. Authored weapon choices remain content data. Training previews all six versioned definitions and persists idempotent conversions from matching Growth Potential into permanent Attribute growth.
 
-Versioned MVP prototype values for Training cost/growth, Aptitude, and Fate are approved in `assets/content/progression/character_growth_mvp_v1.json`. A pure Dart policy quotes authored conversions and deterministically rolls/rerolls Aptitude; character persistence, roll UI, and executable TrainingConversion remain to implement. Training must commit one idempotent TrainingConversion and rebuild AttributeState from base values and conversion history. Treat the authored values as prototype balance pending player testing.
+Versioned MVP prototype values for Training cost/growth, Aptitude, and Fate are approved in `assets/content/progression/character_growth_mvp_v1.json`. A pure Dart policy quotes authored conversions and deterministically rolls/rerolls Aptitude; character persistence stores the initial Aptitude roll, and TrainingConversion commits idempotently and rebuilds AttributeState from base values and conversion history. Fate replacement UI remains to implement. Treat the authored values as prototype balance pending further player testing.
 
 ### M4 — Story runtime, Scene 1–5 and Prepared Deck — IMPLEMENTED PROTOTYPE EXCERPT
 
@@ -124,9 +124,9 @@ For cross-feature journeys, run the relevant integration suite. Player-facing mi
 ## Delivery status
 
 - M0–M2: implemented and pushed.
-- M3: character creation and read-only potential preview are implemented; versioned prototype Aptitude/Fate/Training rules are approved and tested. Persistence/UI for rolls and executable TrainingConversion remain incomplete.
+- M3: character creation and versioned TrainingConversion are implemented; Aptitude/Fate/Training rules are approved and tested. Fate replacement UI and an explanatory Aptitude profile display remain incomplete.
 - M4–M6: prototype story/deck excerpt, deterministic combat core, and standalone Weak Node tutorial are implemented. These are not the full authored narrative or integrated battle experience.
-- M7: partial. Character → Life reward → story/deck journey and persistence checks exist; Training, playable integrated battle, post-battle feedback, and battle resume UI remain incomplete.
+- M7: partial. Character → Life reward → Training conversion and story/deck journey have widget coverage; playable integrated battle, post-battle feedback, battle resume UI, and a complete end-to-end test remain incomplete.
 - M8: local opt-in measurement and a draft pilot protocol are implemented. Human pilot has not been run; participant/privacy protocol decisions and M3/M7 feature completion are prerequisites to meaningful pilot validation.
 
-The next implementation step is to persist and expose the approved Aptitude/Fate rolls in character creation, then implement the idempotent M3 conversion flow from the versioned policy. The Home screen links to a read-only Training preview. Then complete the M7 integrated encounter before recruiting pilot participants. Never report the MVP or human-pilot acceptance as complete while those gaps remain.
+The next implementation step is to add Fate replacement UI, complete the M7 integrated encounter, and retest the updated first-playable flow with human players. Never report the MVP or human-pilot acceptance as complete while those gaps remain.

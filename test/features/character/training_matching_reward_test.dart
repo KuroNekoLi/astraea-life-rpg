@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('shows authored Analysis quote and commits Training', (
+  testWidgets('physical quest Potential can be spent on a matching drill', (
     tester,
   ) async {
     final database = AppDatabase(NativeDatabase.memory());
@@ -39,22 +39,22 @@ void main() {
       createdAt: DateTime.utc(2026),
     );
     await database.putRecord(
-      id: 'grant-1',
-      kind: 'rewardGrant',
-      payload: jsonEncode({
-        'sourceId': 'activity-1',
-        'idempotencyKey': 'life-activity:1',
-        'formulaVersion': 'mvp-prototype-1',
-        'rewards': [
-          {'type': 'growthPotential', 'category': 'cognitive', 'amount': 18},
-        ],
-      }),
+      id: 'growthPotential-physical',
+      kind: 'growthPotential',
+      payload: '{"key":"physical","amount":30,"projectionVersion":1}',
       createdAt: DateTime.utc(2026),
     );
     await database.putRecord(
-      id: 'growthPotential-cognitive',
-      kind: 'growthPotential',
-      payload: '{"key":"cognitive","amount":18,"projectionVersion":1}',
+      id: 'grant-physical-1',
+      kind: 'rewardGrant',
+      payload: jsonEncode({
+        'sourceId': 'activity-physical-1',
+        'idempotencyKey': 'life-activity:physical-1',
+        'formulaVersion': 'mvp-prototype-1',
+        'rewards': [
+          {'type': 'growthPotential', 'category': 'physical', 'amount': 30},
+        ],
+      }),
       createdAt: DateTime.utc(2026),
     );
 
@@ -67,35 +67,25 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.scrollUntilVisible(
-      find.text('Train Analysis'),
-      220,
+      find.text('Train Processing'),
+      240,
       scrollable: find.byType(Scrollable).first,
     );
     await tester.pumpAndSettle();
-
-    expect(find.text('Function Analysis Drill'), findsOneWidget);
-    expect(find.textContaining('Analysis 12 → 13'), findsOneWidget);
-
-    await tester.ensureVisible(find.text('Train Analysis'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Train Analysis'));
-    await tester.pumpAndSettle();
-    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('Reaction Drill'), findsOneWidget);
+    expect(find.textContaining('Processing 12 → 13'), findsOneWidget);
+    await tester.tap(find.text('Train Processing'));
     await tester.pumpAndSettle();
 
-    expect(
-      find.text('Training complete. Your attribute grew permanently.'),
-      findsOneWidget,
-    );
-    await tester.scrollUntilVisible(
-      find.text('Analysis growth is active'),
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('Analysis growth is active'), findsOneWidget);
-    expect(find.text('+1 permanent Analysis from Training'), findsOneWidget);
-    expect((await database.recordsOf('trainingConversion')).length, 1);
+    final conversions = await database.recordsOf('trainingConversion');
+    expect(conversions, hasLength(1));
+    final conversion =
+        jsonDecode(conversions.single.read<String>('payload'))
+            as Map<String, dynamic>;
+    expect(conversion['trainingDefinitionId'], 'reaction-drill');
+    expect(conversion['potentialCategory'], 'physical');
+    expect(conversion['amountSpent'], 18);
+    expect(conversion['attributeDeltas'], {'processing': 1});
     expect(tester.takeException(), isNull);
   });
 }

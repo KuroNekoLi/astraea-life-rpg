@@ -48,16 +48,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'character',
             builder: (_, _) => const CharacterProfileScreen(),
           ),
+          GoRoute(
+            path: '/training',
+            builder: (_, _) => const TrainingPreviewScreen(),
+          ),
+          GoRoute(path: '/story', builder: (_, _) => const StoryScreen()),
+          GoRoute(
+            path: '/function-lab',
+            builder: (_, _) => const FunctionLabScreen(),
+          ),
         ],
-      ),
-      GoRoute(path: '/story', builder: (_, _) => const StoryScreen()),
-      GoRoute(
-        path: '/training',
-        builder: (_, _) => const TrainingPreviewScreen(),
-      ),
-      GoRoute(
-        path: '/function-lab',
-        builder: (_, _) => const FunctionLabScreen(),
       ),
       GoRoute(
         path: '/character/create',

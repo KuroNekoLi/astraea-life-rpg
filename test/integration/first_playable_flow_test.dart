@@ -89,26 +89,38 @@ void main() {
       container.read(routerProvider).go('/story');
       await tester.pumpAndSettle();
       for (var scene = 0; scene < 4; scene++) {
+        await tester.scrollUntilVisible(
+          find.text('Continue'),
+          180,
+          scrollable: find.byType(Scrollable).last,
+        );
+        await tester.pumpAndSettle();
         await tester.tap(find.text('Continue'));
         await tester.pumpAndSettle();
       }
-      final visibleChecks = find.byType(CheckboxListTile);
-      for (var index = 0; index < 5; index++) {
-        await tester.tap(visibleChecks.at(index));
+      for (final spellName in [
+        'Arc Bolt',
+        'Focused Shot',
+        'Energy Burst',
+        'Barrier',
+        'Deflect',
+        'Step Shift',
+      ]) {
+        await tester.scrollUntilVisible(
+          find.text(spellName),
+          180,
+          scrollable: find.byType(Scrollable).last,
+        );
+        await tester.pumpAndSettle();
+        final tile = find.ancestor(
+          of: find.text(spellName),
+          matching: find.byType(CheckboxListTile),
+        );
+        await tester.ensureVisible(tile);
+        await tester.pumpAndSettle();
+        await tester.tap(tile);
         await tester.pumpAndSettle();
       }
-      await tester.scrollUntilVisible(
-        find.text('Step Shift'),
-        250,
-        scrollable: find.byType(Scrollable).last,
-      );
-      await tester.tap(
-        find.ancestor(
-          of: find.text('Step Shift'),
-          matching: find.byType(CheckboxListTile),
-        ),
-      );
-      await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
         find.text('Confirm Prepared Deck'),
         250,
@@ -132,10 +144,9 @@ void main() {
       await tester.pumpAndSettle();
       resumedContainer.read(routerProvider).go('/story');
       await tester.pumpAndSettle();
-      expect(
-        find.text('Scene 1–5 complete. Your Prepared Deck is saved.'),
-        findsOneWidget,
-      );
+      expect(find.text('Chapter One complete'), findsOneWidget);
+      expect(find.text('Play Function Analysis Tutorial'), findsOneWidget);
+      expect(find.text('Return to Adventure'), findsOneWidget);
       expect(
         (await database.recordsOf(
           'preparedDeck',

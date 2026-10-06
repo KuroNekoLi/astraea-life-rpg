@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/app_providers.dart';
 import '../../../core/persistence/app_database.dart';
@@ -70,8 +71,29 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
       if (sceneIndex >= sceneList.length) {
         return Scaffold(
           appBar: AppBar(title: const Text('Academy Story')),
-          body: const Center(
-            child: Text('Scene 1–5 complete. Your Prepared Deck is saved.'),
+          body: ListView(
+            padding: const EdgeInsets.all(24),
+            children: [
+              Text(
+                'Chapter One complete',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Your Prepared Deck is saved. Continue by practicing how to read an enemy Function and discover its Weak Node.',
+              ),
+              const SizedBox(height: 20),
+              FilledButton.icon(
+                onPressed: () => context.push('/function-lab'),
+                icon: const Icon(Icons.account_tree_outlined),
+                label: const Text('Play Function Analysis Tutorial'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => context.go('/adventure'),
+                icon: const Icon(Icons.map_outlined),
+                label: const Text('Return to Adventure'),
+              ),
+            ],
           ),
         );
       }
@@ -80,7 +102,7 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
       return Scaffold(
         appBar: AppBar(title: Text(scene['title'] as String)),
         body: ListView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 104),
           children: [
             for (final beat in scene['beats'] as List<dynamic>)
               Padding(

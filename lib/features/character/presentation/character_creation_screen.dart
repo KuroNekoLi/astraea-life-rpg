@@ -65,12 +65,17 @@ class _CharacterCreationScreenState
           'Distribute 32 points · Base 8 · Maximum 15',
           style: Theme.of(context).textTheme.titleMedium,
         ),
+        const SizedBox(height: 4),
+        const Text(
+          'Choose your hero’s build focus. These Attributes are planned to shape combat options; no choice blocks the main story.',
+        ),
+        const SizedBox(height: 4),
         Text('$_spent / $initialAllocationBudget points'),
         for (final attribute in AttributeType.values)
           ListTile(
             title: Text(_label(attribute)),
             subtitle: Text(
-              'Base ${baseAttributeValue + _allocation[attribute]!}',
+              'Base ${baseAttributeValue + _allocation[attribute]!} · ${_effect(attribute)}',
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -203,4 +208,15 @@ String _label(AttributeType value) => switch (value) {
   AttributeType.efficiency => 'Efficiency',
   AttributeType.ambientSync => 'Ambient Sync',
   AttributeType.analysis => 'Analysis',
+};
+
+String _effect(AttributeType value) => switch (value) {
+  AttributeType.manaCapacity => 'Focus: Mana limit and costly spell stamina',
+  AttributeType.manaOutput => 'Focus: Safe output and burst spell size',
+  AttributeType.computation => 'Focus: Complex Functions and counter reasoning',
+  AttributeType.processing => 'Focus: Initiative, reactions, and fast actions',
+  AttributeType.precision => 'Focus: Targeting, interrupts, and control',
+  AttributeType.efficiency => 'Focus: Mana use and resource efficiency',
+  AttributeType.ambientSync => 'Focus: Environmental and support magic',
+  AttributeType.analysis => 'Focus: Reveal enemy Weak Nodes and counters',
 };

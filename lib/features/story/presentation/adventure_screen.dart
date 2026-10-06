@@ -58,23 +58,40 @@ class AdventureScreen extends ConsumerWidget {
                     index == progress.completedScenes && !progress.isComplete,
               ),
             const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: () => context.push('/story'),
-              icon: Icon(
-                progress.isComplete
-                    ? Icons.replay_rounded
-                    : Icons.arrow_forward_rounded,
+            if (progress.isComplete) ...[
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.flag_outlined),
+                  title: const Text('Chapter One complete'),
+                  subtitle: const Text(
+                    'Next, practice reading an enemy Function and finding its Weak Node.',
+                  ),
+                ),
               ),
-              label: Text(
-                progress.isComplete ? 'Review Chapter' : 'Continue Adventure',
+              const SizedBox(height: 10),
+              FilledButton.icon(
+                onPressed: () => context.push('/function-lab'),
+                icon: const Icon(Icons.account_tree_outlined),
+                label: const Text('Play Function Analysis Tutorial'),
               ),
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton.icon(
-              onPressed: () => context.push('/function-lab'),
-              icon: const Icon(Icons.account_tree_outlined),
-              label: const Text('Function Analysis Tutorial'),
-            ),
+              OutlinedButton.icon(
+                onPressed: () => context.go('/home'),
+                icon: const Icon(Icons.home_outlined),
+                label: const Text('Return Home'),
+              ),
+            ] else ...[
+              FilledButton.icon(
+                onPressed: () => context.push('/story'),
+                icon: const Icon(Icons.arrow_forward_rounded),
+                label: const Text('Continue Adventure'),
+              ),
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: () => context.push('/function-lab'),
+                icon: const Icon(Icons.account_tree_outlined),
+                label: const Text('Try Function Analysis Tutorial'),
+              ),
+            ],
           ],
         ),
       ),

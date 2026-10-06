@@ -57,12 +57,12 @@ class HomeScreen extends ConsumerWidget {
         children: [
           AstraeaHeroPanel(
             eyebrow: 'Astraea Academy · Chapter 01',
-            title: 'Your life becomes a stronger world.',
+            title: 'One real action starts your journey.',
             description:
-                'Real effort grows your Astraea self. Continue your first academy chapter.',
-            icon: Icons.castle_outlined,
-            actionLabel: 'Continue Adventure',
-            onPressed: () => context.go('/adventure'),
+                'Choose a Life Quest, earn Growth Potential, and shape the hero who explores Astraea.',
+            icon: Icons.favorite_outline,
+            actionLabel: 'Choose a Life Quest',
+            onPressed: () => context.go('/life'),
           ),
           const SizedBox(height: 22),
           Row(
@@ -73,7 +73,7 @@ class HomeScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               Text(
-                'Choose a path',
+                'Continue your journey',
                 style: Theme.of(
                   context,
                 ).textTheme.labelMedium?.copyWith(color: AstraeaColors.muted),
@@ -107,19 +107,19 @@ class _JourneyGrid extends StatelessWidget {
         children: [
           _JourneyCard(
             width: width,
+            icon: Icons.favorite_outline,
+            title: 'Life Quests',
+            subtitle: 'Start with one real action',
+            color: const Color(0xFFFFB5C7),
+            onTap: () => context.go('/life'),
+          ),
+          _JourneyCard(
+            width: width,
             icon: Icons.auto_awesome,
             title: 'Adventure',
             subtitle: 'Story & objectives',
             color: AstraeaColors.starlight,
             onTap: () => context.go('/adventure'),
-          ),
-          _JourneyCard(
-            width: width,
-            icon: Icons.favorite_outline,
-            title: 'Life Quests',
-            subtitle: 'Real-world actions',
-            color: const Color(0xFFFFB5C7),
-            onTap: () => context.go('/life'),
           ),
           _JourneyCard(
             width: width,
@@ -133,7 +133,7 @@ class _JourneyGrid extends StatelessWidget {
             width: width,
             icon: Icons.style_outlined,
             title: 'Prepared Deck',
-            subtitle: 'Six ready Functions',
+            subtitle: 'Six spells',
             color: const Color(0xFFC3ADFF),
             onTap: () => context.go('/deck'),
           ),
@@ -194,7 +194,7 @@ class _JourneyCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: AstraeaColors.muted,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
