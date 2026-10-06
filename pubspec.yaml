@@ -33,5 +33,5 @@ flutter:
     - assets/content/quests/mvp_v1.json
     - assets/content/story/scene_1_5_v1.json
     - assets/content/spells/mvp_pool_v1.json
-    - assets/content/encounters/ashfang_training_v1.json
+    - assets/content/encounters/ashfang_training_v2.json
     - assets/content/progression/character_growth_mvp_v1.json

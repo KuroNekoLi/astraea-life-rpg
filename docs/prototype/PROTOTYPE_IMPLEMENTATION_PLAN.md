@@ -85,17 +85,17 @@ Versioned MVP prototype values for Training cost/growth, Aptitude, and Fate are 
 
 Load versioned story/content data separately from player state. Implement dialogue/narration/choice steps, revision-checked transitions, objective flags, Function Theory interaction, Chant/Chantless teaching, Spell Card explanation and six-slot Prepared Deck selection. Do not reveal restricted canon. Narrative copy and reveal timing follow the narrative source documents and narrative review; no engineering-authored canon.
 
-### M5 — Deterministic combat core — ENGINE COMPLETE; PLAYER ENCOUNTER PENDING BALANCE
+### M5 — Deterministic combat core — ENGINE AND ASHFANG PLAYER ENCOUNTER IMPLEMENTED; BALANCE PENDING
 
-Implement headless commands/resolution for turn order, initiative, actions, movement, reactions, Mana, weapon/spell use, defeat and victory. Inject seeded RNG; the same initial state, seed and command sequence must produce identical state and events. Implement one training encounter only after combat mechanics match the approved combat spec. Numerical balance formulas marked TBD remain content/policy inputs.
+Headless commands/resolution cover turn order, initiative, actions, movement, reactions, Mana, weapon/spell use, defeat and victory. Ashfang now uses the existing CombatEngine and Function runtime. Its explicit illustrative numerical inputs are versioned in encounter content and await player balance review; no formula is silently embedded in UI code.
 
 ### M6 — Function Graph / Weak Node — IMPLEMENTED TUTORIAL SCENARIO
 
 Implement active Function execution, visibility state, analysis, interrupt outcomes and downstream cancellation. Add one Ashfang training pattern with a real Weak Node outcome: interrupting LockTarget changes or cancels Pounce. Add pure Dart scenario tests and accessible UI state distinctions that are not color-only.
 
-### M7 — End-to-end first playable — PARTIAL; ACCEPTANCE PENDING
+### M7 — End-to-end first playable — AUTOMATED FLOW IMPLEMENTED; HUMAN RETEST PENDING
 
-From fresh install, complete onboarding, Life Quest, reward, Training, scenes/tutorial, Deck setup, training encounters and post-battle feedback without debug menus. Save/resume across app restart. Add integration coverage for the full chain and error/retry paths. Validate that character build changes combat decisions and Life completion is meaningful without coercion.
+From fresh install, complete onboarding, Life Quest, reward, Training, scenes/tutorial, Deck setup, Ashfang battle, and post-battle feedback without debug menus. Save/resume across app restart. Validate that character Analysis changes Weak Node analysis. A full integration widget journey and focused fresh-install/battle restore tests are implemented; human device retest remains pending.
 
 ### M8 — Pilot and measurement — MEASUREMENT FOUNDATION IMPLEMENTED; HUMAN PILOT PENDING
 
@@ -125,8 +125,8 @@ For cross-feature journeys, run the relevant integration suite. Player-facing mi
 
 - M0–M2: implemented and pushed.
 - M3: character creation and versioned TrainingConversion are implemented; Aptitude/Fate/Training rules are approved and tested. Fate replacement UI and an explanatory Aptitude profile display remain incomplete.
-- M4–M6: prototype story/deck excerpt, deterministic combat core, and standalone Weak Node tutorial are implemented. These are not the full authored narrative or integrated battle experience.
-- M7: partial. Character → Life reward → Training conversion and story/deck journey have widget coverage; playable integrated battle, post-battle feedback, battle resume UI, and a complete end-to-end test remain incomplete.
+- M4–M6: prototype story/deck excerpt, deterministic combat core, and Ashfang Weak Node battle are implemented. Encounter combat inputs remain illustrative and await playtest balance.
+- M7: automated golden path now covers fresh character progression, Life rewards, Training, prepared deck, resumable combat, Weak Node interruption and post-battle feedback. Real-device retest is pending.
 - M8: local opt-in measurement and a draft pilot protocol are implemented. Human pilot has not been run; participant/privacy protocol decisions and M3/M7 feature completion are prerequisites to meaningful pilot validation.
 
-The next implementation step is to add Fate replacement UI, complete the M7 integrated encounter, and retest the updated first-playable flow with human players. Never report the MVP or human-pilot acceptance as complete while those gaps remain.
+The next implementation step is to retest the updated first-playable flow with a real Android device and review Ashfang's illustrative combat inputs before balance approval. Fate replacement UI and the human pilot remain incomplete. Never report the MVP or human-pilot acceptance as complete while those gaps remain.

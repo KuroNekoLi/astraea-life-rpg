@@ -63,6 +63,40 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                   trailing: Text('${value.balances[category] ?? 0}'),
                 ),
               ),
+            if (value.options.every((option) => !option.canTrain)) ...[
+              const SizedBox(height: 8),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Potential is building toward your next Training',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'A new character starts with 0 Growth Potential. Your first Life Quest adds its authored reward to the matching category. Training stays locked until that category covers the quoted cost; no reward or cost is changed.',
+                      ),
+                      const SizedBox(height: 8),
+                      for (final option in value.options.where(
+                        (item) => item.availablePotential > 0,
+                      ))
+                        Text(
+                          '${_labels[option.quote.potentialCategory]}: ${option.availablePotential} / ${option.quote.potentialCost} · ${option.quote.attribute.name}',
+                        ),
+                      const SizedBox(height: 12),
+                      OutlinedButton.icon(
+                        onPressed: () => context.go('/life'),
+                        icon: const Icon(Icons.checklist),
+                        label: const Text('Choose another Life Quest'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 20),
             Text(
               'AVAILABLE DRILLS',

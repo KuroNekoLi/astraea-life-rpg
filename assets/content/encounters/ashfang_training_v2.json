@@ -1,0 +1,69 @@
+{
+    "contentVersion": "ashfang-training-2",
+    "balanceStatus": "illustrative-inputs-awaiting-playtest",
+    "analysisDifficulty": 12,
+    "tutorialSeed": 417,
+    "enemy": "Ashfang Training Construct",
+    "combatInputs": {
+        "status": "illustrative-inputs-awaiting-playtest",
+        "schemaVersion": 1,
+        "seed": 417,
+        "player": {
+            "hp": 24,
+            "mana": 12,
+            "attackBonus": 8,
+            "defense": 12,
+            "processingModifier": 2,
+            "attackDamage": 8,
+            "criticalDamage": 12
+        },
+        "enemy": {
+            "hp": 16,
+            "mana": 0,
+            "attackBonus": 6,
+            "defense": 12,
+            "processingModifier": 0,
+            "pounceDamage": 5,
+            "criticalDamage": 8
+        }
+    },
+    "functionGraph": {
+        "id": "ashfang.pounce.v2",
+        "nodes": [
+            {
+                "id": "detect-target",
+                "type": "DetectTarget",
+                "interruptible": false
+            },
+            {
+                "id": "lock-target",
+                "type": "LockTarget",
+                "interruptible": true
+            },
+            {
+                "id": "pounce",
+                "type": "Pounce",
+                "interruptible": false
+            }
+        ],
+        "edges": [
+            [
+                "detect-target",
+                "lock-target"
+            ],
+            [
+                "lock-target",
+                "pounce"
+            ]
+        ],
+        "weakNodeRules": [
+            {
+                "id": "lock-target-weak-node",
+                "nodeId": "lock-target",
+                "cancelNodes": [
+                    "pounce"
+                ]
+            }
+        ]
+    }
+}

@@ -84,9 +84,14 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
               ),
               const SizedBox(height: 20),
               FilledButton.icon(
+                onPressed: () => context.push('/battle/ashfang'),
+                icon: const Icon(Icons.sports_martial_arts),
+                label: const Text('Start Ashfang Training Battle'),
+              ),
+              OutlinedButton.icon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.account_tree_outlined),
-                label: const Text('Play Function Analysis Tutorial'),
+                label: const Text('Practice Function Analysis'),
               ),
               OutlinedButton.icon(
                 onPressed: () => context.go('/adventure'),

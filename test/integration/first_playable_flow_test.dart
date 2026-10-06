@@ -5,7 +5,9 @@ import 'package:astraea_life_rpg/app/app_providers.dart';
 import 'package:astraea_life_rpg/app/router.dart';
 import 'package:astraea_life_rpg/core/persistence/app_database.dart';
 import 'package:astraea_life_rpg/features/character/presentation/character_creation_screen.dart';
+import 'package:astraea_life_rpg/features/character/data/training_repository.dart';
 import 'package:astraea_life_rpg/features/life_quest/presentation/life_screen.dart';
+import 'package:astraea_life_rpg/features/life_quest/data/life_quest_repository.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,6 +88,25 @@ void main() {
         {'physical': 0, 'cognitive': 18, 'communication': 0},
       );
 
+      final lifeRepository = LifeQuestRepository(database, DateTime.now);
+      await lifeRepository.complete(
+        quest: (await lifeRepository.quests()).single,
+        completionId: 'integration-second-learning',
+        duration: const Duration(minutes: 30),
+        timerEvidence: false,
+        confirmReward: true,
+      );
+      final trainingRepository = TrainingRepository(database);
+      final trainingPreview = await trainingRepository.goldenPathState();
+      final analysisOption = trainingPreview.options.singleWhere(
+        (option) => option.definitionId == 'function-analysis-drill',
+      );
+      expect(analysisOption.canTrain, isTrue);
+      await trainingRepository.trainFunctionAnalysis(
+        idempotencyKey: 'integration-analysis-training',
+      );
+      expect(await database.recordsOf('trainingConversion'), hasLength(1));
+
       container.read(routerProvider).go('/story');
       await tester.pumpAndSettle();
       for (var scene = 0; scene < 4; scene++) {
@@ -145,7 +166,8 @@ void main() {
       resumedContainer.read(routerProvider).go('/story');
       await tester.pumpAndSettle();
       expect(find.text('Chapter One complete'), findsOneWidget);
-      expect(find.text('Play Function Analysis Tutorial'), findsOneWidget);
+      expect(find.text('Start Ashfang Training Battle'), findsOneWidget);
+      expect(find.text('Practice Function Analysis'), findsOneWidget);
       expect(find.text('Return to Adventure'), findsOneWidget);
       expect(
         (await database.recordsOf(
@@ -153,6 +175,28 @@ void main() {
         )).single.read<String>('payload'),
         contains('spellIds'),
       );
+      resumedContainer.read(routerProvider).go('/battle/ashfang');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Attack Ashfang'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('End turn'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Analyze Weak Node'));
+      await tester.pumpAndSettle();
+      expect(find.text('Weak Node revealed: LockTarget'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Interrupt LockTarget'),
+        180,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Interrupt LockTarget'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Attack Ashfang'));
+      await tester.pumpAndSettle();
+      expect(find.text('Training encounter complete'), findsOneWidget);
+      expect(await database.recordsOf('ashfangBattle'), hasLength(1));
+      expect(tester.takeException(), isNull);
       resumedContainer.dispose();
     },
   );
