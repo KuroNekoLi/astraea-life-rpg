@@ -285,11 +285,26 @@ final class LifeQuestRepository {
         );
       }
     }
+    for (final conversion in await _records('trainingConversion')) {
+      final category = conversion['potentialCategory'] as String;
+      final amountSpent = conversion['amountSpent'] as int;
+      gp.update(
+        category,
+        (value) => value - amountSpent,
+        ifAbsent: () => -amountSpent,
+      );
+    }
     for (final entry in xp.entries) {
       await _putProjection('lifeProgress', entry.key, entry.value, now);
     }
-    for (final entry in gp.entries) {
-      await _putProjection('growthPotential', entry.key, entry.value, now);
+    for (final category in ['physical', 'cognitive', 'communication']) {
+      final amount = gp[category] ?? 0;
+      if (amount < 0) {
+        throw StateError(
+          'Training conversions exceed granted $category Growth Potential',
+        );
+      }
+      await _putProjection('growthPotential', category, amount, now);
     }
   }
 

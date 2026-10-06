@@ -1,6 +1,9 @@
+import 'package:astraea_life_rpg/app/app_providers.dart';
 import 'package:astraea_life_rpg/app/app.dart';
 import 'package:astraea_life_rpg/app/router.dart';
+import 'package:astraea_life_rpg/core/persistence/app_database.dart';
 import 'package:astraea_life_rpg/features/story/presentation/function_lab_screen.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +11,11 @@ void main() {
   testWidgets(
     'tutorial shows Weak Node analysis and cancelled Pounce outcome',
     (tester) async {
-      final container = ProviderContainer();
+      final database = AppDatabase(NativeDatabase.memory());
+      addTearDown(database.close);
+      final container = ProviderContainer(
+        overrides: [databaseProvider.overrideWith((ref) async => database)],
+      );
       addTearDown(container.dispose);
       await tester.pumpWidget(
         UncontrolledProviderScope(

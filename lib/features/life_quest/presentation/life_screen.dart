@@ -222,7 +222,7 @@ class QuestCompletionScreen extends ConsumerWidget {
                         );
                         ref.invalidate(lifeQuestsProvider);
                         if (context.mounted) {
-                          context.go('/life');
+                          context.go('/training');
                         }
                       },
                       child: const Text('Confirm reward'),

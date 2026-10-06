@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import '../../../app/app_providers.dart';
 import '../../../core/measurement/prototype_event_recorder.dart';
+import '../../character/data/training_repository.dart';
 import '../../../game_engine/function_graph/function_graph.dart';
 import '../../../game_engine/function_graph/function_runtime.dart';
 import '../../../game_engine/rng/rng.dart';
@@ -81,6 +82,16 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
       schemaVersion: 1,
       contentVersion: content['contentVersion'] as String,
     );
+    var effectiveAnalysis = 8;
+    try {
+      final database = await ref.read(databaseProvider.future);
+      effectiveAnalysis = await TrainingRepository(
+        database,
+      ).effectiveAnalysis();
+    } catch (_) {
+      // The standalone tutorial remains usable before character creation.
+    }
+    final analysisModifier = (effectiveAnalysis - 8).clamp(0, 99).toInt();
     return _AshfangData(
       content['enemy'] as String,
       graph,
@@ -88,6 +99,8 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
       content['balanceStatus'] as String,
       content['analysisDifficulty'] as int,
       content['tutorialSeed'] as int,
+      effectiveAnalysis,
+      analysisModifier,
     );
   }
 
@@ -120,6 +133,10 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
             Text(data.enemy, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 8),
             const Text('Enemy Function: DetectTarget → LockTarget → Pounce'),
+            const SizedBox(height: 8),
+            Text(
+              'Character Analysis: ${data.effectiveAnalysis} → +${data.analysisModifier} Function analysis modifier',
+            ),
             const SizedBox(height: 16),
             for (final node in data.graph.nodes)
               Semantics(
@@ -217,7 +234,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
         nodeId: 'lock-target',
         analysisRoll:
             SeededRng(data.tutorialSeed + _analysisAttempt++).nextInt(20) + 1,
-        analysisModifier: 0,
+        analysisModifier: data.analysisModifier,
         difficulty: data.analysisDifficulty,
         knowledge: _knowledge,
         rules: data.rules,
@@ -283,6 +300,8 @@ final class _AshfangData {
     this.balanceStatus,
     this.analysisDifficulty,
     this.tutorialSeed,
+    this.effectiveAnalysis,
+    this.analysisModifier,
   );
   final String enemy;
   final FunctionGraph graph;
@@ -290,4 +309,6 @@ final class _AshfangData {
   final String balanceStatus;
   final int analysisDifficulty;
   final int tutorialSeed;
+  final int effectiveAnalysis;
+  final int analysisModifier;
 }

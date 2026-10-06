@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:astraea_life_rpg/app/app.dart';
 import 'package:astraea_life_rpg/app/app_providers.dart';
 import 'package:astraea_life_rpg/app/router.dart';
@@ -63,7 +65,18 @@ void main() {
       await tester.tap(find.text('Confirm reward'));
       await tester.pumpAndSettle();
       expect((await database.recordsOf('rewardGrant')).length, 1);
-      expect((await database.recordsOf('growthPotential')).length, 1);
+      final potentialRows = await database.recordsOf('growthPotential');
+      expect(potentialRows, hasLength(3));
+      expect(
+        {
+          for (final row in potentialRows)
+            (jsonDecode(row.read<String>('payload'))
+                    as Map<String, dynamic>)['key']:
+                (jsonDecode(row.read<String>('payload'))
+                    as Map<String, dynamic>)['amount'],
+        },
+        {'physical': 0, 'cognitive': 18, 'communication': 0},
+      );
 
       container.read(routerProvider).go('/story');
       await tester.pumpAndSettle();

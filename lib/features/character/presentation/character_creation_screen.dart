@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
 
 import '../../../app/app_providers.dart';
 import '../../../core/measurement/prototype_event_recorder.dart';
 import '../domain/attribute.dart';
+import '../domain/character_growth_policy.dart';
+import '../../../game_engine/rng/rng.dart';
 
 class CharacterCreationScreen extends ConsumerStatefulWidget {
   const CharacterCreationScreen({super.key});
@@ -133,6 +136,17 @@ class _CharacterCreationScreenState
       final id = 'hero-${now.microsecondsSinceEpoch}';
       final allocation = CharacterInitialAllocation(_allocation);
       final attributes = allocation.toAttributeState(id);
+      final growthContent =
+          jsonDecode(
+                await rootBundle.loadString(
+                  'assets/content/progression/character_growth_mvp_v1.json',
+                ),
+              )
+              as Map<String, dynamic>;
+      final growthPolicy = CharacterGrowthPolicy.fromJson(growthContent);
+      final aptitudeSeed = now.microsecondsSinceEpoch & 0xffffffff;
+      final aptitudeRng = SeededRng(aptitudeSeed);
+      final aptitude = growthPolicy.rollAptitudes(aptitudeRng);
       final payload = {
         'id': id,
         'name': _name.text.trim(),
@@ -145,7 +159,17 @@ class _CharacterCreationScreenState
           for (final entry in allocation.allocation.entries)
             entry.key.name: entry.value,
         },
-        'schemaVersion': 1,
+        'aptitude': {
+          'contentVersion': aptitude.contentVersion,
+          'ratings': {
+            for (final entry in aptitude.ratings.entries)
+              entry.key.name: entry.value,
+          },
+          'fateRerollUsed': aptitude.fateRerollUsed,
+          'rngSeed': aptitudeSeed,
+          'rngState': aptitudeRng.state,
+        },
+        'schemaVersion': 2,
         'revision': 0,
       };
       await database.putRecord(
