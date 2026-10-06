@@ -163,11 +163,17 @@ Route:
 PM
 → astraea-game-director
 → astraea-combat-designer
-→ Architect
-→ Gameplay Engineer
+→ astraea-combat-ux-designer (for player-facing flow)
+→ astraea-combat-animation-designer (for scene/motion work)
+→ astraea-combat-technical-architect
+→ astraea-combat-gameplay-engineer
+→ Flutter Engineer
 → Code Reviewer
-→ QA
+→ astraea-combat-qa
+→ astraea-real-player-playtester (for meaningful battle UX)
 ```
+
+Run the domain, UX, motion, architecture, implementation, and verification roles as distinct workstreams when scope warrants it. Do not ask one role to silently make decisions owned by another. For a small rules-only correction, omit UI/motion/playtest roles when they are not relevant.
 
 ## T4 — Narrative / Story / Character
 
@@ -188,6 +194,8 @@ Route:
 ```text
 PM
 → UX/UI Designer
+→ astraea-combat-ux-designer (when combat is affected)
+→ astraea-combat-animation-designer (when combat motion is affected)
 → astraea-vision-guardian when product identity is affected
 → Architect for screen/state ownership
 → Flutter Engineer
@@ -375,6 +383,27 @@ Owns:
 - Counter-Function
 - combat readability
 
+### `astraea-combat-ux-designer`
+
+Owns:
+
+- combat screen hierarchy, landscape layout, command navigation and targeting flow
+- player-facing turn timeline, intent and Function Graph presentation
+- mapping domain commands/results to feedback and animation choreography
+- accessibility, disabled/error/lifecycle states, and observable UX acceptance criteria
+
+Does not own combat rules, numeric values, Function visibility rules, encounter outcomes, or canon.
+
+### `astraea-combat-animation-designer`
+
+Owns:
+
+- battlefield visual hierarchy, motion vocabulary, camera and scene effects
+- event-to-animation timing and result readability
+- placeholder/production art direction, motion accessibility and presentation performance
+
+Does not own combat outcomes, UX command flow, canon, or licenses. External assets require source and license verification.
+
 ### `astraea-narrative-director`
 
 Owns:
@@ -399,6 +428,25 @@ Must follow Narrative Director.
 ---
 
 ## Engineering
+
+### `astraea-combat-technical-architect`
+
+Owns:
+
+- combat package boundaries and public API integration
+- Flutter/Flame/native platform and orientation lifecycle decisions
+- dependencies, ADRs, migration, license and performance review
+
+Before framework, package or public-asset adoption, must web-search current GitHub/pub.dev/vendor sources and record license, maintenance/platform evidence and the adoption reason.
+
+### `astraea-combat-gameplay-engineer`
+
+Owns:
+
+- approved deterministic combat state, command validation, resolution and events
+- seeded RNG, Function runtime integration, serialization/replay and pure-Dart tests
+
+Does not invent mechanics, balance inputs, enemy policies or UI behavior. Must research existing relevant rules/framework packages before extending infrastructure; the approved Astraea specs remain authoritative.
 
 ### Technical Architect
 
@@ -444,6 +492,16 @@ Gameplay engine must remain pure Dart where specified.
 ---
 
 ## Verification
+
+### `astraea-combat-qa`
+
+Owns:
+
+- combat domain/widget/integration/device test plans and execution
+- Android/iOS orientation, lifecycle, touch, persistence, performance and evidence
+- truthful separation of physical-device, emulator, simulator and automated results
+
+Must research current official platform and testing-tool documentation before tool recommendations; never mark unavailable device coverage as passed.
 
 ### Code Reviewer
 
@@ -504,6 +562,18 @@ Required when:
 - a public interface changes
 - a new state owner appears
 - an external service is introduced
+
+## Gate C2 — Existing Solutions and Public Resources
+
+Before recommending or adding an external framework, package, code sample, asset, or testing tool:
+
+- the owning specialist must search current official/original sources for existing solutions
+- record the checked date, direct URLs, license/provenance, maintenance and platform evidence
+- state what is adopted, what is reference-only, and why an apparently similar project does not fit
+- prefer adapting mature infrastructure over recreating commodity rendering, animation, input, or test tooling
+- if no suitable solution exists or research cannot be completed, record `NOT_FOUND` or `NOT_RESEARCHED` and the evidence limit
+
+External examples do not override Astraea specifications or grant permission to copy code/assets.
 
 ## Gate D — Objective Verification
 

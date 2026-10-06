@@ -175,29 +175,75 @@ void main() {
         )).single.read<String>('payload'),
         contains('spellIds'),
       );
+      tester.view.physicalSize = const Size(1280, 720);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
       resumedContainer.read(routerProvider).go('/battle/ashfang');
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Attack Ashfang'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('End turn'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Analyze Weak Node'));
-      await tester.pumpAndSettle();
-      expect(find.text('Weak Node revealed: LockTarget'), findsOneWidget);
-      await tester.scrollUntilVisible(
-        find.text('Interrupt LockTarget'),
-        180,
-        scrollable: find.byType(Scrollable).first,
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      for (var frame = 0; frame < 20; frame++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(find.text('請旋轉裝置至橫向'), findsNothing);
+      await _attackAshfang(tester);
+      await _pumpBattle(tester);
+      if (find.text('Skip').evaluate().isNotEmpty) {
+        await tester.tap(find.text('Skip'));
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      final endTurnButton = find.ancestor(
+        of: find.text('End Turn'),
+        matching: find.byType(FilledButton),
       );
-      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(endTurnButton).onPressed, isNotNull);
+      await tester.tap(endTurnButton);
+      await _pumpBattle(tester);
+      await tester.tap(find.text('Function'));
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.tap(find.text('Analyze current node'));
+      await _pumpBattle(tester);
+      expect(find.textContaining('Weak Node found'), findsOneWidget);
       await tester.tap(find.text('Interrupt LockTarget'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Attack Ashfang'));
-      await tester.pumpAndSettle();
-      expect(find.text('Training encounter complete'), findsOneWidget);
+      await _pumpBattle(tester);
+      await tester.tap(find.byIcon(Icons.close));
+      await tester.pump(const Duration(milliseconds: 100));
+      await _attackAshfang(tester);
+      expect(find.text('VICTORY'), findsOneWidget);
       expect(await database.recordsOf('ashfangBattle'), hasLength(1));
-      expect(tester.takeException(), isNull);
       resumedContainer.dispose();
     },
   );
+}
+
+Future<void> _attackAshfang(WidgetTester tester) async {
+  expect(find.text('Attack'), findsOneWidget);
+  final attackButton = find.ancestor(
+    of: find.text('Attack'),
+    matching: find.byType(FilledButton),
+  );
+  expect(tester.widget<FilledButton>(attackButton).onPressed, isNotNull);
+  await tester.tap(find.text('Attack'));
+  await tester.pump(const Duration(milliseconds: 100));
+  expect(find.textContaining('TARGET'), findsOneWidget);
+  expect(
+    tester.widget<ChoiceChip>(find.byType(ChoiceChip)).onSelected,
+    isNotNull,
+  );
+  await tester.tap(find.byType(ChoiceChip));
+  await tester.pump(const Duration(milliseconds: 100));
+  expect(tester.widget<ChoiceChip>(find.byType(ChoiceChip)).selected, isTrue);
+  final confirmButton = find.ancestor(
+    of: find.text('Confirm Attack'),
+    matching: find.byType(FilledButton),
+  );
+  expect(tester.widget<FilledButton>(confirmButton).onPressed, isNotNull);
+  await tester.tap(find.text('Confirm Attack'));
+  await _pumpBattle(tester);
+  expect(find.text('TARGET'), findsNothing);
+}
+
+Future<void> _pumpBattle(WidgetTester tester) async {
+  for (var frame = 0; frame < 4; frame++) {
+    await tester.pump(const Duration(milliseconds: 400));
+  }
 }

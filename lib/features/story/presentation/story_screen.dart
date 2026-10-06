@@ -208,15 +208,21 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
               'Quick check: Which step directs the formed effect toward its target?',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            for (var index = 0; index < answers.length; index++)
-              RadioListTile<int>(
-                value: index,
-                groupValue: _functionAnswer,
-                title: Text(answers[index]),
-                onChanged: (value) => setState(() => _functionAnswer = value),
-                dense: true,
-                contentPadding: EdgeInsets.zero,
+            RadioGroup<int>(
+              groupValue: _functionAnswer,
+              onChanged: (value) => setState(() => _functionAnswer = value),
+              child: Column(
+                children: [
+                  for (var index = 0; index < answers.length; index++)
+                    RadioListTile<int>(
+                      value: index,
+                      title: Text(answers[index]),
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                ],
               ),
+            ),
             if (_functionAnswer != null)
               Text(
                 _functionAnswer == 2

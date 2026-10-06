@@ -30,23 +30,26 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _selectedIndex;
+    final isBattleRoute = location.startsWith('/battle/');
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: (index) {
-          final path = _destinations[index].path;
-          if (path != location) context.go(path);
-        },
-        destinations: [
-          for (final destination in _destinations)
-            NavigationDestination(
-              icon: Icon(destination.icon),
-              selectedIcon: Icon(destination.selectedIcon),
-              label: destination.label,
+      bottomNavigationBar: isBattleRoute
+          ? null
+          : NavigationBar(
+              selectedIndex: selectedIndex,
+              onDestinationSelected: (index) {
+                final path = _destinations[index].path;
+                if (path != location) context.go(path);
+              },
+              destinations: [
+                for (final destination in _destinations)
+                  NavigationDestination(
+                    icon: Icon(destination.icon),
+                    selectedIcon: Icon(destination.selectedIcon),
+                    label: destination.label,
+                  ),
+              ],
             ),
-        ],
-      ),
     );
   }
 

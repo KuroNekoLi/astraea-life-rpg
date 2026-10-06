@@ -74,6 +74,10 @@ docs/engineering/DATA_MODEL.md
 ```text
 docs/systems/COMBAT_SYSTEM.md
 docs/systems/SPELL_FUNCTION_SYSTEM.md
+docs/systems/COMBAT_IMPLEMENTATION_GAP_MAP.md
+docs/prototype/COMBAT_UX_FLOW_SPEC.md
+docs/prototype/COMBAT_MOTION_ART_DIRECTION.md
+docs/prototype/COMBAT_DEVICE_TEST_PLAN.md
 ```
 
 ## Story / Canon
@@ -192,6 +196,11 @@ astraea-orchestrator
 astraea-vision-guardian
 astraea-game-director
 astraea-combat-designer
+astraea-combat-ux-designer
+astraea-combat-animation-designer
+astraea-combat-technical-architect
+astraea-combat-gameplay-engineer
+astraea-combat-qa
 astraea-narrative-director
 astraea-real-player-playtester
 ```

@@ -67,9 +67,17 @@ void main() {
     await tester.tap(find.text('Start Ashfang Training Battle'));
     await tester.pumpAndSettle();
     expect(find.byType(AshfangBattleScreen), findsOneWidget);
-    expect(find.text('Prototype encounter inputs'), findsOneWidget);
+    expect(find.text('ASHFANG TRAINING CONSTRUCT'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
 
     container.read(routerProvider).go('/adventure');
+    await tester.pumpAndSettle();
+    expect(find.byType(NavigationBar), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Practice Function Analysis'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Practice Function Analysis'));
     await tester.pumpAndSettle();

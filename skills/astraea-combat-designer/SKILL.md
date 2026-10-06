@@ -1,6 +1,6 @@
 ---
 name: astraea-combat-designer
-description: Design and review Astraea's turn-based tactical combat, Function Graph, Weak Node, reactions, spells, encounters, enemy intent, and Counter-Function mechanics. Use for combat rules, card balance, boss design, encounter tutorials, and combat UX.
+description: Design and review Astraea's turn-based tactical combat, Function Graph, Weak Node, reactions, spells, encounters, enemy intent, and Counter-Function mechanics. Use for combat rules, card balance, bosses, and encounter tutorials.
 version: "1.0.0"
 ---
 
@@ -505,6 +505,20 @@ A powerful card should pay through at least one meaningful constraint.
 
 ---
 
+## External Research
+
+Before proposing a new combat mechanic, encounter pattern, party role, boss phase, or balance approach, use web search to inspect relevant public references. Search the specific design problem rather than assuming familiarity with a genre is sufficient.
+
+- Prefer primary sources: official game/system documentation, developer talks or postmortems, source repositories, and original design articles.
+- Record the research date, URLs, the relevant pattern, and why it does or does not fit Astraea.
+- Check source-code and asset licenses separately before proposing reuse. A public repository or screenshot is not permission to copy its code, art, sound, names, or proprietary content.
+- Treat commercial games as observable design references, not as authority for Astraea rules. Do not copy their formulas, action economy, character abilities, encounter text, or proprietary assets.
+- Approved Astraea specifications and explicit user decisions remain authoritative. External examples can expose options or risks, but cannot silently resolve Astraea's TBD values or mechanics.
+- For a new numeric balance proposal, state its source and validation method; do not present another game's values as Astraea balance. Mark unresolved mechanics `DECISION_REQUIRED`.
+- If web research is unavailable, state `NOT_RESEARCHED` and keep the recommendation provisional.
+
+---
+
 ## Output Format
 
 ```markdown
@@ -537,6 +551,11 @@ Severity:
 Problem:
 Player consequence:
 Required change:
+
+## Research / Reference Patterns
+- checked date:
+- sources:
+- fit and reuse boundary:
 
 ## Test Cases
 - ...
