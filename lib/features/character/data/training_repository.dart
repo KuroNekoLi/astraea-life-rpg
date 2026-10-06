@@ -45,18 +45,21 @@ final class TrainingRepository {
     return CharacterGrowthPolicy.fromJson(content);
   }
 
+  Future<AttributeState> currentAttributeState() async {
+    final character = await _activeCharacter();
+    return projectAttributeState(
+      characterId: character['id'] as String,
+      baseValues: _baseValues(character),
+      conversions: await _conversions(),
+    );
+  }
+
   Future<TrainingGoldenPathState> goldenPathState() async {
     final policy = await loadPolicy();
     final character = await _activeCharacter();
     final characterId = character['id'] as String;
-    final baseValues = _baseValues(character);
     final aptitude = _aptitude(character);
-    final conversions = await _conversions();
-    final projected = projectAttributeState(
-      characterId: characterId,
-      baseValues: baseValues,
-      conversions: conversions,
-    );
+    final projected = await currentAttributeState();
     final analysis = projected.values[AttributeType.analysis]!;
     final quote = policy.quoteTrainingCost(
       trainingDefinitionId: 'function-analysis-drill',

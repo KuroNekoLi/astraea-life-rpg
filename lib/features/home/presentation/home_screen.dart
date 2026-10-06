@@ -2,57 +2,333 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/app_providers.dart';
+import '../../../app/app_shell.dart';
 import '../../../core/measurement/prototype_event_recorder.dart';
+import '../../../app/app_providers.dart';
+import '../../../design_system/theme/astraea_theme.dart';
+import '../../character/application/training_preview_provider.dart';
+import '../../life_quest/application/providers.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Astraea Academy')),
-    body: SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.all(20),
+  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
+    appBar: AppBar(
+      titleSpacing: 20,
+      title: Row(
         children: [
+          const Icon(Icons.auto_awesome, color: AstraeaColors.gold, size: 20),
+          const SizedBox(width: 8),
           Text(
-            'Your life shapes your build.',
-            style: Theme.of(context).textTheme.headlineSmall,
+            'ASTRAEA',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              letterSpacing: 2.4,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Choose a real-life action when it fits your day. Nothing expires or takes away progress.',
+          const SizedBox(width: 7),
+          Text(
+            'LIFE × RPG',
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: AstraeaColors.muted,
+              letterSpacing: 1,
+            ),
           ),
-          const SizedBox(height: 24),
-          FilledButton.icon(
-            onPressed: () => context.push('/life'),
-            icon: const Icon(Icons.auto_awesome),
-            label: const Text('Life Quests'),
+        ],
+      ),
+      actions: [
+        IconButton(
+          tooltip: 'Character profile',
+          onPressed: () => context.go('/character'),
+          icon: const CircleAvatar(
+            radius: 17,
+            backgroundColor: AstraeaColors.panelRaised,
+            child: Icon(Icons.person, size: 20),
           ),
-          const SizedBox(height: 8),
-          OutlinedButton(
-            onPressed: () => context.push('/character/create'),
-            child: const Text('Create Character'),
+        ),
+        const SizedBox(width: 8),
+      ],
+    ),
+    body: SafeArea(
+      top: false,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(18, 12, 18, 28),
+        children: [
+          AstraeaHeroPanel(
+            eyebrow: 'Astraea Academy · Chapter 01',
+            title: 'Your life becomes a stronger world.',
+            description:
+                'Real effort grows your Astraea self. Continue your first academy chapter.',
+            icon: Icons.castle_outlined,
+            actionLabel: 'Continue Adventure',
+            onPressed: () => context.go('/adventure'),
           ),
-          OutlinedButton(
-            onPressed: () => context.push('/training'),
-            child: const Text('View Growth Potential'),
+          const SizedBox(height: 22),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'YOUR JOURNEY',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              Text(
+                'Choose a path',
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium?.copyWith(color: AstraeaColors.muted),
+              ),
+            ],
           ),
-          OutlinedButton(
-            onPressed: () => context.push('/story'),
-            child: const Text('Continue Academy Story'),
-          ),
-          OutlinedButton(
-            onPressed: () => context.push('/function-lab'),
-            child: const Text('Function Analysis Tutorial'),
-          ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
+          const _JourneyGrid(),
+          const SizedBox(height: 22),
+          _TodayQuests(ref: ref),
+          const SizedBox(height: 16),
+          _GrowthReady(ref: ref),
+          const SizedBox(height: 16),
           const _PilotMeasurementControl(),
         ],
       ),
     ),
   );
 }
+
+class _JourneyGrid extends StatelessWidget {
+  const _JourneyGrid();
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final width = (constraints.maxWidth - 10) / 2;
+      return Wrap(
+        spacing: 10,
+        runSpacing: 10,
+        children: [
+          _JourneyCard(
+            width: width,
+            icon: Icons.auto_awesome,
+            title: 'Adventure',
+            subtitle: 'Story & objectives',
+            color: AstraeaColors.starlight,
+            onTap: () => context.go('/adventure'),
+          ),
+          _JourneyCard(
+            width: width,
+            icon: Icons.favorite_outline,
+            title: 'Life Quests',
+            subtitle: 'Real-world actions',
+            color: const Color(0xFFFFB5C7),
+            onTap: () => context.go('/life'),
+          ),
+          _JourneyCard(
+            width: width,
+            icon: Icons.person_outline,
+            title: 'Character',
+            subtitle: 'Your growing build',
+            color: AstraeaColors.gold,
+            onTap: () => context.go('/character'),
+          ),
+          _JourneyCard(
+            width: width,
+            icon: Icons.style_outlined,
+            title: 'Prepared Deck',
+            subtitle: 'Six ready Functions',
+            color: const Color(0xFFC3ADFF),
+            onTap: () => context.go('/deck'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+class _JourneyCard extends StatelessWidget {
+  const _JourneyCard({
+    required this.width,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    required this.onTap,
+  });
+
+  final double width;
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: width,
+    child: Card(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: color.withValues(alpha: 0.13),
+                child: Icon(icon, color: color, size: 21),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      subtitle,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: AstraeaColors.muted,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+class _TodayQuests extends StatelessWidget {
+  const _TodayQuests({required this.ref});
+
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final quests = ref.watch(lifeQuestsProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('TODAY', style: Theme.of(context).textTheme.labelLarge),
+            TextButton(
+              onPressed: () => context.go('/life'),
+              child: const Text('All Quests'),
+            ),
+          ],
+        ),
+        quests.when(
+          loading: () => const LinearProgressIndicator(),
+          error: (_, _) => const Card(
+            child: ListTile(
+              title: Text('Life Quests are temporarily unavailable.'),
+            ),
+          ),
+          data: (items) {
+            if (items.isEmpty) {
+              return const Card(
+                child: ListTile(
+                  leading: Icon(Icons.spa_outlined),
+                  title: Text('A quiet day is okay.'),
+                  subtitle: Text('Choose a Life Quest whenever it fits.'),
+                ),
+              );
+            }
+            return Column(
+              children: [
+                for (final quest in items.take(2))
+                  Card(
+                    child: ListTile(
+                      leading: _domainBadge(quest['domain'] as String),
+                      title: Text(quest['title'] as String),
+                      subtitle: Text(
+                        '${_domainName(quest['domain'] as String)} · ${quest['durationMinutes']} min',
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => context.go('/life'),
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _GrowthReady extends StatelessWidget {
+  const _GrowthReady({required this.ref});
+
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final balances = ref.watch(trainingPotentialProvider);
+    return balances.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
+      data: (values) {
+        final available = values.values.fold<int>(
+          0,
+          (sum, amount) => sum + amount,
+        );
+        if (available == 0) return const SizedBox.shrink();
+        return Card(
+          color: AstraeaColors.deepBlue,
+          child: ListTile(
+            leading: const CircleAvatar(
+              backgroundColor: AstraeaColors.panelRaised,
+              child: Icon(Icons.auto_awesome, color: AstraeaColors.gold),
+            ),
+            title: const Text('Growth Potential ready'),
+            subtitle: Text('$available Potential · Choose how to train'),
+            trailing: const Icon(Icons.arrow_forward),
+            onTap: () => context.push('/training'),
+          ),
+        );
+      },
+    );
+  }
+}
+
+Widget _domainBadge(String domain) {
+  final color = switch (domain) {
+    'fitness' => const Color(0xFF8EE0BE),
+    'learning' => AstraeaColors.starlight,
+    'languages' => const Color(0xFFD0B3FF),
+    _ => AstraeaColors.gold,
+  };
+  final icon = switch (domain) {
+    'fitness' => Icons.directions_walk,
+    'learning' => Icons.menu_book_outlined,
+    'languages' => Icons.translate,
+    _ => Icons.favorite_outline,
+  };
+  return CircleAvatar(
+    backgroundColor: color.withValues(alpha: 0.14),
+    child: Icon(icon, color: color, size: 19),
+  );
+}
+
+String _domainName(String domain) => switch (domain) {
+  'fitness' => 'Fitness',
+  'learning' => 'Learning',
+  'languages' => 'Languages',
+  _ => 'Life',
+};
 
 class _PilotMeasurementControl extends ConsumerStatefulWidget {
   const _PilotMeasurementControl();

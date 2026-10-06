@@ -4,78 +4,189 @@ import 'package:go_router/go_router.dart';
 
 import '../application/providers.dart';
 import '../data/life_quest_repository.dart';
+import '../../../design_system/theme/astraea_theme.dart';
 
-class LifeScreen extends ConsumerWidget {
+class LifeScreen extends ConsumerStatefulWidget {
   const LifeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LifeScreen> createState() => _LifeScreenState();
+}
+
+class _LifeScreenState extends ConsumerState<LifeScreen> {
+  String _selectedDomain = 'All';
+
+  @override
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final quests = ref.watch(lifeQuestsProvider);
     final repository = ref.watch(lifeQuestRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Life Quests')),
+      appBar: AppBar(title: const Text('Life Quest')),
       body: quests.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) =>
             Center(child: Text('Could not load quests: $error')),
-        data: (items) => ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Text(
-              'Choose one meaningful action for today.',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 12),
-            for (final quest in items)
-              Card(
-                child: ListTile(
-                  title: Text(quest['title'] as String),
-                  subtitle: Text(
-                    '${quest['domain']} · ${quest['durationMinutes']} min',
-                  ),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => context.push('/life/${quest['id']}'),
+        data: (items) {
+          final filtered = _selectedDomain == 'All'
+              ? items
+              : items
+                    .where((quest) => quest['domain'] == _selectedDomain)
+                    .toList();
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              Text(
+                'TODAY',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: AstraeaColors.starlight,
+                  letterSpacing: 1.4,
                 ),
               ),
-            const SizedBox(height: 16),
-            OutlinedButton.icon(
-              onPressed: () async {
-                final repo = repository.asData?.value;
-                if (repo == null) return;
-                final templates = await repo.templates();
-                if (context.mounted) {
-                  await showModalBottomSheet<void>(
-                    context: context,
-                    builder: (sheetContext) => SafeArea(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-                          for (final template in templates)
-                            ListTile(
-                              title: Text(template.title),
-                              subtitle: Text(
-                                '${template.domain} · ${template.durationMinutes} min',
-                              ),
-                              onTap: () async {
-                                await repo.addQuest(template);
-                                ref.invalidate(lifeQuestsProvider);
-                                if (sheetContext.mounted) {
-                                  Navigator.pop(sheetContext);
-                                }
-                              },
-                            ),
-                        ],
+              const SizedBox(height: 5),
+              Text(
+                'Choose what fits your day.',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Your progress is always here. There are no streak penalties.',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AstraeaColors.muted),
+              ),
+              const SizedBox(height: 16),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (final domain in [
+                      'All',
+                      'fitness',
+                      'learning',
+                      'languages',
+                    ])
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(_domainLabel(domain)),
+                          selected: _selectedDomain == domain,
+                          onSelected: (_) =>
+                              setState(() => _selectedDomain = domain),
+                        ),
                       ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '${filtered.length} available ${filtered.length == 1 ? 'quest' : 'quests'}',
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium?.copyWith(color: AstraeaColors.muted),
+              ),
+              const SizedBox(height: 8),
+              for (final quest in filtered)
+                Card(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 5,
                     ),
-                  );
-                }
-              },
-              icon: const Icon(Icons.add),
-              label: const Text('Add a Life Quest'),
-            ),
-          ],
-        ),
+                    leading: _LifeDomainIcon(domain: quest['domain'] as String),
+                    title: Text(quest['title'] as String),
+                    subtitle: Text(
+                      '${_domainLabel(quest['domain'] as String)} · ${quest['durationMinutes']} min',
+                    ),
+                    trailing: FilledButton.tonal(
+                      onPressed: () => context.push('/life/${quest['id']}'),
+                      child: const Text('Start'),
+                    ),
+                    onTap: () => context.push('/life/${quest['id']}'),
+                  ),
+                ),
+              if (filtered.isEmpty)
+                const Card(
+                  child: ListTile(
+                    leading: Icon(Icons.spa_outlined),
+                    title: Text('No quests in this category yet.'),
+                    subtitle: Text('Add one when you are ready.'),
+                  ),
+                ),
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                onPressed: () async {
+                  final repo = repository.asData?.value;
+                  if (repo == null) return;
+                  final templates = await repo.templates();
+                  if (context.mounted) {
+                    await showModalBottomSheet<void>(
+                      context: context,
+                      builder: (sheetContext) => SafeArea(
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: [
+                            for (final template in templates)
+                              ListTile(
+                                title: Text(template.title),
+                                subtitle: Text(
+                                  '${template.domain} · ${template.durationMinutes} min',
+                                ),
+                                onTap: () async {
+                                  await repo.addQuest(template);
+                                  ref.invalidate(lifeQuestsProvider);
+                                  if (sheetContext.mounted) {
+                                    Navigator.pop(sheetContext);
+                                  }
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.add),
+                label: const Text('Add a Life Quest'),
+              ),
+            ],
+          );
+        },
       ),
+    );
+  }
+}
+
+String _domainLabel(String domain) => switch (domain) {
+  'All' => 'All',
+  'fitness' => 'Fitness',
+  'learning' => 'Learning',
+  'languages' => 'Languages',
+  _ => domain,
+};
+
+class _LifeDomainIcon extends StatelessWidget {
+  const _LifeDomainIcon({required this.domain});
+
+  final String domain;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = switch (domain) {
+      'fitness' => const Color(0xFF8EE0BE),
+      'learning' => AstraeaColors.starlight,
+      'languages' => const Color(0xFFC7ADFF),
+      _ => AstraeaColors.gold,
+    };
+    final icon = switch (domain) {
+      'fitness' => Icons.directions_walk,
+      'learning' => Icons.menu_book_outlined,
+      'languages' => Icons.translate,
+      _ => Icons.favorite_outline,
+    };
+    return CircleAvatar(
+      backgroundColor: color.withValues(alpha: 0.16),
+      child: Icon(icon, color: color),
     );
   }
 }

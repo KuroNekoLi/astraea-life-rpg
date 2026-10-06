@@ -29,6 +29,14 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      await tester.tap(find.text('Tap to start'));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Enter Astraea'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Enter Astraea'));
+      await tester.pumpAndSettle();
+      container.read(routerProvider).go('/character');
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Create Character'));
       await tester.pumpAndSettle();
       expect(find.byType(CharacterCreationScreen), findsOneWidget);
