@@ -75,7 +75,7 @@ class _CharacterCreationScreenState
           ListTile(
             title: Text(_label(attribute)),
             subtitle: Text(
-              'Base ${baseAttributeValue + _allocation[attribute]!} · ${_effect(attribute)}',
+              'Base $baseAttributeValue + ${_allocation[attribute]} allocated = ${baseAttributeValue + _allocation[attribute]!} starting value\n${_effect(attribute)}',
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,

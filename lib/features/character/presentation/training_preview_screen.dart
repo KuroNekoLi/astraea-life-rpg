@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../design_system/theme/astraea_theme.dart';
 import '../../life_quest/domain/life_domain.dart';
 import '../data/training_repository.dart';
+import '../application/character_profile_provider.dart';
 import '../application/training_preview_provider.dart';
 
 class TrainingPreviewScreen extends ConsumerStatefulWidget {
@@ -184,6 +185,7 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
       _pendingIdempotencyKey = null;
       ref.invalidate(trainingGoldenPathProvider);
       ref.invalidate(trainingPotentialProvider);
+      ref.invalidate(characterProfileProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

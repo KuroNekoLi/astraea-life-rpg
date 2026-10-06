@@ -21,6 +21,8 @@ class StoryScreen extends ConsumerStatefulWidget {
 class _StoryScreenState extends ConsumerState<StoryScreen> {
   late Future<_StoryView> _story;
   final Set<String> _selectedSpells = {};
+  int _selectedFunctionNode = 0;
+  int? _functionAnswer;
 
   @override
   void initState() {
@@ -71,8 +73,18 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
       if (sceneIndex >= sceneList.length) {
         return Scaffold(
           appBar: AppBar(title: const Text('Academy Story')),
+          bottomNavigationBar: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+              child: FilledButton.icon(
+                onPressed: () => context.push('/battle/ashfang'),
+                icon: const Icon(Icons.sports_martial_arts),
+                label: const Text('Start Ashfang Training Battle'),
+              ),
+            ),
+          ),
           body: ListView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
             children: [
               Text(
                 'Chapter One complete',
@@ -83,11 +95,6 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
                 'Your Prepared Deck is saved. Continue by practicing how to read an enemy Function and discover its Weak Node.',
               ),
               const SizedBox(height: 20),
-              FilledButton.icon(
-                onPressed: () => context.push('/battle/ashfang'),
-                icon: const Icon(Icons.sports_martial_arts),
-                label: const Text('Start Ashfang Training Battle'),
-              ),
               OutlinedButton.icon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.account_tree_outlined),
@@ -159,29 +166,73 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
     },
   );
 
-  Widget _functionGraphCard(BuildContext context) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Function Graph',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          for (final node in [
-            'Gather · collect energy',
-            'Shape · form a bolt',
-            'Move · direct the result',
-          ])
-            ListTile(
-              leading: const Icon(Icons.circle_outlined),
-              title: Text(node),
+  Widget _functionGraphCard(BuildContext context) {
+    const nodes = [
+      ('Gather', 'Collects the energy the Function will use.'),
+      ('Shape', 'Forms that energy into the intended effect, such as a bolt.'),
+      ('Move', 'Directs the formed effect toward its target.'),
+    ];
+    const answers = ['Gather', 'Shape', 'Move'];
+    final selected = nodes[_selectedFunctionNode];
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Function Graph',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-        ],
+            const Text('Tap a step to see what it contributes.'),
+            for (var index = 0; index < nodes.length; index++)
+              ListTile(
+                selected: _selectedFunctionNode == index,
+                leading: Icon(
+                  _selectedFunctionNode == index
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                ),
+                title: Text(
+                  '${nodes[index].$1} · ${['collect energy', 'form a bolt', 'direct the result'][index]}',
+                ),
+                onTap: () => setState(() => _selectedFunctionNode = index),
+              ),
+            const Divider(),
+            Text(selected.$1, style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 4),
+            Text(selected.$2),
+            const SizedBox(height: 16),
+            Text(
+              'Quick check: Which step directs the formed effect toward its target?',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            for (var index = 0; index < answers.length; index++)
+              RadioListTile<int>(
+                value: index,
+                groupValue: _functionAnswer,
+                title: Text(answers[index]),
+                onChanged: (value) => setState(() => _functionAnswer = value),
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+              ),
+            if (_functionAnswer != null)
+              Text(
+                _functionAnswer == 2
+                    ? 'Correct — Move directs the effect to its target.'
+                    : 'Not quite. Move is the step that directs the effect to its target.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: _functionAnswer == 2
+                      ? const Color(0xFF9EE3B7)
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget _castingMethodChoices() => const Card(
     child: Padding(

@@ -14,6 +14,30 @@ class AdventureScreen extends ConsumerWidget {
     final adventure = ref.watch(adventureOverviewProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Adventure')),
+      bottomNavigationBar: adventure.when(
+        loading: () => null,
+        error: (_, _) => null,
+        data: (progress) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+            child: FilledButton.icon(
+              onPressed: () => progress.isComplete
+                  ? context.push('/battle/ashfang')
+                  : context.push('/story'),
+              icon: Icon(
+                progress.isComplete
+                    ? Icons.sports_martial_arts
+                    : Icons.arrow_forward_rounded,
+              ),
+              label: Text(
+                progress.isComplete
+                    ? 'Start Ashfang Training Battle'
+                    : 'Continue Adventure',
+              ),
+            ),
+          ),
+        ),
+      ),
       body: adventure.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(
@@ -23,7 +47,7 @@ class AdventureScreen extends ConsumerWidget {
           ),
         ),
         data: (progress) => ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
             AstraeaSectionHeader(
               eyebrow: 'Chapter 01',
@@ -69,11 +93,6 @@ class AdventureScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              FilledButton.icon(
-                onPressed: () => context.push('/battle/ashfang'),
-                icon: const Icon(Icons.sports_martial_arts),
-                label: const Text('Start Ashfang Training Battle'),
-              ),
               OutlinedButton.icon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.account_tree_outlined),
@@ -85,11 +104,6 @@ class AdventureScreen extends ConsumerWidget {
                 label: const Text('Return Home'),
               ),
             ] else ...[
-              FilledButton.icon(
-                onPressed: () => context.push('/story'),
-                icon: const Icon(Icons.arrow_forward_rounded),
-                label: const Text('Continue Adventure'),
-              ),
               const SizedBox(height: 10),
               OutlinedButton.icon(
                 onPressed: () => context.push('/function-lab'),
