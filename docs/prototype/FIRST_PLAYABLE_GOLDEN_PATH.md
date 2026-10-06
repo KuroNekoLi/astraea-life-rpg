@@ -31,7 +31,7 @@ This implementation must preserve:
 - `docs/systems/COMBAT_SYSTEM.md`
 - `docs/systems/SPELL_FUNCTION_SYSTEM.md`
 - `assets/content/progression/character_growth_mvp_v1.json`
-- `assets/content/encounters/ashfang_training_v1.json`
+- `assets/content/encounters/ashfang_training_v2.json`
 
 ## Scope Contract
 

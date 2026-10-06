@@ -55,7 +55,11 @@ class AppShell extends StatelessWidget {
       final path = _destinations[index].path;
       if (location == path || location.startsWith('$path/')) return index;
     }
-    if (location == '/story' || location == '/function-lab') return 2;
+    if (location == '/story' ||
+        location == '/function-lab' ||
+        location.startsWith('/battle')) {
+      return 2;
+    }
     if (location == '/training' || location == '/character/create') return 4;
     return 0;
   }

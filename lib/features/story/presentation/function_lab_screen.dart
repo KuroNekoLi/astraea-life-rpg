@@ -37,7 +37,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
     final content =
         jsonDecode(
               await rootBundle.loadString(
-                'assets/content/encounters/ashfang_training_v1.json',
+                'assets/content/encounters/ashfang_training_v2.json',
               ),
             )
             as Map<String, dynamic>;

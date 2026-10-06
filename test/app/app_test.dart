@@ -40,6 +40,7 @@ void main() {
       '/home',
     );
     expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.text('Choose a Life Quest'), findsOneWidget);
     expect(find.text('Adventure'), findsWidgets);
     for (final destination in [
       ('Life', '/life'),
@@ -55,6 +56,13 @@ void main() {
         destination.$2,
       );
     }
+    container.read(routerProvider).go('/training');
+    await tester.pumpAndSettle();
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(
+      tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
+      4,
+    );
     expect(tester.takeException(), isNull);
   });
 }

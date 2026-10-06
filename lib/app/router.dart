@@ -12,6 +12,7 @@ import '../features/character/presentation/character_profile_screen.dart';
 import '../features/life_quest/presentation/life_screen.dart';
 import '../features/character/presentation/training_preview_screen.dart';
 import '../features/home/presentation/launch_screens.dart';
+import '../features/combat/presentation/ashfang_battle_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -39,6 +40,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const AdventureScreen(),
           ),
           GoRoute(
+            path: '/battle/ashfang',
+            builder: (_, _) => const AshfangBattleScreen(),
+          ),
+          GoRoute(
             path: '/deck',
             name: 'deck',
             builder: (_, _) => const DeckScreen(),
@@ -48,16 +53,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'character',
             builder: (_, _) => const CharacterProfileScreen(),
           ),
+          GoRoute(
+            path: '/training',
+            builder: (_, _) => const TrainingPreviewScreen(),
+          ),
+          GoRoute(path: '/story', builder: (_, _) => const StoryScreen()),
+          GoRoute(
+            path: '/function-lab',
+            builder: (_, _) => const FunctionLabScreen(),
+          ),
         ],
-      ),
-      GoRoute(path: '/story', builder: (_, _) => const StoryScreen()),
-      GoRoute(
-        path: '/training',
-        builder: (_, _) => const TrainingPreviewScreen(),
-      ),
-      GoRoute(
-        path: '/function-lab',
-        builder: (_, _) => const FunctionLabScreen(),
       ),
       GoRoute(
         path: '/character/create',

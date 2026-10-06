@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../design_system/theme/astraea_theme.dart';
 import '../../life_quest/domain/life_domain.dart';
+import '../data/training_repository.dart';
+import '../application/character_profile_provider.dart';
 import '../application/training_preview_provider.dart';
 
 class TrainingPreviewScreen extends ConsumerStatefulWidget {
@@ -43,15 +46,15 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
           ),
         ),
         data: (value) => ListView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
           children: [
             Text(
-              'Growth Potential',
+              'Choose a Training',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             const Text(
-              'Life Quest rewards become Growth Potential. Training converts that potential into permanent character growth.',
+              'Life Quest rewards become Growth Potential. Choose a matching drill to turn it into permanent character growth.',
             ),
             const SizedBox(height: 16),
             for (final category in GrowthPotentialCategory.values)
@@ -61,58 +64,53 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                   trailing: Text('${value.balances[category] ?? 0}'),
                 ),
               ),
-            const SizedBox(height: 20),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Function Analysis Drill',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Cognitive Potential → Analysis. Better Analysis improves your ability to reveal enemy Function Weak Nodes.',
-                    ),
-                    const SizedBox(height: 16),
-                    _row('Current Analysis', '${value.effectiveAnalysis}'),
-                    _row('Analysis Aptitude', '${value.analysisAptitude} / 6'),
-                    _row(
-                      'Training cost',
-                      '${value.quote.potentialCost} Cognitive Potential',
-                    ),
-                    _row(
-                      'After Training',
-                      'Analysis ${value.effectiveAnalysis} → ${value.effectiveAnalysis + value.quote.attributeGrowth}',
-                    ),
-                    _row('Ruleset', value.quote.contentVersion),
-                    const SizedBox(height: 16),
-                    FilledButton(
-                      onPressed: value.canTrain && !_training
-                          ? () => _train(value.characterId)
-                          : null,
-                      child: Text(
-                        _training
-                            ? 'Training…'
-                            : value.canTrain
-                            ? 'Train Analysis'
-                            : 'Not enough Cognitive Potential',
+            if (value.options.every((option) => !option.canTrain)) ...[
+              const SizedBox(height: 8),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Potential is building toward your next Training',
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                    ),
-                    if (!value.canTrain) ...[
                       const SizedBox(height: 8),
                       const Text(
-                        'Complete another Learning Life Quest to earn more Cognitive Potential. Nothing is lost or reset.',
+                        'A new character starts with 0 Growth Potential. Your first Life Quest adds its authored reward to the matching category. Training stays locked until that category covers the quoted cost; no reward or cost is changed.',
+                      ),
+                      const SizedBox(height: 8),
+                      for (final option in value.options.where(
+                        (item) => item.availablePotential > 0,
+                      ))
+                        Text(
+                          '${_labels[option.quote.potentialCategory]}: ${option.availablePotential} / ${option.quote.potentialCost} · ${option.quote.attribute.name}',
+                        ),
+                      const SizedBox(height: 12),
+                      OutlinedButton.icon(
+                        onPressed: () => context.go('/life'),
+                        icon: const Icon(Icons.checklist),
+                        label: const Text('Choose another Life Quest'),
                       ),
                     ],
-                  ],
+                  ),
                 ),
               ),
+            ],
+            const SizedBox(height: 20),
+            Text(
+              'AVAILABLE DRILLS',
+              style: Theme.of(context).textTheme.labelLarge,
             ),
-            if (value.analysisPermanentGrowth > 0) ...[
-              const SizedBox(height: 16),
+            const SizedBox(height: 8),
+            for (final option in value.options)
+              _TrainingOptionCard(
+                option: option,
+                training: _training,
+                onTrain: () => _train(value.characterId, option.definitionId),
+              ),
+            if (value.analysisPermanentGrowth > 0)
               Card(
                 child: ListTile(
                   title: const Text('Analysis growth is active'),
@@ -122,7 +120,44 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                   trailing: const Icon(Icons.auto_awesome),
                 ),
               ),
-              const SizedBox(height: 8),
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Keep your journey moving',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Training changes your character permanently. Check the updated build, then return to the academy.',
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: () => context.go('/character'),
+                          icon: const Icon(Icons.person_outline),
+                          label: const Text('View Character'),
+                        ),
+                        FilledButton.icon(
+                          onPressed: () => context.go('/adventure'),
+                          icon: const Icon(Icons.auto_awesome),
+                          label: const Text('Continue Adventure'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (value.analysisPermanentGrowth > 0) ...[
+              const SizedBox(height: 12),
               FilledButton.tonalIcon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.visibility),
@@ -135,39 +170,132 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
     );
   }
 
-  Widget _row(String label, String value) => Padding(
-    padding: const EdgeInsets.only(bottom: 6),
-    child: Row(
-      children: [
-        Expanded(child: Text(label)),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
-      ],
-    ),
-  );
-
-  Future<void> _train(String characterId) async {
+  Future<void> _train(String characterId, String definitionId) async {
     setState(() {
       _training = true;
       _pendingIdempotencyKey ??=
-          'golden-path:$characterId:function-analysis:${DateTime.now().microsecondsSinceEpoch}';
+          'training:$characterId:$definitionId:${DateTime.now().microsecondsSinceEpoch}';
     });
     try {
       final repository = await ref.read(trainingRepositoryProvider.future);
-      await repository.trainFunctionAnalysis(
+      await repository.train(
+        trainingDefinitionId: definitionId,
         idempotencyKey: _pendingIdempotencyKey!,
       );
       _pendingIdempotencyKey = null;
       ref.invalidate(trainingGoldenPathProvider);
       ref.invalidate(trainingPotentialProvider);
+      ref.invalidate(characterProfileProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Training complete. Analysis increased permanently.'),
+            content: Text(
+              'Training complete. Your attribute grew permanently.',
+            ),
           ),
         );
       }
     } finally {
       if (mounted) setState(() => _training = false);
     }
+  }
+}
+
+class _TrainingOptionCard extends StatelessWidget {
+  const _TrainingOptionCard({
+    required this.option,
+    required this.training,
+    required this.onTrain,
+  });
+
+  final TrainingOptionPreview option;
+  final bool training;
+  final VoidCallback onTrain;
+
+  static const _details = {
+    'reaction-drill': (
+      'Reaction Drill',
+      'Processing',
+      'Build focus: initiative, reactions, and fast battle decisions.',
+    ),
+    'precision-movement': (
+      'Precision Movement',
+      'Precision',
+      'Build focus: targeting, interrupts, and precise control.',
+    ),
+    'function-analysis-drill': (
+      'Function Analysis Drill',
+      'Analysis',
+      'Build focus: revealing enemy Function Weak Nodes.',
+    ),
+    'complexity-exercise': (
+      'Complexity Exercise',
+      'Computation',
+      'Build focus: complex Functions and counter reasoning.',
+    ),
+    'mana-control-drill': (
+      'Mana Control Drill',
+      'Efficiency',
+      'Build focus: Mana use and resource efficiency.',
+    ),
+    'intent-encoding-drill': (
+      'Intent Encoding Drill',
+      'Mana Output',
+      'Build focus: safe output and burst spell capacity.',
+    ),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final detail = _details[option.definitionId]!;
+    final category = option.quote.potentialCategory;
+    final categoryLabel = switch (category) {
+      GrowthPotentialCategory.physical => 'Physical',
+      GrowthPotentialCategory.cognitive => 'Cognitive',
+      GrowthPotentialCategory.communication => 'Communication',
+    };
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(detail.$1, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 4),
+            Text('$categoryLabel Potential → ${detail.$2}'),
+            const SizedBox(height: 6),
+            Text(
+              detail.$3,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '${detail.$2} ${option.currentAttributeValue} → ${option.currentAttributeValue + option.quote.attributeGrowth}',
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Aptitude ${option.quote.aptitudeRating}/6 · Cost ${option.quote.potentialCost} $categoryLabel Potential',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: option.canTrain && !training ? onTrain : null,
+                child: Text(
+                  training
+                      ? 'Training…'
+                      : option.canTrain
+                      ? 'Train ${detail.$2}'
+                      : 'Need ${option.quote.potentialCost - option.availablePotential} more $categoryLabel Potential',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

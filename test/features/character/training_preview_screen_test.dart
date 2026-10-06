@@ -66,11 +66,15 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Cognitive Potential'), findsOneWidget);
-    expect(find.text('18'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Train Analysis'),
+      220,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+
     expect(find.text('Function Analysis Drill'), findsOneWidget);
-    expect(find.text('18 Cognitive Potential'), findsOneWidget);
-    expect(find.text('Analysis 12 → 13'), findsOneWidget);
+    expect(find.textContaining('Analysis 12 → 13'), findsOneWidget);
 
     await tester.ensureVisible(find.text('Train Analysis'));
     await tester.pumpAndSettle();
@@ -80,7 +84,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.text('Training complete. Analysis increased permanently.'),
+      find.text('Training complete. Your attribute grew permanently.'),
       findsOneWidget,
     );
     await tester.scrollUntilVisible(

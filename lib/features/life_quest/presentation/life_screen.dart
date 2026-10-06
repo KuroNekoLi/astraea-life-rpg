@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../character/application/training_preview_provider.dart';
 import '../application/providers.dart';
 import '../data/life_quest_repository.dart';
 import '../../../design_system/theme/astraea_theme.dart';
@@ -332,6 +333,8 @@ class QuestCompletionScreen extends ConsumerWidget {
                           confirmReward: true,
                         );
                         ref.invalidate(lifeQuestsProvider);
+                        ref.invalidate(trainingGoldenPathProvider);
+                        ref.invalidate(trainingPotentialProvider);
                         if (context.mounted) {
                           context.go('/training');
                         }

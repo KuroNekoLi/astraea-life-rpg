@@ -16,6 +16,7 @@ final class TrainingGoldenPathState {
     required this.analysisPermanentGrowth,
     required this.analysisAptitude,
     required this.quote,
+    required this.options,
   });
 
   final String characterId;
@@ -24,9 +25,28 @@ final class TrainingGoldenPathState {
   final int analysisPermanentGrowth;
   final int analysisAptitude;
   final TrainingCostQuote quote;
+  final List<TrainingOptionPreview> options;
 
   bool get canTrain =>
       (balances[GrowthPotentialCategory.cognitive] ?? 0) >= quote.potentialCost;
+}
+
+final class TrainingOptionPreview {
+  const TrainingOptionPreview({
+    required this.definitionId,
+    required this.quote,
+    required this.currentAttributeValue,
+    required this.currentPermanentGrowth,
+    required this.availablePotential,
+  });
+
+  final String definitionId;
+  final TrainingCostQuote quote;
+  final int currentAttributeValue;
+  final int currentPermanentGrowth;
+  final int availablePotential;
+
+  bool get canTrain => availablePotential >= quote.potentialCost;
 }
 
 final class TrainingRepository {
@@ -66,13 +86,32 @@ final class TrainingRepository {
       aptitude: aptitude,
       currentPermanentGrowth: analysis.permanentGrowth,
     );
+    final balances = await availablePotential();
+    final options = policy.definitions
+        .map((definition) {
+          final attribute = projected.values[definition.attribute]!;
+          final optionQuote = policy.quoteTrainingCost(
+            trainingDefinitionId: definition.id,
+            aptitude: aptitude,
+            currentPermanentGrowth: attribute.permanentGrowth,
+          );
+          return TrainingOptionPreview(
+            definitionId: definition.id,
+            quote: optionQuote,
+            currentAttributeValue: attribute.effectiveValue,
+            currentPermanentGrowth: attribute.permanentGrowth,
+            availablePotential: balances[definition.potentialCategory] ?? 0,
+          );
+        })
+        .toList(growable: false);
     return TrainingGoldenPathState(
       characterId: characterId,
-      balances: await availablePotential(),
+      balances: balances,
       effectiveAnalysis: analysis.effectiveValue,
       analysisPermanentGrowth: analysis.permanentGrowth,
       analysisAptitude: aptitude.ratings[AttributeType.analysis]!,
       quote: quote,
+      options: options,
     );
   }
 
@@ -105,6 +144,14 @@ final class TrainingRepository {
 
   Future<TrainingResult> trainFunctionAnalysis({
     required String idempotencyKey,
+  }) => train(
+    trainingDefinitionId: 'function-analysis-drill',
+    idempotencyKey: idempotencyKey,
+  );
+
+  Future<TrainingResult> train({
+    required String trainingDefinitionId,
+    required String idempotencyKey,
   }) async {
     if (idempotencyKey.trim().isEmpty) {
       throw ArgumentError.value(idempotencyKey, 'idempotencyKey');
@@ -126,10 +173,17 @@ final class TrainingRepository {
         baseValues: baseValues,
         conversions: history,
       );
+      final definitionPolicy = policy.definitions.firstWhere(
+        (definition) => definition.id == trainingDefinitionId,
+        orElse: () => throw ArgumentError.value(
+          trainingDefinitionId,
+          'trainingDefinitionId',
+        ),
+      );
       final currentGrowth =
-          projected.values[AttributeType.analysis]!.permanentGrowth;
+          projected.values[definitionPolicy.attribute]!.permanentGrowth;
       final quote = policy.quoteTrainingCost(
-        trainingDefinitionId: 'function-analysis-drill',
+        trainingDefinitionId: trainingDefinitionId,
         aptitude: aptitude,
         currentPermanentGrowth: currentGrowth,
       );

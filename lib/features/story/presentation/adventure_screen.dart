@@ -14,6 +14,30 @@ class AdventureScreen extends ConsumerWidget {
     final adventure = ref.watch(adventureOverviewProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Adventure')),
+      bottomNavigationBar: adventure.when(
+        loading: () => null,
+        error: (_, _) => null,
+        data: (progress) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+            child: FilledButton.icon(
+              onPressed: () => progress.isComplete
+                  ? context.push('/battle/ashfang')
+                  : context.push('/story'),
+              icon: Icon(
+                progress.isComplete
+                    ? Icons.sports_martial_arts
+                    : Icons.arrow_forward_rounded,
+              ),
+              label: Text(
+                progress.isComplete
+                    ? 'Start Ashfang Training Battle'
+                    : 'Continue Adventure',
+              ),
+            ),
+          ),
+        ),
+      ),
       body: adventure.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(
@@ -23,7 +47,7 @@ class AdventureScreen extends ConsumerWidget {
           ),
         ),
         data: (progress) => ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
             AstraeaSectionHeader(
               eyebrow: 'Chapter 01',
@@ -58,23 +82,35 @@ class AdventureScreen extends ConsumerWidget {
                     index == progress.completedScenes && !progress.isComplete,
               ),
             const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: () => context.push('/story'),
-              icon: Icon(
-                progress.isComplete
-                    ? Icons.replay_rounded
-                    : Icons.arrow_forward_rounded,
+            if (progress.isComplete) ...[
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.flag_outlined),
+                  title: const Text('Chapter One complete'),
+                  subtitle: const Text(
+                    'Next, practice reading an enemy Function and finding its Weak Node.',
+                  ),
+                ),
               ),
-              label: Text(
-                progress.isComplete ? 'Review Chapter' : 'Continue Adventure',
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: () => context.push('/function-lab'),
+                icon: const Icon(Icons.account_tree_outlined),
+                label: const Text('Practice Function Analysis'),
               ),
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton.icon(
-              onPressed: () => context.push('/function-lab'),
-              icon: const Icon(Icons.account_tree_outlined),
-              label: const Text('Function Analysis Tutorial'),
-            ),
+              OutlinedButton.icon(
+                onPressed: () => context.go('/home'),
+                icon: const Icon(Icons.home_outlined),
+                label: const Text('Return Home'),
+              ),
+            ] else ...[
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: () => context.push('/function-lab'),
+                icon: const Icon(Icons.account_tree_outlined),
+                label: const Text('Try Function Analysis Tutorial'),
+              ),
+            ],
           ],
         ),
       ),
