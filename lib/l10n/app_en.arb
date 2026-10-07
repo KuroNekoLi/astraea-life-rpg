@@ -759,5 +759,6 @@
   "combatHoldFormation": "Hold Formation",
   "combatNodeCompression": "Compression",
   "combatNodeStabilization": "Stabilization",
-  "combatNodeTrajectory": "Trajectory"
+  "combatNodeTrajectory": "Trajectory",
+  "combatIntentWhileHeroCasting": "Ashfang may act before Fireball II resolves."
 }
