@@ -395,33 +395,33 @@ class _RematchCommands extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-            Text(
-              victory
-                  ? context.l10n.combatRematchVictoryTitle
-                  : context.l10n.combatRematchDefeatTitle,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: victory
-                    ? AstraeaColors.gold
-                    : Theme.of(context).colorScheme.error,
+              Text(
+                victory
+                    ? context.l10n.combatRematchVictoryTitle
+                    : context.l10n.combatRematchDefeatTitle,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: victory
+                      ? AstraeaColors.gold
+                      : Theme.of(context).colorScheme.error,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              victory
-                  ? context.l10n.combatRematchVictoryBody
-                  : context.l10n.combatRematchDefeatBody,
-            ),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: controller.reset,
-              child: Text(context.l10n.combatRestart),
-            ),
-            TextButton(
-              onPressed: () => context.go('/adventure'),
-              child: Text(context.l10n.combatReturnAdventure),
-            ),
-          ],
-        ),
+              const SizedBox(height: 10),
+              Text(
+                victory
+                    ? context.l10n.combatRematchVictoryBody
+                    : context.l10n.combatRematchDefeatBody,
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: controller.reset,
+                child: Text(context.l10n.combatRestart),
+              ),
+              TextButton(
+                onPressed: () => context.go('/adventure'),
+                child: Text(context.l10n.combatReturnAdventure),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -436,78 +436,78 @@ class _RematchCommands extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-          Text(
-            context.l10n.combatRematchTitle,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 10),
-          if (actor != null) ...[
             Text(
-              context.l10n.combatRematchPlayerTurn(
-                _actorName(context, actorId!),
-              ),
-              style: Theme.of(
-                context,
-              ).textTheme.labelLarge?.copyWith(color: AstraeaColors.starlight),
+              context.l10n.combatRematchTitle,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 4),
-            Text(context.l10n.combatHp(actor.hp, actor.maxHp)),
-            Text(context.l10n.combatMana(actor.mana, actor.maxMana)),
-            const SizedBox(height: 14),
-            FilledButton.icon(
-              onPressed: controller.basicAttack,
-              icon: const Icon(Icons.gps_fixed),
-              label: Text(context.l10n.combatRematchBasicAttack),
-            ),
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
-              onPressed: controller.guard,
-              icon: const Icon(Icons.shield_outlined),
-              label: Text(context.l10n.combatRematchGuard),
-            ),
-            if (actorId == 'hero') ...[
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: controller.castHeroFireballI,
-                icon: const Icon(Icons.local_fire_department_outlined),
-                label: Text(context.l10n.combatRematchFireballI),
-              ),
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: controller.beginHeroFireballIIFullChant,
-                icon: const Icon(Icons.auto_awesome),
-                label: Text(context.l10n.combatRematchFireballII),
-              ),
-            ],
-            if (actorId == 'rio') ...[
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: view.enemyCastingFunction == null
-                    ? null
-                    : controller.analyzeEnemyFunction,
-                icon: const Icon(Icons.search),
-                label: Text(context.l10n.combatRematchAnalyze),
-              ),
-              const SizedBox(height: 6),
+            const SizedBox(height: 10),
+            if (actor != null) ...[
               Text(
-                view.enemyCastingFunction == null
-                    ? context.l10n.combatRematchNoCastingHint
-                    : context.l10n.combatRematchCastingHint,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
+                context.l10n.combatRematchPlayerTurn(
+                  _actorName(context, actorId!),
+                ),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: AstraeaColors.starlight,
+                ),
               ),
+              const SizedBox(height: 4),
+              Text(context.l10n.combatHp(actor.hp, actor.maxHp)),
+              Text(context.l10n.combatMana(actor.mana, actor.maxMana)),
+              const SizedBox(height: 14),
+              FilledButton.icon(
+                onPressed: controller.basicAttack,
+                icon: const Icon(Icons.gps_fixed),
+                label: Text(context.l10n.combatRematchBasicAttack),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: controller.guard,
+                icon: const Icon(Icons.shield_outlined),
+                label: Text(context.l10n.combatRematchGuard),
+              ),
+              if (actorId == 'hero') ...[
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: controller.castHeroFireballI,
+                  icon: const Icon(Icons.local_fire_department_outlined),
+                  label: Text(context.l10n.combatRematchFireballI),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: controller.beginHeroFireballIIFullChant,
+                  icon: const Icon(Icons.auto_awesome),
+                  label: Text(context.l10n.combatRematchFireballII),
+                ),
+              ],
+              if (actorId == 'rio') ...[
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: view.enemyCastingFunction == null
+                      ? null
+                      : controller.analyzeEnemyFunction,
+                  icon: const Icon(Icons.search),
+                  label: Text(context.l10n.combatRematchAnalyze),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  view.enemyCastingFunction == null
+                      ? context.l10n.combatRematchNoCastingHint
+                      : context.l10n.combatRematchCastingHint,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
+                ),
+              ],
+            ] else ...[
+              const SizedBox(height: 24),
+              Text(
+                context.l10n.combatRematchCastingHint,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
             ],
-          ] else ...[
-            const SizedBox(height: 24),
-            Text(
-              context.l10n.combatRematchCastingHint,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
           ],
-        ],
-      ),
+        ),
       ),
     );
   }
