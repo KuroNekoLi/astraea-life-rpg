@@ -755,5 +755,9 @@
   "combatFullChantCastingBody": "Fireball II is now a pending Resolve event on the Timeline. Ashfang can act before the spell completes.",
   "combatAdvanceTimeline": "Advance to Resolve",
   "combatDefeatTitle": "Training failed",
-  "combatDefeatBody": "The party was defeated. Restart the training encounter and try a different decision."
+  "combatDefeatBody": "The party was defeated. Restart the training encounter and try a different decision.",
+  "combatHoldFormation": "Hold Formation",
+  "combatNodeCompression": "Compression",
+  "combatNodeStabilization": "Stabilization",
+  "combatNodeTrajectory": "Trajectory"
 }
