@@ -176,7 +176,120 @@ These are consequences of the locked rules and should guide interface and encoun
 
 ## 12. Balance / Playtest — Not Locked Yet
 
-The following values and formulas are explicitly open and require balance work or playtesting:
+Balance is an iterative loop, not a one-time rules lock:
+
+```text
+Target experience → Initial test values → Playtest → Measure → Adjust
+```
+
+The values in this section and in the linked Ashfang test sheet are hypotheses for a first prototype pass. They are not canon, production balance, or a promise that the system is balanced. Change only a small number of primary balance axes per iteration so results remain interpretable.
+
+### 12.1 Encounter length and complexity targets
+
+| Encounter | Target duration | Party Main Actions (initial target) | Purpose |
+|---|---:|---:|---|
+| Normal | 2–4 minutes | 8–15 | Quick decisions; one main tactical problem plus the basic damage loop. |
+| Elite | 5–8 minutes | 18–30 | Combine a few mechanics, such as Caster + Support + positioning. |
+| Boss | 10–15 minutes | 35–60+ | Multi-phase tactical encounter. |
+
+Action count is preferred over round count because CTB timing may create different numbers of actions per character. A normal enemy should not require the party to use every combat system. Reserve dense system interactions for elites and bosses.
+
+### 12.2 Damage and value baselines
+
+Use enemy Max HP percentages as the first tuning reference. A standard character Main Action should initially deal about **10–15% of a normal enemy's Max HP** before situational modifiers. For an illustrative 500 HP Ashfang, that corresponds to 50–75 damage. Suggested initial bands for the first sheet are:
+
+- Basic Attack: 50–60 damage.
+- Fast Technique: 1.1–1.3× the Basic Attack baseline.
+- Normal SC: 1.3–1.7× baseline.
+- Heavy Technique: 1.5–2.0× baseline.
+- Full Chant SC: 2.0–3.0× baseline raw output where appropriate; it should not be treated as a universal damage multiplier.
+
+Full Chant should offer roughly **1.3–1.6× the total tactical value** of the same caster's Chantless use in a favorable setup. “Value” can come from output, Stability, parameter access, efficiency, area, or other spell-specific benefits; this is not a fixed damage ratio. Expert Chantless can exceed novice Full Chant.
+
+Last Spell is evaluated by encounter impact, not a universal damage multiplier. Initial target: its effect should be worth about 2–4 of that character's future high-quality Main Actions, with immediate impact, while still costing that character all remaining actions for the battle. Test opening use and late-fight use; do not add boss immunity or phase locks preemptively. Respond to demonstrated dominant strategies with the smallest relevant adjustment.
+
+### 12.3 Resistance curve candidate
+
+Candidate diminishing-returns formula for early simulation:
+
+```text
+DamageMultiplier = 100 / (100 + Resistance)
+```
+
+| Resistance | Damage received |
+|---:|---:|
+| 0 | 100% |
+| 20 | 83% |
+| 50 | 67% |
+| 100 | 50% |
+| 200 | 33% |
+
+This is a candidate curve only. Negative Resistance behavior and final scaling are undecided.
+
+### 12.4 Mana and timeline starting benchmarks
+
+Use **Max Mana = 100** as a convenient first-pass reference, not a required character stat. Candidate starting ranges:
+
+- Basic Attack recovery: +10 Mana.
+- Guard recovery: +6 Mana.
+- Normal SC: 12–20 Mana.
+- Higher-Tier SC: 25–40 Mana.
+- Large spell: 40+ Mana.
+- Normal Action Delay: 100 internal baseline units.
+- Fast / Normal / Slow / Very Slow action bands: 70–85 / 100 / 120–140 / 160+.
+- Short / Medium / Long / Grand cast-time bands: 40–60 / 80–110 / 130–180 / 200+.
+
+The interface presents relative Timeline previews, never bare internal values as the player-facing explanation. Mana testing should determine whether SC use is constrained without forcing long stretches of Basic Attack. The aim is neither unlimited strong-SC spam nor depletion after only a couple of casts.
+
+### 12.5 Interrupt and Control tests
+
+Candidate early ranges for comparable-level combat:
+
+- Function Stability: 30–60.
+- Ordinary dedicated Interrupt: 25–45.
+- Specialist Interrupt: 45–65.
+
+These ranges should create cases where a dedicated technique often succeeds, a high-Stability caster requires Weak Node / Stability Damage / teamwork, and ordinary attacks do not automatically interrupt. Track whether players always choose Interrupt and always succeed, or almost never find it worthwhile; either pattern signals a tuning or UX problem.
+
+Hard Control needs diminishing returns or a temporary resistance window so bosses cannot be stun-locked. A simple candidate is full effectiveness on the first application, reduced effectiveness on a repeat within a short window, then temporary immunity, followed by recovery. Exact percentages and window duration remain open.
+
+Because the game uses a continuous timeline, evaluate status duration in Action Time or meaningful event boundaries (such as “until after the target's next action”), not only in a fixed count of rounds. Show players the resulting Timeline change in readable terms.
+
+### 12.6 Position and enemy durability tests
+
+Test whether each Zone creates a meaningful choice. Near may reward Physical pressure and strong Interrupts; Mid should be flexible; Far may protect casters and enable ranged options while exposing the party to specific long-range punishments. Watch for a dominant safe Zone and adjust abilities and encounter patterns before applying blanket damage penalties.
+
+Elite difficulty should come primarily from added archetype interaction, Stability, Counter tools, or position patterns, not only large HP and damage multipliers. For example, an Elite Caster may pair casting with self-stabilization support.
+
+### 12.7 Initial playtest protocol
+
+Use four passes:
+
+1. **Sandbox:** a small party versus Ashfang, without story or animation dependencies, to check the basic numerical loop.
+2. **Dominant Strategy:** repeat Basic Attack, highest-Tier SC, Chantless, Full Chant, Guard, Interrupt, and Far positioning to expose strategies that overwhelm alternatives.
+3. **First-Time Readability:** observe a first-time player with minimal explanation. They should understand that a known Fireball is coming and that there is an opportunity to act before it resolves; an Unknown Spell should make Analysis seem potentially useful.
+4. **Expert Exploit:** actively search for infinite Mana, permanent Stun, Timeline lock, infinite Counter, Full Chant abuse, Last Spell opener, and Zone exploits.
+
+Change one primary balance axis at a time where possible (for example, adjust Cast Time before also changing damage, Mana cost, Stability, and recovery). Do not interpret win rate alone as proof of encounter quality. Also ask whether players understand why they won or lost, make meaningful choices, vary their actions, notice the Timeline, and receive useful “aha” information from Analysis.
+
+### 12.8 Prototype scope and telemetry
+
+The first vertical-slice balance pass should stay small: Hero, Yuma, Rio, and Ashfang Training Construct. Candidate SC set: Fireball I, Fireball II, Force Bolt, Barrier, Blink, Position Swap, Analysis, and Interrupt Shot. Initially exercise Action Timeline, Near/Mid/Far, Mana, Full Chant, Chantless, Interrupt, Analysis, Weak Node, and Basic Guard. Add system breadth after this core encounter is fun and legible.
+
+Record at least:
+
+```text
+battle duration; Main Actions per battle; SC usage by spell; Basic Attack and Guard count;
+Full Chant vs Chantless usage; Interrupt attempts and success; Analysis use;
+Mana remaining at battle end; Zone occupancy; damage taken; Last Spell use and activation timing;
+deaths / wipes
+```
+
+Usage ratios are diagnostic, not quotas; Full Chant and Chantless do not need a 50/50 split, but both should have sensible situations.
+
+### 12.9 Remaining balance variables
+
+The following exact values and formulas remain open and must be validated or replaced by playtest:
 
 - Action Delay values for each Attack, Technique, SC, movement ability, and event type.
 - Cast Times by SC and casting method; Timeline units and event insertion rules where numeric precision is needed.
@@ -192,7 +305,7 @@ The following values and formulas are explicitly open and require balance work o
 - Exact Stability / Interrupt Power derivation coefficients, Stability Damage amounts, and recovery effects.
 - Enemy archetype patterns, condition priorities, and encounter-specific telegraph timing.
 
-These open items must not be presented as settled numerical rules until separately resolved.
+Candidate starting bands above do not close these items. See [`ASHFANG_BALANCE_TEST_SHEET_V0_1.md`](ASHFANG_BALANCE_TEST_SHEET_V0_1.md) for one concrete, explicitly provisional sample loadout.
 
 ## Source alignment and precedence
 
