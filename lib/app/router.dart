@@ -13,6 +13,7 @@ import '../features/life_quest/presentation/life_screen.dart';
 import '../features/character/presentation/training_preview_screen.dart';
 import '../features/home/presentation/launch_screens.dart';
 import '../features/combat/presentation/v1/ashfang_combat_v1_screen.dart';
+import '../features/combat/presentation/v1/ashfang_rematch_v1_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -63,6 +64,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/battle/ashfang',
         builder: (_, _) => const AshfangCombatV1Screen(),
+      ),
+      GoRoute(
+        path: '/battle/ashfang/rematch',
+        builder: (_, _) => const AshfangRematchV1Screen(),
       ),
       GoRoute(
         path: '/character/create',
