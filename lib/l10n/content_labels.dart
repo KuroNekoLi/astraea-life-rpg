@@ -11,12 +11,13 @@ String localizedQuestTitle(AppLocalizations l10n, String id) => switch (id) {
   _ => id,
 };
 
-String localizedDomain(AppLocalizations l10n, String domain) => switch (domain) {
-  'fitness' => l10n.domainFitness,
-  'learning' => l10n.domainLearning,
-  'languages' => l10n.domainLanguages,
-  _ => l10n.domainLife,
-};
+String localizedDomain(AppLocalizations l10n, String domain) =>
+    switch (domain) {
+      'fitness' => l10n.domainFitness,
+      'learning' => l10n.domainLearning,
+      'languages' => l10n.domainLanguages,
+      _ => l10n.domainLife,
+    };
 
 String localizedPotentialCategory(
   AppLocalizations l10n,
@@ -27,15 +28,13 @@ String localizedPotentialCategory(
   GrowthPotentialCategory.communication => l10n.potentialCommunication,
 };
 
-String localizedPotentialForDomain(
-  AppLocalizations l10n,
-  String domain,
-) => switch (domain) {
-  'fitness' => l10n.potentialPhysical,
-  'learning' => l10n.potentialCognitive,
-  'languages' => l10n.potentialCommunication,
-  _ => l10n.potentialGrowth,
-};
+String localizedPotentialForDomain(AppLocalizations l10n, String domain) =>
+    switch (domain) {
+      'fitness' => l10n.potentialPhysical,
+      'learning' => l10n.potentialCognitive,
+      'languages' => l10n.potentialCommunication,
+      _ => l10n.potentialGrowth,
+    };
 
 String localizedAttribute(AppLocalizations l10n, AttributeType value) =>
     switch (value) {
@@ -160,7 +159,6 @@ String localizedFunctionNodeType(AppLocalizations l10n, String type) =>
   ),
   _ => (id, id, id),
 };
-
 
 String localizedBalanceStatus(AppLocalizations l10n, String status) =>
     switch (status) {

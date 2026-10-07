@@ -62,7 +62,9 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
     builder: (context, snapshot) {
       if (snapshot.hasError) {
         return Scaffold(
-          body: Center(child: Text(context.l10n.couldNotLoadStory('${snapshot.error}'))),
+          body: Center(
+            child: Text(context.l10n.couldNotLoadStory('${snapshot.error}')),
+          ),
         );
       }
       if (!snapshot.hasData) {
@@ -118,7 +120,10 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
         body: ListView(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 104),
           children: [
-            for (final beat in localizedSceneBeats(context.l10n, scene['id'] as String))
+            for (final beat in localizedSceneBeats(
+              context.l10n,
+              scene['id'] as String,
+            ))
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Text(
@@ -135,8 +140,12 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
                   value: _selectedSpells.contains(
                     (spell as Map<String, dynamic>)['id'],
                   ),
-                  title: Text(localizedSpellName(context.l10n, spell['id'] as String)),
-                  subtitle: Text(localizedSpellRole(context.l10n, spell['role'] as String)),
+                  title: Text(
+                    localizedSpellName(context.l10n, spell['id'] as String),
+                  ),
+                  subtitle: Text(
+                    localizedSpellRole(context.l10n, spell['role'] as String),
+                  ),
                   onChanged: (selected) => setState(() {
                     final id = spell['id'] as String;
                     if (selected == true && _selectedSpells.length < 6) {
@@ -161,7 +170,9 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
                       }
                     },
               child: Text(
-                isDeck ? context.l10n.confirmPreparedDeck : context.l10n.commonContinue,
+                isDeck
+                    ? context.l10n.confirmPreparedDeck
+                    : context.l10n.commonContinue,
               ),
             ),
           ],
