@@ -1,0 +1,556 @@
+{
+  "@@locale": "en",
+  "appTitle": "Astraea",
+  "navHome": "Home",
+  "navLife": "Life",
+  "navAdventure": "Adventure",
+  "navDeck": "Deck",
+  "navCharacter": "Character",
+  "commonRetry": "Retry",
+  "commonContinue": "Continue",
+  "commonBack": "Back",
+  "commonCancel": "Cancel",
+  "commonStart": "Start",
+  "commonFinish": "Finish",
+  "commonPause": "Pause",
+  "commonResume": "Resume",
+  "commonEnable": "Enable",
+  "commonTurnOff": "Turn off",
+  "splashTagline": "Turn real-life effort into magic that changes the world.",
+  "tapToStart": "Tap to start",
+  "welcomeToAstraea": "Welcome to Astraea",
+  "onboardingHeadline": "Your everyday effort can shape your Astraea self.",
+  "onboardingBody": "Real life and the academy are connected, while your actions remain yours to choose.",
+  "enterAstraea": "Enter Astraea",
+  "noStreakPenalty": "No streak penalties. Progress waits whenever you do.",
+  "chooseLifeQuest": "Choose a Life Quest",
+  "earnGrowthPotential": "Earn Growth Potential",
+  "buildRpgSelf": "Build your RPG self",
+  "chooseLifeQuestDescription": "Pick a real-world action when it fits your day.",
+  "earnGrowthPotentialDescription": "Your action creates an opportunity to grow in-game.",
+  "buildRpgSelfDescription": "Train, prepare your deck, and explore the academy.",
+  "homeBrandSubtitle": "LIFE × RPG",
+  "homeHeroEyebrow": "Astraea Academy · Chapter 01",
+  "homeHeroTitle": "One real action starts your journey.",
+  "homeHeroDescription": "Choose a Life Quest, earn Growth Potential, and shape the hero who explores Astraea.",
+  "yourJourney": "YOUR JOURNEY",
+  "continueYourJourney": "Continue your journey",
+  "journeyLifeQuests": "Life Quests",
+  "journeyLifeQuestsSubtitle": "Start with one real action",
+  "journeyAdventure": "Adventure",
+  "journeyAdventureSubtitle": "Story & objectives",
+  "journeyCharacter": "Character",
+  "journeyCharacterSubtitle": "Your growing build",
+  "journeyPreparedDeck": "Prepared Deck",
+  "journeyPreparedDeckSubtitle": "Six spells",
+  "today": "TODAY",
+  "allQuests": "All Quests",
+  "lifeQuestsUnavailable": "Life Quests are temporarily unavailable.",
+  "quietDayTitle": "A quiet day is okay.",
+  "quietDaySubtitle": "Choose a Life Quest whenever it fits.",
+  "growthPotentialReady": "Growth Potential ready",
+  "characterProfileTooltip": "Character profile",
+  "optionalPilotMeasurement": "Optional pilot measurement",
+  "pilotOnLocalOnly": "On · local only",
+  "pilotOffDefault": "Off · default",
+  "pilotTurnOffTitle": "Turn off pilot measurement?",
+  "pilotEnableTitle": "Enable private pilot measurement?",
+  "pilotTurnOffBody": "Turning this off deletes locally stored milestone events.",
+  "pilotEnableBody": "This stores a small set of gameplay milestones on this device only. It does not collect names, notes, evidence, health data, or custom quest text. There is no upload. You can turn it off and delete the events at any time.",
+  "potentialChooseHowToTrain": "{amount} Potential · Choose how to train",
+  "@potentialChooseHowToTrain": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "lifeQuest": "Life Quest",
+  "couldNotLoadQuests": "Could not load quests: {error}",
+  "@couldNotLoadQuests": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseWhatFitsYourDay": "Choose what fits your day.",
+  "progressAlwaysHere": "Your progress is always here. There are no streak penalties.",
+  "availableQuestCount": "{count, plural, =1 {1 available quest} other {{count} available quests}}",
+  "@availableQuestCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "domainAll": "All",
+  "domainFitness": "Fitness",
+  "domainLearning": "Learning",
+  "domainLanguages": "Languages",
+  "domainLife": "Life",
+  "noQuestsCategory": "No quests in this category yet.",
+  "addWhenReady": "Add one when you are ready.",
+  "addLifeQuest": "Add a Life Quest",
+  "minutesShort": "{minutes} min",
+  "@minutesShort": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "questDetails": "Quest details",
+  "couldNotLoadQuest": "Could not load quest: {error}",
+  "@couldNotLoadQuest": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "questNotFound": "Quest not found",
+  "questAboutMinutes": "{domain} · about {minutes} minutes",
+  "@questAboutMinutes": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "selfReportTimerEvidence": "Self-report is always available. A timer adds lightweight evidence.",
+  "startTimer": "Start timer",
+  "completeSelfReport": "Complete with self-report",
+  "questComplete": "Quest complete",
+  "lifeXpReward": "+{amount} {domain} Life XP",
+  "@lifeXpReward": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      },
+      "domain": {
+        "type": "String"
+      }
+    }
+  },
+  "potentialReward": "+{amount} {category} Potential",
+  "@potentialReward": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "timerEvidenceBonus": "Timer evidence · bonus included",
+  "selfReportPrivate": "Self-report · private",
+  "confirmReward": "Confirm reward",
+  "questTimer": "Quest timer",
+  "timerRunsAway": "Timer runs while you are away.",
+  "potentialPhysical": "Physical",
+  "potentialCognitive": "Cognitive",
+  "potentialCommunication": "Communication",
+  "potentialGrowth": "Growth",
+  "questFitnessWalk10": "Walk 10 minutes",
+  "questFitnessExercise20": "Exercise 20 minutes",
+  "questLearningRead20": "Read 20 minutes",
+  "questLearningStudy20": "Study 20 minutes",
+  "questLanguagesPractice15": "Practice a language 15 minutes",
+  "createAstraeaSelf": "Create your Astraea self",
+  "saving": "Saving…",
+  "characterName": "Character name",
+  "distributePoints": "Distribute 32 points · Base 8 · Maximum 15",
+  "characterBuildFocusDescription": "Choose your hero’s build focus. These Attributes are planned to shape combat options; no choice blocks the main story.",
+  "pointsSpent": "{spent} / {budget} points",
+  "@pointsSpent": {
+    "placeholders": {
+      "spent": {
+        "type": "int"
+      },
+      "budget": {
+        "type": "int"
+      }
+    }
+  },
+  "attributeAllocationSummary": "Base {base} + {allocated} allocated = {starting} starting value\n{effect}",
+  "@attributeAllocationSummary": {
+    "placeholders": {
+      "base": {
+        "type": "int"
+      },
+      "allocated": {
+        "type": "int"
+      },
+      "starting": {
+        "type": "int"
+      },
+      "effect": {
+        "type": "String"
+      }
+    }
+  },
+  "initialWeapon": "Initial weapon",
+  "weaponAstraeaLongsword": "Astraea Longsword",
+  "weaponStandardSpear": "Standard Spear",
+  "weaponTrainingArcaneGun": "Training Arcane Gun",
+  "weaponStandardStaff": "Standard Staff",
+  "attributeManaCapacity": "Mana Capacity",
+  "attributeManaOutput": "Mana Output",
+  "attributeComputation": "Computation",
+  "attributeProcessing": "Processing",
+  "attributePrecision": "Precision",
+  "attributeEfficiency": "Efficiency",
+  "attributeAmbientSync": "Ambient Sync",
+  "attributeAnalysis": "Analysis",
+  "attributeManaCapacityEffect": "Focus: Mana limit and costly spell stamina",
+  "attributeManaOutputEffect": "Focus: Safe output and burst spell size",
+  "attributeComputationEffect": "Focus: Complex Functions and counter reasoning",
+  "attributeProcessingEffect": "Focus: Initiative, reactions, and fast actions",
+  "attributePrecisionEffect": "Focus: Targeting, interrupts, and control",
+  "attributeEfficiencyEffect": "Focus: Mana use and resource efficiency",
+  "attributeAmbientSyncEffect": "Focus: Environmental and support magic",
+  "attributeAnalysisEffect": "Focus: Reveal enemy Weak Nodes and counters",
+  "character": "Character",
+  "yourAstraeaSelf": "Your Astraea self",
+  "characterAttributes": "Character Attributes",
+  "trainingGrowsBuild": "Training grows your chosen build over time.",
+  "attributesSection": "ATTRIBUTES",
+  "trainedDelta": "+{amount} trained",
+  "@trainedDelta": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "viewTraining": "View Training",
+  "chooseStartingAttributesWeapon": "Choose your starting Attributes and weapon to begin.",
+  "createCharacter": "Create Character",
+  "couldNotLoadCharacter": "Could not load your character.",
+  "training": "Training",
+  "chooseTraining": "Choose a Training",
+  "trainingDescription": "Life Quest rewards become Growth Potential. Choose a matching drill to turn it into permanent character growth.",
+  "physicalPotential": "Physical Potential",
+  "cognitivePotential": "Cognitive Potential",
+  "communicationPotential": "Communication Potential",
+  "potentialBuilding": "Potential is building toward your next Training",
+  "potentialBuildingDescription": "A new character starts with 0 Growth Potential. Your first Life Quest adds its authored reward to the matching category. Training stays locked until that category covers the quoted cost; no reward or cost is changed.",
+  "trainingPotentialProgress": "{category}: {available} / {cost} · {attribute}",
+  "@trainingPotentialProgress": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "available": {
+        "type": "int"
+      },
+      "cost": {
+        "type": "int"
+      },
+      "attribute": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseAnotherLifeQuest": "Choose another Life Quest",
+  "availableDrills": "AVAILABLE DRILLS",
+  "analysisGrowthActive": "Analysis growth is active",
+  "permanentAnalysisGrowth": "+{amount} permanent Analysis from Training",
+  "@permanentAnalysisGrowth": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "keepJourneyMoving": "Keep your journey moving",
+  "trainingPermanentDescription": "Training changes your character permanently. Check the updated build, then return to the academy.",
+  "viewCharacter": "View Character",
+  "continueAdventure": "Continue Adventure",
+  "tryAnalysisAshfang": "Try Analysis against Ashfang",
+  "trainingComplete": "Training complete. Your attribute grew permanently.",
+  "trainingPotentialToAttribute": "{category} Potential → {attribute}",
+  "@trainingPotentialToAttribute": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "attribute": {
+        "type": "String"
+      }
+    }
+  },
+  "trainingAttributeChange": "{attribute} {before} → {after}",
+  "@trainingAttributeChange": {
+    "placeholders": {
+      "attribute": {
+        "type": "String"
+      },
+      "before": {
+        "type": "int"
+      },
+      "after": {
+        "type": "int"
+      }
+    }
+  },
+  "aptitudeCost": "Aptitude {aptitude}/6 · Cost {cost} {category} Potential",
+  "@aptitudeCost": {
+    "placeholders": {
+      "aptitude": {
+        "type": "int"
+      },
+      "cost": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "trainingInProgress": "Training…",
+  "trainAttribute": "Train {attribute}",
+  "@trainAttribute": {
+    "placeholders": {
+      "attribute": {
+        "type": "String"
+      }
+    }
+  },
+  "needMorePotential": "Need {amount} more {category} Potential",
+  "@needMorePotential": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "trainingReactionDrill": "Reaction Drill",
+  "trainingPrecisionMovement": "Precision Movement",
+  "trainingFunctionAnalysisDrill": "Function Analysis Drill",
+  "trainingComplexityExercise": "Complexity Exercise",
+  "trainingManaControlDrill": "Mana Control Drill",
+  "trainingIntentEncodingDrill": "Intent Encoding Drill",
+  "trainingReactionFocus": "Build focus: initiative, reactions, and fast battle decisions.",
+  "trainingPrecisionFocus": "Build focus: targeting, interrupts, and precise control.",
+  "trainingAnalysisFocus": "Build focus: revealing enemy Function Weak Nodes.",
+  "trainingComplexityFocus": "Build focus: complex Functions and counter reasoning.",
+  "trainingManaControlFocus": "Build focus: Mana use and resource efficiency.",
+  "trainingIntentEncodingFocus": "Build focus: safe output and burst spell capacity.",
+  "adventure": "Adventure",
+  "startAshfangBattle": "Start Ashfang Training Battle",
+  "couldNotLoadChapterRetry": "Could not load chapter · Retry",
+  "chapter01": "Chapter 01",
+  "firstStepsAcademy": "Your first steps into the Astraea Academy.",
+  "storyPath": "STORY PATH",
+  "chapterOneComplete": "Chapter One complete",
+  "nextPracticeFunction": "Next, practice reading an enemy Function and finding its Weak Node.",
+  "practiceFunctionAnalysis": "Practice Function Analysis",
+  "returnHome": "Return Home",
+  "tryFunctionAnalysisTutorial": "Try Function Analysis Tutorial",
+  "currentObjective": "CURRENT OBJECTIVE",
+  "chapterProgress": "Chapter progress · {completed} of {total} scenes",
+  "@chapterProgress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sceneAcademyArrival": "Academy Arrival",
+  "sceneAptitudeAssessment": "Aptitude Assessment",
+  "sceneFunctionTheory": "Function Theory",
+  "sceneChantAndChantless": "Chant and Chantless",
+  "scenePreparedDeck": "Prepared Deck",
+  "scene1Title": "Astraea Academy",
+  "scene2Title": "Aptitude Assessment",
+  "scene3Title": "Function Theory",
+  "scene4Title": "Full Chant and Chantless",
+  "scene5Title": "Spell Cards and Prepared Deck",
+  "scene1Beat1": "Astraea Academy is one of the world's most important institutions for magical education, research, and Aberration response.",
+  "scene1Beat2": "...Finally. I really made it here.",
+  "scene1Beat3": "Since that day, I have wanted to come here. Someday... I want to become someone who can use magic to protect others. First, I should report in.",
+  "scene1Beat4": "Objective: New student registration · Go to the academy gate and speak with Yuma Saeki.",
+  "scene2Beat1": "Create your Astraea self: allocate eight Attributes and choose a starting weapon.",
+  "scene2Beat2": "Each Attribute starts at Base 8; allocate 32 points; starting cap 15.",
+  "scene2Beat3": "Life Progress represents your history of investment, not a rating of your real-world ability.",
+  "scene3Beat1": "Magic is not a wish. Magic is a method of transforming World State A into B.",
+  "scene3Beat2": "f(S0)=S1",
+  "scene3Beat3": "Function Graph: Gather(Energy) → Shape(Bolt) → Move(Target). Tap a node to inspect its role in the spell sequence.",
+  "scene4Beat1": "Full Chant: Human → Chant → Magic System",
+  "scene4Beat2": "Chantless: Human → Mental Encoding → Magic System",
+  "scene4Beat3": "Chantless does not skip processing; the caster internalizes the encoding.",
+  "scene5Beat1": "Function Graph → Encode → Spell Card → Prepared Deck → Cast",
+  "scene5Beat2": "A Spell Card stores a constructed request structure; the Prepared Deck contains preloaded spells, not random draws.",
+  "scene5Beat3": "Choose six Spell Cards for the Prepared Deck.",
+  "preparedDeck": "Prepared Deck",
+  "couldNotLoadDeckRetry": "Could not load deck · Retry",
+  "spellCards": "Spell Cards",
+  "buildPreparedDeck": "Build your Prepared Deck",
+  "yourPreparedDeck": "Your Prepared Deck",
+  "chooseSixFunctions": "Choose six ready-to-cast Functions for your build.",
+  "noDeckPrepared": "No deck prepared yet",
+  "preparedCount": "Prepared {selected} / 6",
+  "@preparedCount": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsCount": "{count} cards",
+  "@cardsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "readySection": "READY",
+  "cardLibrary": "CARD LIBRARY",
+  "continueDeckSetup": "Continue to Deck Setup",
+  "spellArcBolt": "Arc Bolt",
+  "spellFocusedShot": "Focused Shot",
+  "spellEnergyBurst": "Energy Burst",
+  "spellBarrier": "Barrier",
+  "spellDeflect": "Deflect",
+  "spellStepShift": "Step Shift",
+  "spellWeakNodeScan": "Weak Node Scan",
+  "spellManaStabilize": "Mana Stabilize",
+  "spellInterruptPulse": "Interrupt Pulse",
+  "roleAttack": "Attack",
+  "roleDefense": "Defense",
+  "roleMobility": "Mobility",
+  "roleAnalysis": "Analysis",
+  "roleSupport": "Support",
+  "roleCounter": "Counter",
+  "couldNotLoadStory": "Could not load story: {error}",
+  "@couldNotLoadStory": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "academyStory": "Academy Story",
+  "preparedDeckSavedNext": "Your Prepared Deck is saved. Continue by practicing how to read an enemy Function and discover its Weak Node.",
+  "returnToAdventure": "Return to Adventure",
+  "preparedDeckCount": "Prepared Deck: {selected} / 6",
+  "@preparedDeckCount": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "functionGraph": "Function Graph",
+  "tapStepRole": "Tap a step to see what it contributes.",
+  "quickCheck": "Quick check: Which step directs the formed effect toward its target?",
+  "fullChantSlowerStable": "Full Chant is slower and stable.",
+  "chantlessFasterInternal": "Chantless is faster and requires internalized encoding.",
+  "bothPerformProcessing": "Both methods perform the Function processing.",
+  "couldNotLoadFunction": "Could not load Function: {error}",
+  "@couldNotLoadFunction": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "functionAnalysis": "Function Analysis",
+  "ashfangTrainingConstruct": "Ashfang Training Construct",
+  "enemyFunctionPath": "Enemy Function: DetectTarget → LockTarget → Pounce",
+  "characterAnalysisModifier": "Character Analysis: {analysis} → +{modifier} Function analysis modifier",
+  "@characterAnalysisModifier": {
+    "placeholders": {
+      "analysis": {
+        "type": "int"
+      },
+      "modifier": {
+        "type": "int"
+      }
+    }
+  },
+  "analyzeActiveFunction": "Analyze active Function",
+  "interruptLockTarget": "Interrupt LockTarget",
+  "observeNextFunctionNode": "Observe next Function node",
+  "resetTutorialPattern": "Reset tutorial pattern",
+  "contentBalance": "Content balance: {status}",
+  "@contentBalance": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "nodeStateCancelled": "Cancelled by Weak Node interruption",
+  "nodeStateWeak": "Weak Node revealed · interruptible",
+  "nodeStateActive": "Active Function",
+  "nodeStateAwaiting": "Awaiting execution",
+  "feedbackPreparingPounce": "Ashfang is preparing Pounce. Inspect the Function before it resolves.",
+  "feedbackPreparingAgain": "Ashfang is preparing Pounce again.",
+  "feedbackLockActive": "LockTarget is active. It is interruptible, but its role is not yet analyzed.",
+  "feedbackWeakFound": "Weak Node found: interrupting LockTarget cancels downstream Pounce.",
+  "feedbackAnalysisMiss": "Analysis did not reveal the node. Try again.",
+  "feedbackInterrupted": "LockTarget interrupted. Pounce is cancelled.",
+  "feedbackInterruptFailed": "This Function could not be interrupted.",
+  "functionNodeDetectTarget": "Detect Target",
+  "functionNodeLockTarget": "Lock Target",
+  "functionNodePounce": "Pounce",
+  "ashfangEncounter": "Ashfang Encounter",
+  "battleUnavailable": "Battle unavailable: {error}",
+  "@battleUnavailable": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prototypeEncounterInputs": "Prototype encounter inputs",
+  "battleRoundStatus": "Round {round} · {status}",
+  "@battleRoundStatus": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "weakNodeRevealed": "Weak Node revealed: LockTarget",
+  "weakNodeCancelsPounce": "Interrupting this node cancels downstream Pounce.",
+  "trainingEncounterComplete": "Training encounter complete",
+  "trainingAnalysisSaved": "Your trained Analysis informed the Weak Node interaction. Battle state is saved.",
+  "encounterEnded": "Encounter ended",
+  "ashfangOverwhelmed": "Ashfang overwhelmed your character. This result is saved.",
+  "attackAshfang": "Attack Ashfang",
+  "endTurn": "End turn",
+  "analyzeWeakNode": "Analyze Weak Node",
+  "resolvePounce": "Resolve Pounce",
+  "unitHpDetail": "{detail} · HP {hp} / {maxHp}",
+  "@unitHpDetail": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      },
+      "hp": {
+        "type": "int"
+      },
+      "maxHp": {
+        "type": "int"
+      }
+    }
+  }
+}

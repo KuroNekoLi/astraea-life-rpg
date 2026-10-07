@@ -10,6 +10,8 @@ dependencies:
   drift: ^2.35.1
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_riverpod: ^3.4.3
   freezed_annotation: ^3.1.0
   go_router: ^18.0.2
@@ -28,6 +30,7 @@ dev_dependencies:
   test: ^1.31.1
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/content/quests/mvp_v1.json

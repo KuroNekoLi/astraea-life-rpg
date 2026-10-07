@@ -1,0 +1,556 @@
+{
+  "@@locale": "zh_TW",
+  "appTitle": "Astraea",
+  "navHome": "首頁",
+  "navLife": "生活",
+  "navAdventure": "冒險",
+  "navDeck": "牌組",
+  "navCharacter": "角色",
+  "commonRetry": "重試",
+  "commonContinue": "繼續",
+  "commonBack": "返回",
+  "commonCancel": "取消",
+  "commonStart": "開始",
+  "commonFinish": "完成",
+  "commonPause": "暫停",
+  "commonResume": "繼續",
+  "commonEnable": "啟用",
+  "commonTurnOff": "關閉",
+  "splashTagline": "讓現實的努力，成為改變世界的魔法。",
+  "tapToStart": "點擊開始",
+  "welcomeToAstraea": "歡迎來到 Astraea",
+  "onboardingHeadline": "你每天投入的努力，都能塑造在 Astraea 中的自己。",
+  "onboardingBody": "現實生活與學院彼此相連，但要做什麼始終由你決定。",
+  "enterAstraea": "進入 Astraea",
+  "noStreakPenalty": "沒有連續打卡懲罰。你休息時，進度會等你回來。",
+  "chooseLifeQuest": "選擇 Life Quest",
+  "earnGrowthPotential": "獲得成長潛能",
+  "buildRpgSelf": "打造你的 RPG 角色",
+  "chooseLifeQuestDescription": "在適合今天的時候，選一件真實世界中的行動。",
+  "earnGrowthPotentialDescription": "你的行動會轉化為遊戲內的成長機會。",
+  "buildRpgSelfDescription": "訓練、準備術式牌組，並探索學院。",
+  "homeBrandSubtitle": "生活 × RPG",
+  "homeHeroEyebrow": "Astraea Academy · 第一章",
+  "homeHeroTitle": "一個真實行動，就能讓旅程開始。",
+  "homeHeroDescription": "選擇 Life Quest、獲得成長潛能，塑造探索 Astraea 的你。",
+  "yourJourney": "你的旅程",
+  "continueYourJourney": "繼續旅程",
+  "journeyLifeQuests": "Life Quest",
+  "journeyLifeQuestsSubtitle": "從一個真實行動開始",
+  "journeyAdventure": "冒險",
+  "journeyAdventureSubtitle": "故事與目標",
+  "journeyCharacter": "角色",
+  "journeyCharacterSubtitle": "正在成長的 Build",
+  "journeyPreparedDeck": "Prepared Deck",
+  "journeyPreparedDeckSubtitle": "六張準備術式",
+  "today": "今天",
+  "allQuests": "全部任務",
+  "lifeQuestsUnavailable": "目前無法載入 Life Quest。",
+  "quietDayTitle": "今天安靜一點也沒關係。",
+  "quietDaySubtitle": "適合的時候再選一個 Life Quest。",
+  "growthPotentialReady": "已有可用的成長潛能",
+  "characterProfileTooltip": "角色資料",
+  "optionalPilotMeasurement": "選用的試玩測量",
+  "pilotOnLocalOnly": "開啟 · 僅本機",
+  "pilotOffDefault": "關閉 · 預設",
+  "pilotTurnOffTitle": "關閉試玩測量？",
+  "pilotEnableTitle": "啟用私密試玩測量？",
+  "pilotTurnOffBody": "關閉後會刪除儲存在本機的里程碑事件。",
+  "pilotEnableBody": "這只會在本機儲存少量遊戲里程碑，不會收集姓名、筆記、證據、健康資料或自訂任務文字，也不會上傳。你可以隨時關閉並刪除這些事件。",
+  "potentialChooseHowToTrain": "{amount} 點潛能 · 選擇訓練方式",
+  "@potentialChooseHowToTrain": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "lifeQuest": "Life Quest",
+  "couldNotLoadQuests": "無法載入任務：{error}",
+  "@couldNotLoadQuests": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseWhatFitsYourDay": "選擇今天適合你的行動。",
+  "progressAlwaysHere": "你的進度一直都在，也沒有連續打卡懲罰。",
+  "availableQuestCount": "目前有 {count} 個可用任務",
+  "@availableQuestCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "domainAll": "全部",
+  "domainFitness": "健身",
+  "domainLearning": "學習",
+  "domainLanguages": "語言",
+  "domainLife": "生活",
+  "noQuestsCategory": "這個分類目前還沒有任務。",
+  "addWhenReady": "準備好的時候再新增即可。",
+  "addLifeQuest": "新增 Life Quest",
+  "minutesShort": "{minutes} 分鐘",
+  "@minutesShort": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "questDetails": "任務詳情",
+  "couldNotLoadQuest": "無法載入任務：{error}",
+  "@couldNotLoadQuest": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "questNotFound": "找不到這個任務",
+  "questAboutMinutes": "{domain} · 約 {minutes} 分鐘",
+  "@questAboutMinutes": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "selfReportTimerEvidence": "你可以直接自行回報；使用計時器則會留下輕量證據。",
+  "startTimer": "開始計時",
+  "completeSelfReport": "自行回報完成",
+  "questComplete": "任務完成",
+  "lifeXpReward": "+{amount} {domain} Life XP",
+  "@lifeXpReward": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      },
+      "domain": {
+        "type": "String"
+      }
+    }
+  },
+  "potentialReward": "+{amount} {category} 潛能",
+  "@potentialReward": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "timerEvidenceBonus": "計時器證據 · 已包含加成",
+  "selfReportPrivate": "自行回報 · 私密",
+  "confirmReward": "確認獎勵",
+  "questTimer": "任務計時器",
+  "timerRunsAway": "離開畫面後計時仍會繼續。",
+  "potentialPhysical": "體能",
+  "potentialCognitive": "認知",
+  "potentialCommunication": "溝通",
+  "potentialGrowth": "成長",
+  "questFitnessWalk10": "步行 10 分鐘",
+  "questFitnessExercise20": "運動 20 分鐘",
+  "questLearningRead20": "閱讀 20 分鐘",
+  "questLearningStudy20": "學習 20 分鐘",
+  "questLanguagesPractice15": "語言練習 15 分鐘",
+  "createAstraeaSelf": "建立你的 Astraea 自我",
+  "saving": "儲存中…",
+  "characterName": "角色名稱",
+  "distributePoints": "配置 32 點 · 基礎 8 · 上限 15",
+  "characterBuildFocusDescription": "選擇角色的 Build 方向。這些能力值會影響戰鬥選項，但任何選擇都不會封鎖主線故事。",
+  "pointsSpent": "{spent} / {budget} 點",
+  "@pointsSpent": {
+    "placeholders": {
+      "spent": {
+        "type": "int"
+      },
+      "budget": {
+        "type": "int"
+      }
+    }
+  },
+  "attributeAllocationSummary": "基礎 {base} + 配置 {allocated} = 初始 {starting}\n{effect}",
+  "@attributeAllocationSummary": {
+    "placeholders": {
+      "base": {
+        "type": "int"
+      },
+      "allocated": {
+        "type": "int"
+      },
+      "starting": {
+        "type": "int"
+      },
+      "effect": {
+        "type": "String"
+      }
+    }
+  },
+  "initialWeapon": "初始武器",
+  "weaponAstraeaLongsword": "Astraea 長劍",
+  "weaponStandardSpear": "標準長槍",
+  "weaponTrainingArcaneGun": "訓練用奧術槍",
+  "weaponStandardStaff": "標準法杖",
+  "attributeManaCapacity": "Mana 容量",
+  "attributeManaOutput": "Mana 輸出",
+  "attributeComputation": "運算",
+  "attributeProcessing": "處理速度",
+  "attributePrecision": "精準",
+  "attributeEfficiency": "效率",
+  "attributeAmbientSync": "環境同步",
+  "attributeAnalysis": "分析",
+  "attributeManaCapacityEffect": "重點：Mana 上限與高消耗術式續航",
+  "attributeManaOutputEffect": "重點：安全輸出與爆發術式規模",
+  "attributeComputationEffect": "重點：複雜 Function 與 Counter 推理",
+  "attributeProcessingEffect": "重點：時間軸、Reaction 與快速行動",
+  "attributePrecisionEffect": "重點：目標控制、Interrupt 與精準操作",
+  "attributeEfficiencyEffect": "重點：Mana 使用與資源效率",
+  "attributeAmbientSyncEffect": "重點：環境與支援魔法",
+  "attributeAnalysisEffect": "重點：揭露敵方 Weak Node 與 Counter 路徑",
+  "character": "角色",
+  "yourAstraeaSelf": "你的 Astraea 自我",
+  "characterAttributes": "角色能力",
+  "trainingGrowsBuild": "訓練會逐步塑造你選擇的 Build。",
+  "attributesSection": "能力值",
+  "trainedDelta": "+{amount} 訓練成長",
+  "@trainedDelta": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "viewTraining": "查看訓練",
+  "chooseStartingAttributesWeapon": "選擇初始能力與武器後即可開始。",
+  "createCharacter": "建立角色",
+  "couldNotLoadCharacter": "無法載入角色。",
+  "training": "訓練",
+  "chooseTraining": "選擇訓練",
+  "trainingDescription": "Life Quest 的獎勵會成為成長潛能。選擇對應訓練，將它轉化為永久角色成長。",
+  "physicalPotential": "體能潛能",
+  "cognitivePotential": "認知潛能",
+  "communicationPotential": "溝通潛能",
+  "potentialBuilding": "潛能正在累積，逐步接近下一次訓練",
+  "potentialBuildingDescription": "新角色從 0 點成長潛能開始。第一個 Life Quest 會依內容提供對應分類的獎勵；當該分類足以支付訓練成本時才會解鎖。",
+  "trainingPotentialProgress": "{category}：{available} / {cost} · {attribute}",
+  "@trainingPotentialProgress": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "available": {
+        "type": "int"
+      },
+      "cost": {
+        "type": "int"
+      },
+      "attribute": {
+        "type": "String"
+      }
+    }
+  },
+  "chooseAnotherLifeQuest": "選擇另一個 Life Quest",
+  "availableDrills": "可用訓練",
+  "analysisGrowthActive": "Analysis 成長已生效",
+  "permanentAnalysisGrowth": "訓練已永久增加 {amount} 點 Analysis",
+  "@permanentAnalysisGrowth": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "keepJourneyMoving": "繼續你的旅程",
+  "trainingPermanentDescription": "訓練會永久改變角色。確認更新後的 Build，再回到學院繼續前進。",
+  "viewCharacter": "查看角色",
+  "continueAdventure": "繼續冒險",
+  "tryAnalysisAshfang": "對 Ashfang 嘗試 Analysis",
+  "trainingComplete": "訓練完成。你的能力已永久成長。",
+  "trainingPotentialToAttribute": "{category}潛能 → {attribute}",
+  "@trainingPotentialToAttribute": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "attribute": {
+        "type": "String"
+      }
+    }
+  },
+  "trainingAttributeChange": "{attribute} {before} → {after}",
+  "@trainingAttributeChange": {
+    "placeholders": {
+      "attribute": {
+        "type": "String"
+      },
+      "before": {
+        "type": "int"
+      },
+      "after": {
+        "type": "int"
+      }
+    }
+  },
+  "aptitudeCost": "Aptitude {aptitude}/6 · 消耗 {cost} {category}潛能",
+  "@aptitudeCost": {
+    "placeholders": {
+      "aptitude": {
+        "type": "int"
+      },
+      "cost": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "trainingInProgress": "訓練中…",
+  "trainAttribute": "訓練 {attribute}",
+  "@trainAttribute": {
+    "placeholders": {
+      "attribute": {
+        "type": "String"
+      }
+    }
+  },
+  "needMorePotential": "還需要 {amount} 點{category}潛能",
+  "@needMorePotential": {
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      },
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "trainingReactionDrill": "Reaction 訓練",
+  "trainingPrecisionMovement": "精準移動訓練",
+  "trainingFunctionAnalysisDrill": "Function Analysis 訓練",
+  "trainingComplexityExercise": "複雜度訓練",
+  "trainingManaControlDrill": "Mana 控制訓練",
+  "trainingIntentEncodingDrill": "意圖編碼訓練",
+  "trainingReactionFocus": "Build 重點：時間軸、Reaction 與快速戰鬥判斷。",
+  "trainingPrecisionFocus": "Build 重點：目標、Interrupt 與精準控制。",
+  "trainingAnalysisFocus": "Build 重點：揭露敵方 Function 的 Weak Node。",
+  "trainingComplexityFocus": "Build 重點：複雜 Function 與 Counter 推理。",
+  "trainingManaControlFocus": "Build 重點：Mana 使用與資源效率。",
+  "trainingIntentEncodingFocus": "Build 重點：安全輸出與爆發術式容量。",
+  "adventure": "冒險",
+  "startAshfangBattle": "開始 Ashfang 訓練戰",
+  "couldNotLoadChapterRetry": "無法載入章節 · 重試",
+  "chapter01": "第一章",
+  "firstStepsAcademy": "踏入 Astraea Academy 的第一步。",
+  "storyPath": "故事路徑",
+  "chapterOneComplete": "第一章完成",
+  "nextPracticeFunction": "接下來練習讀取敵方 Function，並找出可能的 Weak Node。",
+  "practiceFunctionAnalysis": "練習 Function Analysis",
+  "returnHome": "返回首頁",
+  "tryFunctionAnalysisTutorial": "嘗試 Function Analysis 教學",
+  "currentObjective": "目前目標",
+  "chapterProgress": "章節進度 · 已完成 {completed} / {total} 個場景",
+  "@chapterProgress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "sceneAcademyArrival": "抵達學院",
+  "sceneAptitudeAssessment": "適性評估",
+  "sceneFunctionTheory": "Function 理論",
+  "sceneChantAndChantless": "詠唱與無詠唱",
+  "scenePreparedDeck": "Prepared Deck",
+  "scene1Title": "Astraea Academy",
+  "scene2Title": "適性評估",
+  "scene3Title": "Function 理論",
+  "scene4Title": "Full Chant 與 Chantless",
+  "scene5Title": "Spell Card 與 Prepared Deck",
+  "scene1Beat1": "星環中央魔導學院。集魔法教育、研究與異形應對人才培育於一身，是世界上最重要的魔導學府之一。",
+  "scene1Beat2": "……終於。真的考上了。",
+  "scene1Beat3": "從那一天開始，我就一直想來這裡。總有一天……我也想成為能夠用魔法保護別人的人。先去報到吧。",
+  "scene1Beat4": "目標：新生報到 · 前往學院正門與佐伯悠真交談。",
+  "scene2Beat1": "建立你的 Astraea 自我：配置八項能力，選擇初始武器。",
+  "scene2Beat2": "每項能力 Base 8；配置 32 點；初始值上限 15。",
+  "scene2Beat3": "Life Progress 表示投入歷史，不等同於現實能力評級。",
+  "scene3Beat1": "Magic is not a wish. Magic is a method of transforming World State A into B.",
+  "scene3Beat2": "f(S0)=S1",
+  "scene3Beat3": "Function Graph：Gather(Energy) → Shape(Bolt) → Move(Target)。點選節點查看其在術式序列中的作用。",
+  "scene4Beat1": "Full Chant: Human → Chant → Magic System",
+  "scene4Beat2": "Chantless: Human → Mental Encoding → Magic System",
+  "scene4Beat3": "Chantless 並非省略處理；編碼由施術者內化。",
+  "scene5Beat1": "Function Graph → Encode → Spell Card → Prepared Deck → Cast",
+  "scene5Beat2": "Spell Card 保存已構築的術式 request structure；Prepared Deck 是預先載入的術式，不是隨機抽牌。",
+  "scene5Beat3": "選擇六張術式卡加入 Prepared Deck。",
+  "preparedDeck": "Prepared Deck",
+  "couldNotLoadDeckRetry": "無法載入牌組 · 重試",
+  "spellCards": "Spell Card",
+  "buildPreparedDeck": "建立 Prepared Deck",
+  "yourPreparedDeck": "你的 Prepared Deck",
+  "chooseSixFunctions": "選擇六個可直接施放的 Function，組成你的戰鬥 Build。",
+  "noDeckPrepared": "尚未準備牌組",
+  "preparedCount": "已準備 {selected} / 6",
+  "@preparedCount": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "cardsCount": "共 {count} 張",
+  "@cardsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "readySection": "已準備",
+  "cardLibrary": "術式庫",
+  "continueDeckSetup": "繼續設定牌組",
+  "spellArcBolt": "Arc Bolt",
+  "spellFocusedShot": "Focused Shot",
+  "spellEnergyBurst": "Energy Burst",
+  "spellBarrier": "Barrier",
+  "spellDeflect": "Deflect",
+  "spellStepShift": "Step Shift",
+  "spellWeakNodeScan": "Weak Node Scan",
+  "spellManaStabilize": "Mana Stabilize",
+  "spellInterruptPulse": "Interrupt Pulse",
+  "roleAttack": "攻擊",
+  "roleDefense": "防禦",
+  "roleMobility": "位移",
+  "roleAnalysis": "分析",
+  "roleSupport": "支援",
+  "roleCounter": "反制",
+  "couldNotLoadStory": "無法載入故事：{error}",
+  "@couldNotLoadStory": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "academyStory": "學院故事",
+  "preparedDeckSavedNext": "Prepared Deck 已儲存。接下來練習讀取敵方 Function，並找出 Weak Node。",
+  "returnToAdventure": "返回冒險",
+  "preparedDeckCount": "Prepared Deck：{selected} / 6",
+  "@preparedDeckCount": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "functionGraph": "Function Graph",
+  "tapStepRole": "點選步驟查看它在術式中的作用。",
+  "quickCheck": "快速確認：哪一個步驟負責把已形成的效果導向目標？",
+  "fullChantSlowerStable": "Full Chant 較慢，但更加穩定。",
+  "chantlessFasterInternal": "Chantless 更快，但需要施術者內化編碼。",
+  "bothPerformProcessing": "兩種方式都會執行完整的 Function 處理。",
+  "couldNotLoadFunction": "無法載入 Function：{error}",
+  "@couldNotLoadFunction": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "functionAnalysis": "Function Analysis",
+  "ashfangTrainingConstruct": "Ashfang Training Construct",
+  "enemyFunctionPath": "敵方 Function：DetectTarget → LockTarget → Pounce",
+  "characterAnalysisModifier": "角色 Analysis：{analysis} → Function 分析修正 +{modifier}",
+  "@characterAnalysisModifier": {
+    "placeholders": {
+      "analysis": {
+        "type": "int"
+      },
+      "modifier": {
+        "type": "int"
+      }
+    }
+  },
+  "analyzeActiveFunction": "分析目前 Function",
+  "interruptLockTarget": "Interrupt LockTarget",
+  "observeNextFunctionNode": "觀察下一個 Function 節點",
+  "resetTutorialPattern": "重設教學模式",
+  "contentBalance": "內容平衡狀態：{status}",
+  "@contentBalance": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "nodeStateCancelled": "已由 Weak Node Interrupt 取消",
+  "nodeStateWeak": "Weak Node 已揭露 · 可 Interrupt",
+  "nodeStateActive": "Function 執行中",
+  "nodeStateAwaiting": "等待執行",
+  "feedbackPreparingPounce": "Ashfang 正在準備 Pounce。先觀察 Function，再讓它完成。",
+  "feedbackPreparingAgain": "Ashfang 再次準備 Pounce。",
+  "feedbackLockActive": "LockTarget 已啟動。它可以被 Interrupt，但你尚未分析它的作用。",
+  "feedbackWeakFound": "找到 Weak Node：Interrupt LockTarget 會取消後續 Pounce。",
+  "feedbackAnalysisMiss": "這次 Analysis 沒有揭露節點，再試一次。",
+  "feedbackInterrupted": "LockTarget 已被 Interrupt。Pounce 取消。",
+  "feedbackInterruptFailed": "這個 Function 無法被 Interrupt。",
+  "functionNodeDetectTarget": "偵測目標",
+  "functionNodeLockTarget": "鎖定目標",
+  "functionNodePounce": "撲擊",
+  "ashfangEncounter": "Ashfang 遭遇戰",
+  "battleUnavailable": "戰鬥無法使用：{error}",
+  "@battleUnavailable": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prototypeEncounterInputs": "Prototype 遭遇戰輸入",
+  "battleRoundStatus": "Round {round} · {status}",
+  "@battleRoundStatus": {
+    "placeholders": {
+      "round": {
+        "type": "int"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "weakNodeRevealed": "Weak Node 已揭露：LockTarget",
+  "weakNodeCancelsPounce": "Interrupt 這個節點會取消後續 Pounce。",
+  "trainingEncounterComplete": "訓練戰完成",
+  "trainingAnalysisSaved": "你訓練後的 Analysis 影響了 Weak Node 互動，戰鬥狀態已儲存。",
+  "encounterEnded": "遭遇戰結束",
+  "ashfangOverwhelmed": "Ashfang 擊敗了你的角色，此結果已儲存。",
+  "attackAshfang": "攻擊 Ashfang",
+  "endTurn": "結束行動",
+  "analyzeWeakNode": "分析 Weak Node",
+  "resolvePounce": "執行 Pounce",
+  "unitHpDetail": "{detail} · HP {hp} / {maxHp}",
+  "@unitHpDetail": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      },
+      "hp": {
+        "type": "int"
+      },
+      "maxHp": {
+        "type": "int"
+      }
+    }
+  }
+}
