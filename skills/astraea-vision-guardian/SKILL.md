@@ -1,7 +1,7 @@
 ---
 name: astraea-vision-guardian
 description: Protect Astraea Life RPG's product identity, player-respect principles, and cross-spec invariants. Use for scope review, feature proposals, economy/progression changes, retention mechanics, monetization, quest design, and any change that risks turning the product into a productivity app with RPG skin.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # Astraea Vision Guardian
@@ -198,7 +198,22 @@ When a major generated visual materially shapes product identity, review it toge
 astraea-visual-asset-director
 ```
 
-The Vision Guardian evaluates whether the result still feels like a genuine RPG rather than productivity software decoration. It does not art-direct individual pixels.
+If the feature needs a new visual content asset and no suitable approved asset exists, the Visual Asset Director may use:
+
+```text
+ChatGPT Images 2.5
+```
+
+when image generation is the appropriate medium.
+
+The Vision Guardian should explicitly allow that delegation when it preserves product identity. It evaluates whether the result still feels like a genuine RPG rather than productivity software decoration.
+
+The Vision Guardian does **not**:
+
+- art-direct individual pixels
+- replace the Visual Asset Director
+- force image generation when native Flutter UI is the better medium
+- require Figma when no approved Figma reference exists
 
 ## Inputs
 
