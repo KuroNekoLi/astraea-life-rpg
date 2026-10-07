@@ -594,5 +594,124 @@
   "feedbackWeakNodeFoundLegacy": "找到 Weak Node。Interrupt LockTarget 即可取消 Pounce。",
   "feedbackWeakNodeMissLegacy": "這次沒有揭露 Weak Node，Ashfang 將執行 Pounce。",
   "feedbackInterruptedLegacy": "LockTarget 已被 Interrupt，後續 Pounce 已取消。",
-  "feedbackPounceResolved": "Pounce 已由戰鬥引擎解析。"
+  "feedbackPounceResolved": "Pounce 已由戰鬥引擎解析。",
+  "combatRotateDevice": "請將裝置旋轉為橫向以進行戰鬥。",
+  "combatActionTimeline": "行動時間軸",
+  "combatEnemyIntent": "敵方意圖",
+  "combatCurrentActor": "目前角色",
+  "combatHero": "主角",
+  "combatRio": "Rio",
+  "combatYuma": "Yuma",
+  "combatAshfang": "Ashfang",
+  "combatReactionReady": "Reaction 可用",
+  "combatReactionSpent": "Reaction 已使用",
+  "combatAttack": "攻擊",
+  "combatTechnique": "戰技",
+  "combatSc": "SC",
+  "combatAnalyze": "分析",
+  "combatGuard": "防禦",
+  "combatMove": "移動",
+  "combatFireballI": "Fireball I",
+  "combatFireballII": "Fireball II",
+  "combatKnownFireball": "Fireball I",
+  "combatModifiedFireball": "改造 Fireball",
+  "combatFullChant": "Full Chant",
+  "combatChantless": "Chantless",
+  "combatUnknownFunction": "未知 Function",
+  "combatTargetHero": "目標：主角",
+  "combatTimelineTurn": "{name} 行動",
+  "combatTimelineResolve": "{spell} 解析",
+  "combatTimelineFunction": "Active Function",
+  "combatHp": "HP {current}/{max}",
+  "combatMana": "Mana {current}/{max}",
+  "combatTutorialChantlessTitle": "先從 Prepared Spell 開始",
+  "combatTutorialChantlessBody": "使用 Chantless 施放 Fireball I，Function 會立即解析。",
+  "combatCastFireballI": "施放 Fireball I",
+  "combatKnownReactionTitle": "REACTION",
+  "combatKnownReactionBody": "Ashfang 正在構築 Fireball I。Rio 可以在 Function 成立前 Interrupt。",
+  "combatInterrupt": "Interrupt",
+  "combatSaveReaction": "保留 Reaction",
+  "combatModifiedAnalysisTitle": "偵測到未知改造",
+  "combatModifiedAnalysisBody": "使用 Analysis 找出這個 Function 真正可利用的結構資訊。",
+  "combatAnalyzeModified": "分析改造 Function",
+  "combatModifiedReactionTitle": "Weak Node 已揭露",
+  "combatModifiedReactionBody": "Analysis 找到脆弱的 Stabilization 相依節點，Rio 可以利用它。",
+  "combatWeakNodeStabilization": "Weak Node：Stabilization",
+  "combatStabilityUnknown": "Stability ?",
+  "combatStabilityValue": "Stability {value}",
+  "combatFunctionStructure": "FUNCTION 結構",
+  "combatStructureUnknown": "內部相依關係尚未揭露。",
+  "combatStructureRevealed": "Stabilization 存在可利用的結構弱點。",
+  "combatBeginFullChant": "開始 Fireball II · Full Chant",
+  "combatFullChantTitle": "投入 Full Chant",
+  "combatFullChantBody": "Fireball II 會進入 Timeline，完成構築後才解析。",
+  "combatFinisherTitle": "低 Tier 仍然有價值",
+  "combatFinisherBody": "以較低消耗的 Fireball I Chantless 完成戰鬥。",
+  "combatFinishFireballI": "以 Fireball I 收尾",
+  "combatVictoryTitle": "訓練戰完成",
+  "combatVictoryBody": "你已透過真正的 CTB engine 使用 Chantless、Interrupt、Analysis、Weak Node 與 Full Chant。",
+  "combatRestart": "重新訓練",
+  "combatReturnAdventure": "返回冒險",
+  "combatIntentHeroTurn": "閱讀戰場並選擇行動。",
+  "combatIntentKnownFireball": "Fireball I · Full Chant",
+  "combatIntentModifiedFireball": "改造 Fireball · Full Chant",
+  "combatIntentHeroFullChant": "Ashfang 正在恢復。主角可以投入 Full Chant。",
+  "combatIntentFinisher": "Ashfang 已接近被擊敗。",
+  "combatIntentVictory": "訓練目標完成。",
+  "combatFeedbackOpening": "Prepared SC 是可直接使用的戰鬥選項。先從 Fireball I 開始。",
+  "combatFeedbackHeroChantless": "Fireball I 透過 Chantless 立即解析。",
+  "combatFeedbackKnownCasting": "Ashfang 開始已知的 Full Chant，Interrupt window 已開啟。",
+  "combatFeedbackKnownInterrupted": "Rio 在 Function 成立前破壞了尚未完成的 Fireball。",
+  "combatFeedbackKnownResolved": "你保留了 Reaction。Fireball I 成功解析並傷害主角。",
+  "combatFeedbackModifiedCasting": "Ashfang 改造了 Function，內部結構目前未知。",
+  "combatFeedbackAnalysisWeakNode": "Analysis 揭露了 Stability 與真正的 Stabilization Weak Node。",
+  "combatFeedbackModifiedInterrupted": "Weak Node bonus 提高了 Interrupt Power，成功破壞 Function。",
+  "combatFeedbackModifiedResolved": "改造 Function 被允許完成解析。",
+  "combatFeedbackHeroFullChantCasting": "主角支付 Mana 並進入 Full Chant。",
+  "combatFeedbackHeroFullChantResolved": "Fireball II 成功解析，Ashfang 已奄奄一息。",
+  "combatFeedbackVictory": "Ashfang 已被擊敗，教學目標完成。",
+  "combatFeedbackDefeat": "隊伍戰敗。",
+  "combatZoneMid": "MID",
+  "combatTrainingArena": "ASTRAEA 訓練場",
+  "@combatTimelineTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@combatTimelineResolve": {
+    "placeholders": {
+      "spell": {
+        "type": "String"
+      }
+    }
+  },
+  "@combatHp": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "@combatMana": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "@combatStabilityValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  }
 }

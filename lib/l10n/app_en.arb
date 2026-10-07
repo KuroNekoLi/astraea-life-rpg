@@ -631,5 +631,124 @@
   "feedbackWeakNodeFoundLegacy": "Weak Node found. Interrupt LockTarget to cancel Pounce.",
   "feedbackWeakNodeMissLegacy": "Weak Node not revealed this time. Ashfang resolves Pounce.",
   "feedbackInterruptedLegacy": "LockTarget interrupted. Downstream Pounce was cancelled.",
-  "feedbackPounceResolved": "Pounce resolved through the combat engine."
+  "feedbackPounceResolved": "Pounce resolved through the combat engine.",
+  "combatRotateDevice": "Rotate your device to play the battle in landscape.",
+  "combatActionTimeline": "ACTION TIMELINE",
+  "combatEnemyIntent": "ENEMY INTENT",
+  "combatCurrentActor": "CURRENT",
+  "combatHero": "Hero",
+  "combatRio": "Rio",
+  "combatYuma": "Yuma",
+  "combatAshfang": "Ashfang",
+  "combatReactionReady": "Reaction ready",
+  "combatReactionSpent": "Reaction spent",
+  "combatAttack": "Attack",
+  "combatTechnique": "Technique",
+  "combatSc": "SC",
+  "combatAnalyze": "Analyze",
+  "combatGuard": "Guard",
+  "combatMove": "Move",
+  "combatFireballI": "Fireball I",
+  "combatFireballII": "Fireball II",
+  "combatKnownFireball": "Fireball I",
+  "combatModifiedFireball": "Modified Fireball",
+  "combatFullChant": "Full Chant",
+  "combatChantless": "Chantless",
+  "combatUnknownFunction": "Unknown Function",
+  "combatTargetHero": "Target: Hero",
+  "combatTimelineTurn": "{name} Turn",
+  "@combatTimelineTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatTimelineResolve": "{spell} Resolve",
+  "@combatTimelineResolve": {
+    "placeholders": {
+      "spell": {
+        "type": "String"
+      }
+    }
+  },
+  "combatTimelineFunction": "Active Function",
+  "combatHp": "HP {current}/{max}",
+  "@combatHp": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "combatMana": "Mana {current}/{max}",
+  "@combatMana": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "combatTutorialChantlessTitle": "Start with a prepared spell",
+  "combatTutorialChantlessBody": "Use Fireball I with Chantless casting. The Function resolves immediately.",
+  "combatCastFireballI": "Cast Fireball I",
+  "combatKnownReactionTitle": "REACTION",
+  "combatKnownReactionBody": "Ashfang is constructing Fireball I. Rio can interrupt before the Function is established.",
+  "combatInterrupt": "Interrupt",
+  "combatSaveReaction": "Save Reaction",
+  "combatModifiedAnalysisTitle": "Unknown modification detected",
+  "combatModifiedAnalysisBody": "Use Analysis to reveal what is actually vulnerable in this Function.",
+  "combatAnalyzeModified": "Analyze Modified Function",
+  "combatModifiedReactionTitle": "Weak Node revealed",
+  "combatModifiedReactionBody": "Analysis found a vulnerable Stabilization dependency. Rio can exploit it.",
+  "combatWeakNodeStabilization": "Weak Node: Stabilization",
+  "combatStabilityUnknown": "Stability ?",
+  "combatStabilityValue": "Stability {value}",
+  "@combatStabilityValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "combatFunctionStructure": "FUNCTION STRUCTURE",
+  "combatStructureUnknown": "Internal dependencies have not been revealed.",
+  "combatStructureRevealed": "Stabilization is structurally vulnerable.",
+  "combatBeginFullChant": "Begin Fireball II · Full Chant",
+  "combatFullChantTitle": "Commit to Full Chant",
+  "combatFullChantBody": "Fireball II enters the Timeline and resolves after its construction completes.",
+  "combatFinisherTitle": "Low Tier remains useful",
+  "combatFinisherBody": "Finish with the cheaper Fireball I using Chantless casting.",
+  "combatFinishFireballI": "Finish with Fireball I",
+  "combatVictoryTitle": "Training battle complete",
+  "combatVictoryBody": "You used Chantless, Interrupt, Analysis, a Weak Node, and Full Chant through the real CTB engine.",
+  "combatRestart": "Restart Training",
+  "combatReturnAdventure": "Return to Adventure",
+  "combatIntentHeroTurn": "Read the field and choose your action.",
+  "combatIntentKnownFireball": "Fireball I · Full Chant",
+  "combatIntentModifiedFireball": "Modified Fireball · Full Chant",
+  "combatIntentHeroFullChant": "Ashfang is recovering. Hero can commit to Full Chant.",
+  "combatIntentFinisher": "Ashfang is nearly defeated.",
+  "combatIntentVictory": "Training objective complete.",
+  "combatFeedbackOpening": "Prepared SCs are direct battle options. Start with Fireball I.",
+  "combatFeedbackHeroChantless": "Fireball I resolved immediately through Chantless casting.",
+  "combatFeedbackKnownCasting": "Ashfang began a known Full Chant. The Interrupt window is open.",
+  "combatFeedbackKnownInterrupted": "Rio broke the unfinished Fireball before establishment.",
+  "combatFeedbackKnownResolved": "Reaction saved. Fireball I resolved and damaged Hero.",
+  "combatFeedbackModifiedCasting": "Ashfang changed the Function. Its internal structure is unknown.",
+  "combatFeedbackAnalysisWeakNode": "Analysis revealed Stability and a real Stabilization Weak Node.",
+  "combatFeedbackModifiedInterrupted": "Weak Node bonus raised Interrupt Power enough to break the Function.",
+  "combatFeedbackModifiedResolved": "The modified Function was allowed to resolve.",
+  "combatFeedbackHeroFullChantCasting": "Hero committed Mana and entered Full Chant.",
+  "combatFeedbackHeroFullChantResolved": "Fireball II resolved. Ashfang is barely standing.",
+  "combatFeedbackVictory": "Ashfang defeated. Tutorial objective complete.",
+  "combatFeedbackDefeat": "The party was defeated.",
+  "combatZoneMid": "MID",
+  "combatTrainingArena": "ASTRAEA TRAINING HALL"
 }
