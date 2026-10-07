@@ -723,5 +723,35 @@
   "combatNodeCompression": "壓縮",
   "combatNodeStabilization": "穩定",
   "combatNodeTrajectory": "軌跡",
-  "combatIntentWhileHeroCasting": "Fireball II 解析前，Ashfang 仍可能行動。"
+  "combatIntentWhileHeroCasting": "Fireball II 解析前，Ashfang 仍可能行動。",
+  "combatFreePractice": "自由練習",
+  "combatRematchTitle": "Ashfang 自由練習",
+  "combatRematchSubtitle": "不再提示標準答案。閱讀 Timeline，自己決定如何應對。",
+  "combatRematchEnemyCasting": "改造 Fireball · Full Chant",
+  "combatRematchEnemyPressure": "Ashfang 正在尋找進攻空隙。",
+  "combatRematchBasicAttack": "普通攻擊",
+  "combatRematchGuard": "防禦",
+  "combatRematchFireballI": "Fireball I · Chantless",
+  "combatRematchFireballII": "Fireball II · Full Chant",
+  "combatRematchAnalyze": "Analyze Function",
+  "combatRematchInterrupt": "Interrupt",
+  "combatRematchExploitWeakNode": "利用 Weak Node",
+  "combatRematchSaveReaction": "保留 Reaction",
+  "combatRematchReactionTitle": "REACTION WINDOW",
+  "combatRematchReactionBodyUnknown": "Ashfang 仍在構築 Function。你可以現在反應，也可以保留 Rio 的 Reaction。",
+  "combatRematchReactionBodyKnown": "Analysis 已揭露 Stabilization Weak Node。你可以利用它，或保留 Reaction。",
+  "combatRematchVictoryTitle": "自由練習完成",
+  "combatRematchVictoryBody": "你在沒有教學提示的情況下擊敗了 Ashfang。",
+  "combatRematchDefeatTitle": "自由練習失敗",
+  "combatRematchDefeatBody": "再試一次，調整 Mana、Analysis 與 Reaction 的使用時機。",
+  "combatRematchPlayerTurn": "為 {name} 選擇行動",
+  "@combatRematchPlayerTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatRematchCastingHint": "敵方 Function 仍在構築。",
+  "combatRematchNoCastingHint": "目前沒有可以分析的敵方 Function。"
 }
