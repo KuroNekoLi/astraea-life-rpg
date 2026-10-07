@@ -538,10 +538,31 @@ Connection(Human, Magic System)
 
 # 31. Last Spell — Canon
 
-特殊 Spell Card：
-- 每戰一次
-- 高輸出
-- 使用後 caster 退出戰鬥
+Last Spell 是角色專屬的特殊 Spell Card，不是一般高 Tier Spell Family，也不屬於一般 `I → II → III` SC Tier progression。
+
+規則：
+- 每個角色每場戰鬥最多使用自己的 Last Spell 一次；不同角色各有自己的使用次數。
+- 效果遠超一般 SC，可提供極高輸出、特殊效果或改變戰場規則。
+- 使用後立刻施加 `LastSpellExhaustion`，該角色直到本場戰鬥結束都不能再行動。
+- 解鎖來自角色劇情、重大成長或特殊條件；確切解鎖方式由角色設計決定。
+- Last Spell 是否占用一般 Prepared Deck 位置：**TBD**。
+
+```text
+LastSpellExhaustion
+├── duration: until battle end
+├── removable: false during this battle
+└── cannot:
+    ├── take Main Action or Quick Action
+    ├── move or use Reaction
+    ├── cast Spell / use Last Spell
+    └── use Technique
+```
+
+這是獨立的本場戰鬥終止行動狀態，不等同於 HP 歸零、昏迷或受傷；治療、恢復 Mana 或其他一般狀態移除不能解除它。Mana 可以同時耗盡，但不是 Exhaustion 的唯一原因。角色表現出的代價可依個人不同，不預設必然昏迷或瀕死。
+
+隊伍內每位角色都可各自使用一次，因此四名角色理論上各有一次機會。每次使用都會永久拿走該角色本場剩餘回合與支援能力，構成即時戰術收益與後續隊伍行動力之間的取捨。
+
+例如，`Starfall: Final Equation` 可作為某角色的超規模攻擊；`Absolute Domain Separation` 可暫時隔離一片戰場、改變 Boss Function 與召喚物的生效條件；`Perfect Deconstruction` 可分析並破解大型 active Function。這些是效果方向示例，不指定為現有角色的正式 Last Spell。
 
 後期可能具有高 Reality Cost。
 

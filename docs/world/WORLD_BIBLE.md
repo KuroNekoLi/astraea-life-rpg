@@ -208,24 +208,29 @@ SC 可選擇 Full Chant 或 Chantless。能否 Chantless 取決於施術者對�
 
 ## 6. Last Spell
 
-**Last Spell 是 Spell Card 的特殊分類。**
+**Last Spell 是角色專屬、每名角色每場戰鬥最多使用一次的特殊 Spell Card。**它不是一般高 Tier SC，也不是所有角色共用的 Spell Family。
 
 規則：
 
-- 一場戰鬥中只能使用一次。
-- 發動後，施術者無法繼續戰鬥。
-- 效果或輸出遠高於一般 Spell。
-- 「Last Spell」不是單一唯一魔法名稱；不同角色可以擁有不同的 Last Spell。
+- 每名角色每場戰鬥最多使用自己的 Last Spell 一次；隊伍中不同角色各自有一次使用機會。
+- 效果遠超一般 SC，可是極高輸出、特殊效果或改變戰場規則，不限於傷害。
+- 發動後施術者立即失去本場戰鬥剩餘時間的行動能力，直到戰鬥結束。
+- Last Spell 不屬於一般 SC 的 I → II → III Tier progression。解鎖可透過角色劇情、重大成長或特殊條件；具體條件依角色設計。
+- 不同角色擁有不同的 Last Spell，表達個人的魔法系統、戰鬥定位、性格、故事與天賦。
 
-其設計精神是把角色剩餘的 Mana、計算能力、術式承載能力與戰鬥資源集中投入一次巨大 Function。
+其設計精神是用角色剩餘的戰鬥能力，換取一次極端的 Function Execution。Last Spell 與 Fireball V 等一般高階 SC 不同：一般高階 SC 即使 Mana Cost 與 Complexity 很高，施放後仍留在正常戰鬥循環；Last Spell 使用後角色退出本場戰鬥。
 
 ```text
 Last Spell
     ↓
-Maximum / Extreme Function Execution
+Extreme Function Execution
     ↓
-Caster becomes unable to continue combat
+Caster gains LastSpellExhaustion until battle end
 ```
+
+`LastSpellExhaustion` 是獨立且本場不可解除的戰鬥狀態，不等同於昏迷、瀕死或受傷，也不能單靠恢復 HP 或 Mana 移除。Mana 可同時大量消耗或歸零，但不是角色失去行動能力的唯一原因。其具體身心呈現可因角色而異。
+
+Last Spell 是否占用一般 Prepared Deck 的 6 個位置：**TBD**。
 
 Last Spell 的巨大輸出也意味著它理論上可能帶來極高 Reality Cost；此點可在後期真相揭露後成為戰術與倫理衝突。
 

@@ -198,6 +198,12 @@ Combatant
 └── FunctionKnowledge
 ```
 
+## Last Spell Exhaustion
+
+Last Spell 是角色專屬 SC；每個角色每場戰鬥最多使用一次。使用後立即套用 `LastSpellExhaustion`，持續至本場戰鬥結束，並從可行動／Reaction 序列中移除。這是硬性且本場不可解除的狀態：角色不能採取 Main Action、Quick Action、移動、Reaction、施法或使用 Technique。治療、復活、恢復 Mana 或一般狀態解除均不會讓角色本場重新行動。
+
+Last Spell 的代價獨立於 Mana 歸零；Mana 可大量消耗或歸零，但補回 Mana 不會解除 Exhaustion。該角色不必然昏迷、瀕死或受傷，狀態表現可依角色個別設計。隊伍裡其他角色仍可各自使用一次自己的 Last Spell。
+
 具體 HP / Defense / derived-stat 公式：**TBD**。
 
 ---

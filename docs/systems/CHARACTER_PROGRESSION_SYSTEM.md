@@ -254,6 +254,10 @@ Attributes
 
 形成。
 
+## Character-Specific Last Spell
+
+Last Spell 是角色專屬的終極表達，不是可自由學習的普通 Spell Family，也不參與一般 SC Tier XP／`I → II → III` 升階。其取得應連結角色劇情、重大成長或特殊條件；各角色的確切解鎖條件 **TBD**。Last Spell 的戰鬥代價與每場使用規則見 `COMBAT_SYSTEM.md`，卡片與 Signature 規則見 `SPELL_FUNCTION_SYSTEM.md`。
+
 # 13. Example Builds
 
 ## Function Analyst
