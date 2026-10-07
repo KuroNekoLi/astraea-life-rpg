@@ -131,6 +131,53 @@ Spell
 └── resulting_state_change
 ```
 
+# 7.1 Spell Signature — Canon
+
+常用 Spell 具有標準 Signature，用來描述術式接受的參數與基本結構。
+
+例如：
+
+```text
+Fireball(
+    power,
+    direction,
+    velocity,
+    radius,
+    temperature,
+    stability,
+    ...
+)
+```
+
+Astraea 學院學生會在基礎教育中學習常用術式的 Signature、典型 Graph、詠唱特徵與基本應對方式。
+
+因此對標準、已知術式：
+
+```text
+recognized signature
+→ known spell
+→ immediate tactical response
+```
+
+不需要先花費 Analysis action 才知道術式名稱與基本性質。
+
+但 Signature 與 runtime parameters 必須分開：
+
+```text
+Signature:
+Fireball(power, direction, radius, ...)
+
+Runtime:
+Fireball(
+  power = 900,
+  direction = target_A,
+  radius = 3.5,
+  ...
+)
+```
+
+已知 Signature 不代表已知本次施法的實際威力、穩定性或是否被修改。
+
 # 8. Spell Card
 
 **Canon**
@@ -179,9 +226,59 @@ MVP 主要：
 - stability verification
 - request encoding
 
+Full Chant 的功能不是增加一個獨立「Buff」，而是把部分 Function construction / encoding 工作外部化並結構化。
+
+在相同施術者、相同 Spell 與近似資源投入下，Full Chant 通常提供：
+- 較高 Stability
+- 較完整 Parameter Binding
+- 較低 internal computation burden
+- 較高有效輸出／較少 execution loss
+
+代價：
+- casting time 較長
+- intent 較容易被辨識
+- 提供明確 Interrupt window
+
+
 # 12. Chantless — Canon
 
-不是沒有 encoding，而是將 encoding 內化至施術者。
+不是沒有 encoding，而是將原本由外部詠唱完成的 computation / encoding 內化至施術者。
+
+```text
+Full Chant:
+Human
+→ Chant-assisted construction / encoding
+→ Magic System
+
+Chantless:
+Human
+→ Internal construction / mental encoding
+→ Magic System
+```
+
+對多數施術者而言，Chantless 是以速度換取較高的個人處理負擔，因此可能造成：
+- lower effective output
+- lower Efficiency
+- lower Precision
+- lower Stability
+- higher failure / deviation risk
+
+但這些不是固定倍率。
+
+若施術者具有極高 Processing、Precision、Efficiency，或極高 Mana Capacity / Output，則：
+
+```text
+talented caster Chantless output
+>
+ordinary caster Full Chant output
+```
+
+是合法且符合世界觀的結果。
+
+魔法天才至少存在兩種典型：
+1. Precision / Efficiency 型：低浪費、高控制，能自行承擔大量 construction / encoding。
+2. Capacity / Output 型：控制未必最精密，但巨量 Mana 讓最終輸出仍遠高於一般人。
+
 
 # 13. Complexity
 
@@ -215,7 +312,39 @@ Critical
 - interrupt susceptibility
 - partial failure
 
-# 15. Weak Node
+# 15. Analysis — Canon
+
+Analysis 的核心不是固定產生 Weak Node，而是將未知資訊轉換成可採取行動的戰鬥資訊。
+
+對已知、標準術式：
+- spell identity / basic signature 可直接由受過教育的角色辨識；
+- 不要求先進行 Analysis 才能 Guard、Dodge、Interrupt 或使用已知 Counter。
+
+Analysis 的主要使用情境：
+- unknown signature
+- modified spell
+- composite spell
+- self-authored / high-level spell
+- runtime parameter estimation
+- Function Graph reconstruction
+- reversibility check
+- Counter path discovery
+- Weak Node discovery
+
+Analysis 可以揭露：
+- intent
+- runtime parameters
+- node / dependency
+- stability
+- casting progress
+- target condition
+- reversible node
+- possible Weak Node
+- possible Counter path
+
+Weak Node 是 Analysis 可能產生的高價值結果之一，不是所有 Spell 都一定存在。
+
+# 16. Weak Node
 
 **Canon**
 
@@ -223,7 +352,7 @@ Weak Node 是 Function Graph 中最適合干涉的節點。
 
 不是敵人生理弱點。
 
-# 16. Weak Node Types
+# 17. Weak Node Types
 
 **Proposal**
 - Structural Weak Node
@@ -231,17 +360,44 @@ Weak Node 是 Function Graph 中最適合干涉的節點。
 - Parameter Weak Node
 - Dependency Weak Node
 
-# 17. Interrupt
+# 18. Interrupt
 
-Interrupt 會：
-- cancel
-- delay
-- destabilize
-- force retarget
+Interrupt 處理的是 **Spell 尚未完成／Function 尚未成立** 的施法過程。
+
+典型流程：
+
+```text
+Caster
+→ Chant / Encoding
+→ Function construction
+→ [Interrupt window]
+→ Execution
+```
+
+可由：
+- weapon hit
+- knockback
+- stun
+- silence
+- displacement
+- dedicated interference spell
+- timing-based reaction
+
+造成：
+- cancel casting
+- delay completion
+- destabilize construction
+- force restart / retarget
 - increase cost
-- expose downstream node
 
-# 18. Reversibility
+對學生已知的標準 Fireball，常見正解就是在詠唱完成前直接 Interrupt；不需要先進行 Function Analysis。
+
+Interrupt 與 Counter-Function 必須區分：
+- **Interrupt**：阻止術式完成。
+- **Counter / Reverse Operation**：處理已成立、已 active execution 或已無法藉由打斷施術者停止的術式。
+
+
+# 19. Reversibility
 
 **Canon**
 
@@ -259,7 +415,7 @@ f^-1(B)=A
 
 不是所有 Function 都可逆。
 
-# 19. Counter-Function
+# 20. Counter-Function
 
 類型：
 - Full Inversion
@@ -268,7 +424,7 @@ f^-1(B)=A
 - Sequence Cancel
 - State Restore
 
-# 20. Counter Requirements
+# 21. Counter Requirements
 
 - Function Knowledge
 - Analysis threshold
@@ -277,21 +433,32 @@ f^-1(B)=A
 - sufficient Mana
 - reversibility
 
-# 21. Function Knowledge
+# 22. Function Knowledge
 
 **Proposal**
 
+Function Knowledge 不應從「所有東西都 Unknown」開始。
+
+學院教育提供 common spell baseline knowledge。對常用標準術式，角色可預設具備：
+- identity known
+- signature known
+- basic graph known
+- common interrupt timing known
+
+Knowledge progression 主要針對未知、改造、複合或高階術式：
+
 ```text
 K0 Unknown
-K1 Intent Known
-K2 Nodes Known
-K3 Weak Node Known
-K4 Counter Path Known
+K1 Intent / Signature partially known
+K2 Runtime parameters / Nodes known
+K3 Dependencies / Weak Node known
+K4 Counter / Reverse path known
 ```
 
 可跨戰鬥保存。
 
-# 22. Spell Acquisition
+
+# 23. Spell Acquisition
 
 來源：
 - class / lesson
@@ -306,7 +473,7 @@ K4 Counter Path Known
 - paid gacha
 - premium-only power spell
 
-# 23. Function Construction
+# 24. Function Construction
 
 **Proposal**
 
@@ -321,7 +488,7 @@ Node
 
 不是完全自由 programming。
 
-# 24. Parameter Binding
+# 25. Parameter Binding
 
 Spell Card 可在施放時綁定：
 - target
@@ -329,9 +496,15 @@ Spell Card 可在施放時綁定：
 - range
 - duration
 
+Parameter Binding 必須區分：
+- **Signature parameters**：術式定義允許哪些參數。
+- **Runtime values**：本次 execution 實際綁定的數值。
+
+Analysis 可用來估算或揭露 runtime values，但角色可能早已知道 Signature。
+
 哪些 parameter 可變由 Card 定義。
 
-# 25. Spell Data Model
+# 26. Spell Data Model
 
 ```text
 SpellDefinition
@@ -348,7 +521,7 @@ SpellDefinition
 └── unlock_condition
 ```
 
-# 26. Function Graph Data Model
+# 27. Function Graph Data Model
 
 ```text
 FunctionGraph
@@ -361,7 +534,7 @@ FunctionGraph
 └── counter_metadata
 ```
 
-# 27. Execution Runtime
+# 28. Execution Runtime
 
 ```text
 FunctionExecution
@@ -376,7 +549,7 @@ FunctionExecution
 └── resolution
 ```
 
-# 28. Active Node State
+# 29. Active Node State
 
 ```text
 Pending
@@ -387,7 +560,7 @@ Failed
 Countered
 ```
 
-# 29. Error Semantics
+# 30. Error Semantics
 
 Function 失敗必須有明確原因：
 - invalid target
@@ -399,7 +572,7 @@ Function 失敗必須有明確原因：
 
 這對後期 Magic Disability 劇情尤其重要。
 
-# 30. Magic Disability Compatibility — Canon
+# 31. Magic Disability Compatibility — Canon
 
 Mio 切斷：
 
@@ -417,7 +590,7 @@ Connection(Human, Magic System)
 
 系統模型必須能表達這種 failure。
 
-# 31. Last Spell — Canon
+# 32. Last Spell — Canon
 
 特殊 Spell Card：
 - 每戰一次
@@ -426,7 +599,7 @@ Connection(Human, Magic System)
 
 後期可能具有高 Reality Cost。
 
-# 32. Reality Cost — Canon
+# 33. Reality Cost — Canon
 
 ```text
 Mana Cost = caster pays
@@ -435,7 +608,7 @@ Reality Cost = world pays
 
 前期 UI 不顯示 Reality Cost。
 
-# 33. Research
+# 34. Research
 
 **Proposal**
 
@@ -446,7 +619,7 @@ Research 可：
 - unlock variant
 - discover counter path
 
-# 34. MVP Scope
+# 35. MVP Scope
 
 MVP：
 - 8–12 Spell Cards
@@ -466,7 +639,7 @@ MVP：
 - Last Spell
 - advanced inverse solver
 
-# 35. Validation
+# 36. Validation
 
 1. 玩家理解 Spell Card ≠ 抽卡嗎？
 2. Function Graph 看得懂嗎？
@@ -474,7 +647,7 @@ MVP：
 4. Counter 是否能產生不同於 damage 的玩法？
 5. Data model 是否能支援 Mio 失能事件？
 
-# 36. Major TBD
+# 37. Major TBD
 
 1. Complexity scale
 2. stability formula
@@ -487,6 +660,6 @@ MVP：
 9. Reality Cost representation
 10. Last Spell schemas
 
-# 37. Core Thesis
+# 38. Core Thesis
 
 > **Astraea 的 Spell 不是動畫名稱，而是可以被理解、拆解、干涉與反轉的 Function。**
