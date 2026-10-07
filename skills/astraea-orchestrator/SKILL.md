@@ -187,7 +187,7 @@ Route:
 
 ```text
 PM
-→ UX/UI Designer
+→ astraea-ui-ux-director
 → relevant domain specialist
 → astraea-visual-asset-director when new visual content is required
 → astraea-vision-guardian when product identity is affected
@@ -390,6 +390,20 @@ Owns:
 - reveal order
 - spoiler boundaries
 - story coherence
+
+### `astraea-ui-ux-director`
+
+Owns:
+
+- information architecture
+- navigation hierarchy
+- interaction hierarchy
+- responsive behavior
+- accessibility
+- localization UX
+- cross-screen UI coherence
+
+Does not own domain rules, Flutter architecture, canon, or generated artwork.
 
 ### `astraea-visual-asset-director`
 
@@ -729,6 +743,7 @@ A task is DONE only when:
 - static analysis passes
 - reviewer has no blocking findings
 - relevant UI has visual evidence
+- player-facing strings are localized for English and zh-TW
 - relevant player-facing flow has playtest evidence
 - specs are updated if behavior changed
 - no unresolved decision is hidden

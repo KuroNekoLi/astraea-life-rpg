@@ -377,13 +377,32 @@ Minimum expectations:
 
 # 20. Localization
 
-Do not concatenate translated sentences.
+Astraea ships with two supported locales:
 
-Use localization resources for user-visible strings.
+```text
+en
+zh_TW
+```
 
-Avoid hardcoded user-facing strings in reusable widgets.
+Localization is mandatory, not optional future-proofing.
 
-MVP may ship one locale, but code should not make future localization unnecessarily expensive.
+Rules:
+
+- all player-facing Flutter strings must come from Flutter localization resources
+- authored player-facing content must be locale-aware or resolved from stable IDs
+- do not hardcode display strings inside Widgets
+- do not concatenate translated sentences
+- use localization placeholders and pluralization
+- persistent/domain data stores stable IDs, never localized labels as identity
+- do not translate routes, enum names, database keys, analytics keys, or machine-readable IDs
+- error objects/domain outcomes remain language-neutral; presentation maps them to localized copy
+- generated artwork must not contain critical UI text
+- any new screen must be checked in English and zh-TW
+- tests for major user-facing changes must include at least one zh-TW smoke/render path
+
+Default locale selection follows the operating system. A future Settings screen may override locale without changing domain data.
+
+Do not introduce a new localization package when Flutter gen_l10n is sufficient.
 
 ---
 
@@ -568,5 +587,7 @@ A Flutter implementation is complete only when:
 - analyze passes
 - tests pass
 - relevant visual state is reviewed
+- English and zh-TW rendering are supported for player-facing changes
+- no new hardcoded player-facing strings were introduced
 - relevant first-player flow is validated
 - no unresolved product/canon decision is hidden

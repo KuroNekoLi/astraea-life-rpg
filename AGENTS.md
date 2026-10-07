@@ -87,6 +87,9 @@ docs/world/STORY_STRUCTURE.md
 ## UX / Prototype
 
 ```text
+docs/ui/ASTRAEA_UI_UX_FOUNDATION_V1.md
+docs/ui/CURRENT_UI_AUDIT_V1.md
+skills/astraea-ui-ux-director/SKILL.md
 docs/prototype/WIREFRAME_SPEC.md
 docs/prototype/FIRST_PLAYABLE_PROTOTYPE.md
 docs/product/MVP_VERTICAL_SLICE.md
@@ -202,6 +205,7 @@ astraea-game-director
 astraea-combat-designer
 astraea-narrative-director
 astraea-real-player-playtester
+astraea-ui-ux-director
 astraea-visual-asset-director
 ```
 
@@ -331,7 +335,26 @@ Use generated art for content such as spell artwork, enemy concepts, backgrounds
 
 ---
 
-# 10. Verification
+# 10. Localization
+
+Astraea must support:
+
+```text
+English
+Traditional Chinese (zh-TW)
+```
+
+Player-facing Flutter strings must come from localization resources or locale-aware authored content.
+
+Do not hardcode user-facing strings in Widgets.
+
+Stable IDs, enum values, routes, persistence keys, analytics keys, and debug-only machine data remain language-neutral.
+
+All new user-facing work must consider both locales before completion.
+
+---
+
+# 11. Verification
 
 Minimum completion gate:
 
@@ -357,7 +380,7 @@ Do not claim success.
 
 ---
 
-# 11. Player-Facing Gate
+# 12. Player-Facing Gate
 
 For meaningful user-facing work, technical success is insufficient.
 
@@ -382,7 +405,7 @@ Especially:
 
 ---
 
-# 12. Product Invariants
+# 13. Product Invariants
 
 Do not introduce without explicit product decision:
 
@@ -396,7 +419,7 @@ Do not introduce without explicit product decision:
 
 ---
 
-# 13. Canon Safety
+# 14. Canon Safety
 
 Do not reveal too early:
 
@@ -414,7 +437,7 @@ astraea-narrative-director
 
 ---
 
-# 14. MVP Priority
+# 15. MVP Priority
 
 The core MVP hypothesis is:
 
@@ -438,7 +461,7 @@ Life Quest
 
 ---
 
-# 15. If Unsure
+# 16. If Unsure
 
 Do not guess.
 

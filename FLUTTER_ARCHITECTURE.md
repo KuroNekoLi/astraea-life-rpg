@@ -99,6 +99,11 @@ lib/
 │   ├── router.dart
 │   └── app_providers.dart
 │
+├── l10n/
+│   ├── app_en.arb
+│   ├── app_zh_TW.arb
+│   └── generated localization output
+│
 ├── design_system/
 │   ├── tokens/
 │   ├── components/
@@ -454,13 +459,37 @@ for shared:
 - Function Graph primitives
 - Quest controls
 
-Figma Design System is the visual authority.
+There is currently no required Figma artifact.
+
+Visual authority comes from approved project specs, current Flutter implementation, approved assets, and the project UI/UX foundation. If an approved Figma reference is provided later, it becomes a high-fidelity reference for that specific surface.
 
 Do not duplicate magic colors and spacing values across screens.
 
 ---
 
-# 14. Assets
+# 14. Localization
+
+Use Flutter's built-in localization generation.
+
+Supported locales:
+
+```text
+en
+zh_TW
+```
+
+Rules:
+
+- presentation resolves user-facing strings through localization resources
+- domain/game-engine code never depends on localization
+- content identity uses stable IDs
+- localized display text is derived at the presentation/content boundary
+- locale changes must not mutate save data
+- generated artwork does not carry critical localized UI text
+
+---
+
+# 22. Assets
 
 Generated art assets are content, not UI chrome.
 
@@ -484,7 +513,7 @@ Flutter composes these at runtime.
 
 ---
 
-# 15. Story Runtime
+# 22. Story Runtime
 
 Story content should be data-driven where practical.
 
@@ -505,7 +534,7 @@ Canon content remains authored/reviewed by narrative roles.
 
 ---
 
-# 16. Content Validation
+# 22. Content Validation
 
 Static content should have validation before runtime.
 
@@ -523,7 +552,7 @@ Fail fast in development.
 
 ---
 
-# 17. Error Handling
+# 22. Error Handling
 
 Use explicit failure types.
 
@@ -548,7 +577,7 @@ Core gameplay simulation should not depend on UI error strings.
 
 ---
 
-# 18. Offline-First MVP
+# 22. Offline-First MVP
 
 Default MVP assumption:
 
@@ -567,7 +596,7 @@ Future sync should be layered on top of a stable local model.
 
 ---
 
-# 19. Testing Architecture
+# 22. Testing Architecture
 
 ## Domain / Game Engine
 
@@ -619,7 +648,7 @@ Life Quest
 
 ---
 
-# 20. Architecture Rules That Require ADR
+# 22. Architecture Rules That Require ADR
 
 Create an ADR before:
 
@@ -635,7 +664,7 @@ Create an ADR before:
 
 ---
 
-# 21. MVP Principle
+# 22. MVP Principle
 
 Prefer:
 
