@@ -713,5 +713,10 @@
         "type": "int"
       }
     }
-  }
+  },
+  "combatFullChantCastingTitle": "Full Chant 正在構築",
+  "combatFullChantCastingBody": "Fireball II 已成為 Timeline 上等待解析的 Resolve event。術式完成前，Ashfang 仍有機會行動。",
+  "combatAdvanceTimeline": "推進至 Resolve",
+  "combatDefeatTitle": "訓練失敗",
+  "combatDefeatBody": "隊伍已戰敗。重新開始訓練，嘗試不同的決策。"
 }
