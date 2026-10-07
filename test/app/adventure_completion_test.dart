@@ -71,6 +71,12 @@ void main() {
 
     container.read(routerProvider).go('/adventure');
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Practice Function Analysis'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Practice Function Analysis'));
     await tester.pumpAndSettle();
     expect(find.byType(FunctionLabScreen), findsOneWidget);
