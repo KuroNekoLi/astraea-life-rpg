@@ -825,10 +825,7 @@ class _GraphNode extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(color: color, width: 2),
               boxShadow: [
-                BoxShadow(
-                  color: color.withValues(alpha: 0.18),
-                  blurRadius: 10,
-                ),
+                BoxShadow(color: color.withValues(alpha: 0.18), blurRadius: 10),
               ],
             ),
           ),
