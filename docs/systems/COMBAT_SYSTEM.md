@@ -39,20 +39,42 @@ Interfere
 Resolve
 ```
 
-玩家需要理解敵人的術式如何運作，再選擇：
+玩家需要根據自己已知的魔法知識與當下取得的情報來判斷，不是每次都先做 Analysis。
 
+對已知標準術式，角色可能直接辨識並選擇：
 - 直接承受
 - 迴避
 - 防禦
-- 中斷
+- 在詠唱完成前中斷
+- 使用已知 Counter
+
+對未知、改造、複合或高階術式，才需要進一步：
+- Analysis
+- Function Graph reconstruction
 - 破解 Weak Node
-- Counter-Function
+- 尋找 Counter / Reverse path
 - 改變位置
 - 用 Party Synergy 建立解法
 
 戰鬥的理想感受：
 
 > **我不是因為數值比較高而贏，而是因為我理解了這個 Function。**
+
+### Combat knowledge principle
+
+Astraea 的差異化不是「所有敵人都先掃描弱點」，而是：
+
+```text
+Known spell
+→ use learned knowledge immediately
+
+Unknown / modified spell
+→ analyze
+→ understand
+→ choose response
+```
+
+因此戰鬥的資訊玩法必須保留玩家既有知識的價值，並讓 Analysis 成為處理未知性的工具，而不是固定開場稅。
 
 ---
 
@@ -563,7 +585,7 @@ Chantless 是把原本外部詠唱處理的 computation / encoding 移到施術�
 ### Strength
 - 快速
 - 彈性高
-- 不容易被傳統 Silence / Chant Interrupt 克制
+- 不容易被傳統 Chant Interrupt 克制
 - 適合 reactive play
 
 ### Weakness
@@ -571,8 +593,22 @@ Chantless 是把原本外部詠唱處理的 computation / encoding 移到施術�
 - 高 Precision requirement
 - 高 error / instability risk
 - 複雜 Spell 負擔更大
+- 對多數施術者而言，通常犧牲部分有效輸出／效率／穩定性
 
----
+這不是固定的 damage penalty。最終表現由施術者能力決定。
+
+因此以下情況合法：
+
+```text
+Talented caster + Chantless
+>
+Ordinary caster + Full Chant
+```
+
+尤其：
+- Precision / Efficiency 型天才可以靠高控制與低浪費彌補完整詠唱的輔助。
+- Capacity / Output 型天才即使效率較差，也可能靠巨量 Mana 讓 Chantless 輸出高於一般人的 Full Chant。
+
 
 # 17. Function Graph in Combat
 
@@ -635,79 +671,101 @@ Boss 可以同時維持多個 Active Function。
 
 # 19. Function Visibility
 
-## 19.1 Transparent
+Function visibility 必須先區分 **known common spell** 與 **unknown / modified spell**。
 
-完整 Graph 可見。
+學院學生已學過常用 Spell 的 Signature、典型 Graph、詠唱特徵與基本應對，因此「是否知道這是 Fireball」不應被當成每場戰鬥都要花 Analysis 解鎖的資訊。
+
+## 19.1 Familiar / Known
 
 適用：
-
-- Tutorial
-- familiar enemy
+- common academy spell
+- previously learned spell
 - previously analyzed spell
 
----
+預設可顯示／辨識：
+- Spell identity
+- standard signature
+- broad intent
+- common interrupt window
+
+不代表自動知道：
+- exact runtime parameters
+- hidden modifications
+- current stability
+- altered dependencies
 
 ## 19.2 Partial
 
-部分 Node：
+部分 runtime / Graph 資訊：
 
 ```text
+Fireball
+Power: ???
+Stability: ???
+Graph:
+Known Node
+↓
 ???
+↓
+Known Node
 ```
 
-玩家需要：
-
+玩家可透過：
 - Analysis
 - previous knowledge
 - Rio support
 - observed execution
 
-解鎖。
+逐步揭露。
 
----
+## 19.3 Hidden / Unknown
 
-## 19.3 Hidden
-
-只顯示 Enemy Intent。
+只顯示有限 Intent 或異常徵兆。
 
 例如：
+
+```text
+Unknown signature detected.
+```
+
+或：
 
 ```text
 Mio is altering the casting interface.
 ```
 
-而不直接顯示 Function Graph。
-
 適用：
-
 - Boss
 - unknown magic
+- self-authored magic
+- composite magic
+- heavily modified spell
 - story revelation
 
----
 
 # 20. Function Knowledge
 
-玩家對 Function 的知識可跨戰鬥保留。
+Function Knowledge 可跨戰鬥保留，但 common academy spells 具有 baseline knowledge。
 
-例如：
+例如標準 Fireball：
 
 ```text
-FireBolt
-Knowledge 0:
-Unknown
+Baseline academy knowledge:
+- identity known
+- signature known
+- typical chant known
+- typical graph known
+- common interrupt timing known
+```
 
-Knowledge 1:
-Intent known
+對未知／改造術式，才進入額外 knowledge progression：
 
-Knowledge 2:
-Nodes known
-
-Knowledge 3:
-Weak Node known
-
-Knowledge 4:
-Counter path known
+```text
+K0 Unknown
+K1 Intent / partial signature known
+K2 Runtime parameters / nodes known
+K3 Dependencies / Weak Node known
+K4 Counter / Reverse path known
 ```
 
 ## Proposal
@@ -716,30 +774,70 @@ Counter path known
 
 > 戰鬥 → 理解 → 下次更有效率
 
-的長期 RPG progression。
+的長期 RPG progression，但不應要求玩家每次重新分析學院常識。
 
----
 
 # 21. Analysis Action
 
-Analysis 不只是：
+Analysis 的核心是：
 
 ```text
-Scan enemy weakness.
+Unknown
+↓
+Information
+↓
+Decision
 ```
 
-可做：
+不是：
 
+```text
+Analyze
+↓
+Weak Node automatically appears
+↓
+Attack highlighted node
+```
+
+### 不需要 Analysis 的典型情境
+
+敵方正在完整詠唱標準 Fireball，而角色已受過學院教育：
+
+```text
+Recognize Fireball
+↓
+Predict completion
+↓
+Interrupt / Guard / Dodge / known Counter
+```
+
+不要求先消耗 Analysis action。
+
+### 需要 Analysis 的典型情境
+
+- unknown signature
+- modified spell
+- composite spell
+- self-authored / high-level spell
+- runtime parameters 不明且會影響決策
+- 需要確認 stability / target condition
+- 需要重建 Function Graph
+- 需要尋找 Weak Node
+- 需要判斷 reversibility
+- 需要發現 Counter / Reverse path
+
+Analysis 可做：
 - Reveal Node
 - Reveal dependency
 - Detect Weak Node
 - Estimate completion timing
+- Estimate runtime parameter
 - Check invertibility
-- Identify parameter
 - predict target
 - identify false node / decoy
 
----
+Weak Node 是可能結果之一，不保證存在。
+
 
 # 22. Weak Node
 
@@ -794,20 +892,42 @@ Spell completely disappears
 
 # 24. Interrupt
 
-Interrupt 是最基礎的 Function interference。
+Interrupt 是阻止 **尚未完成的施法／Function construction** 的基礎戰鬥手段。
 
-可能由：
+典型時序：
 
+```text
+Chant / Encoding
+↓
+Function construction
+↓
+[Interrupt window]
+↓
+Spell established
+↓
+Execution
+```
+
+可由：
 - Weapon Technique
 - Reaction
 - Spell
-- Movement
+- Movement / displacement
+- stun
+- silence
 - environmental interaction
 
 觸發。
 
-成功率可受：
+成功可能：
+- cancel casting
+- delay
+- destabilize
+- force restart
+- force retarget
+- increase cost
 
+成功率可受：
 - Precision
 - Processing
 - target Stability
@@ -817,11 +937,27 @@ Interrupt 是最基礎的 Function interference。
 
 公式：**TBD**。
 
----
+### Interrupt 與 Counter 的界線
 
-# 25. Counter-Function
+對已知 Fireball：
+
+```text
+尚在詠唱
+→ 打斷施術者即可
+
+Fireball 已形成／已飛出
+→ 打施術者通常無法讓既成 Function 自動消失
+→ Dodge / Guard / Counter / Reverse Operation
+```
+
+所以 Counter-Function 不應取代傳統 RPG 的 Interrupt；兩者是不同時間點的戰術工具。
+
+
+# 25. Counter-Function / Reverse Operation
 
 ## Canon
+
+Counter-Function 在戰鬥中的主要定位，是處理 **已經成立、active execution，或無法再靠打斷 caster 停止的術式**。
 
 若：
 
@@ -841,7 +977,14 @@ f^-1(B) = A
 
 > 不是所有 Function 都存在完整、唯一反函數。
 
----
+Counter / Reverse Operation 不等於屬性相剋，也不等於 Interrupt。它可能依賴：
+- 已知 Signature / Function Knowledge
+- runtime Analysis
+- correct timing
+- reversibility
+- compatible technique / spell
+- Mana / action budget
+
 
 # 26. Counter Types
 
