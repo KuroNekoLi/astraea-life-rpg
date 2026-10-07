@@ -264,9 +264,9 @@ void main() {
     });
 
     test('Normal Move cannot cross two Zones at once', () {
-      final started = engine.advance(
-        battle(player: hero(zone: BattleZone.far)),
-      ).state;
+      final started = engine
+          .advance(battle(player: hero(zone: BattleZone.far)))
+          .state;
 
       expect(
         () => engine.move(
