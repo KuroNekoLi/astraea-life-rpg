@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CombatPulseRing extends StatefulWidget {
+class CombatPulseRing extends StatelessWidget {
   const CombatPulseRing({
     super.key,
     required this.color,
@@ -13,53 +13,27 @@ class CombatPulseRing extends StatefulWidget {
   final double strokeWidth;
 
   @override
-  State<CombatPulseRing> createState() => _CombatPulseRingState();
-}
-
-class _CombatPulseRingState extends State<CombatPulseRing>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1200),
-  )..repeat(reverse: true);
-
-  late final Animation<double> _scale = Tween<double>(
-    begin: 0.86,
-    end: 1.08,
-  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-  late final Animation<double> _opacity = Tween<double>(
-    begin: 0.25,
-    end: 0.72,
-  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 650),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        final scale = 0.82 + (0.22 * value);
+        final opacity = 0.72 - (0.42 * value);
         return Opacity(
-          opacity: _opacity.value,
+          opacity: opacity,
           child: Transform.scale(
-            scale: _scale.value,
+            scale: scale,
             child: Container(
-              width: widget.size,
-              height: widget.size,
+              width: size,
+              height: size,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: widget.color,
-                  width: widget.strokeWidth,
-                ),
+                border: Border.all(color: color, width: strokeWidth),
                 boxShadow: [
                   BoxShadow(
-                    color: widget.color.withValues(alpha: 0.28),
+                    color: color.withValues(alpha: 0.28),
                     blurRadius: 18,
                     spreadRadius: 2,
                   ),
