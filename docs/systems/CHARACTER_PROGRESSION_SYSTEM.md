@@ -317,13 +317,15 @@ Attributes
 
 # 15. Spell Requirement
 
-Spell 可要求：
+Spell / Spell Tier 可要求：
 
 ```text
 minimum_attribute
 complexity_tolerance
 mana_output
 casting_method
+chantless_requirement
+tier_mastery
 ```
 
 但不要讓大量 Spell 因 1 點差距完全不可用。
@@ -332,6 +334,50 @@ casting_method
 - 達標：正常
 - 未達：較高成本 / 較慢 / 不穩定
 - 極度未達：不可使用
+
+# 15.1 Spell System Progression and SC XP
+
+Spell 會被歸入若干 Magic Systems / Schools；正式分類與命名 **TBD**。
+
+角色可以取得／分配某一系統的成長點數，將其投入該系統內的 SC。
+
+```text
+Magic System growth points
+↓
+compatible SC
+↓
+SC Tier XP
+↓
+Tier mastered
+↓
+next Tier unlocked
+```
+
+例如：
+
+```text
+Fireball I XP full
+→ Fireball II unlocked
+```
+
+Tier 升級不是單純 damage +N，而是：
+- 開放更多 Signature parameters；
+- 提高 Function control ceiling；
+- 通常提高 Mana Cost；
+- 通常提高 Complexity；
+- 通常提高 Chantless requirement。
+
+SC progression 與 Character Attributes 分離。
+
+因此：
+- 角色可以解鎖 Fireball III，但 Processing / Precision 不足以 Chantless；
+- 角色也可以把 Fireball I 用得比普通人的 Fireball III 更強。
+
+目前尚待決定：
+- Magic Systems 的正式分類；
+- 每個系統點數來源與經濟；
+- 戰鬥使用是否直接提供 SC XP；
+- 高 Tier 解鎖後是否保留低 Tier 為獨立可準備版本。
 
 # 16. Training Types
 
@@ -350,6 +396,20 @@ Mana Control Drill
 - 消耗指定 Potential
 - 推進 1–2 Attribute
 - 有 diminishing return
+
+# 16.1 Prepared Function Capacity
+
+角色可以學會大量 Spell，但戰鬥前能維持的 Prepared Functions 數量有限。
+
+MVP：
+
+```text
+Prepared SC limit = 6
+```
+
+這是戰鬥 Loadout 限制，不是角色知識限制。
+
+未來是否由特定角色能力提高 Prepared Function Capacity：**TBD**。
 
 # 17. Respec
 
