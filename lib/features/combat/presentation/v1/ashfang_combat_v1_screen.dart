@@ -699,9 +699,9 @@ class _ActionCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     body,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AstraeaColors.muted,
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
                   ),
                   const SizedBox(height: 12),
                   Wrap(
@@ -754,9 +754,9 @@ class _AnalysisAction extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     context.l10n.combatModifiedAnalysisBody,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AstraeaColors.muted,
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
                   ),
                   const SizedBox(height: 16),
                   Text(
