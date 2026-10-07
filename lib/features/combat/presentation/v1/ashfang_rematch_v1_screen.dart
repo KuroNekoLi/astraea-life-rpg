@@ -7,6 +7,7 @@ import '../../../../game_engine/combat/v1/combat_models.dart';
 import '../../../../l10n/l10n.dart';
 import '../../application/ashfang_rematch_v1_provider.dart';
 import '../../application/ashfang_rematch_v1_session.dart';
+import 'combat_vfx.dart';
 
 class AshfangRematchV1Screen extends ConsumerWidget {
   const AshfangRematchV1Screen({super.key});
@@ -272,13 +273,24 @@ class _RematchBattlefield extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Icon(
-                        view.weakNodeRevealed
-                            ? Icons.hub_outlined
-                            : Icons.blur_circular,
-                        color: view.weakNodeRevealed
-                            ? AstraeaColors.gold
-                            : AstraeaColors.starlight,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CombatPulseRing(
+                            color: view.weakNodeRevealed
+                                ? AstraeaColors.gold
+                                : AstraeaColors.starlight,
+                            size: 58,
+                          ),
+                          Icon(
+                            view.weakNodeRevealed
+                                ? Icons.hub_outlined
+                                : Icons.blur_circular,
+                            color: view.weakNodeRevealed
+                                ? AstraeaColors.gold
+                                : AstraeaColors.starlight,
+                          ),
+                        ],
                       ),
                     ),
                   ),
