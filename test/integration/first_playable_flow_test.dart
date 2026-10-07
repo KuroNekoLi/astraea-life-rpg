@@ -175,28 +175,40 @@ void main() {
         )).single.read<String>('payload'),
         contains('spellIds'),
       );
+      tester.view.physicalSize = const Size(1200, 700);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       resumedContainer.read(routerProvider).go('/battle/ashfang');
       await tester.pumpAndSettle();
 
       expect(find.text('ACTION TIMELINE'), findsOneWidget);
+      await tester.ensureVisible(find.text('Cast Fireball I'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Cast Fireball I'));
       await tester.pumpAndSettle();
 
       expect(find.text('REACTION'), findsOneWidget);
-      await tester.tap(find.text('Interrupt'));
+      await tester.ensureVisible(find.text('Interrupt').last);
+      await tester.tap(find.text('Interrupt').last);
       await tester.pumpAndSettle();
 
       expect(find.text('Analyze Modified Function'), findsOneWidget);
+      await tester.ensureVisible(find.text('Analyze Modified Function'));
       await tester.tap(find.text('Analyze Modified Function'));
       await tester.pumpAndSettle();
 
       expect(find.text('Weak Node revealed'), findsOneWidget);
-      await tester.tap(find.text('Interrupt'));
+      await tester.ensureVisible(find.text('Interrupt').last);
+      await tester.tap(find.text('Interrupt').last);
       await tester.pumpAndSettle();
 
+      await tester.ensureVisible(find.text('Begin Fireball II · Full Chant'));
       await tester.tap(find.text('Begin Fireball II · Full Chant'));
       await tester.pumpAndSettle();
 
+      await tester.ensureVisible(find.text('Finish with Fireball I'));
       await tester.tap(find.text('Finish with Fireball I'));
       await tester.pumpAndSettle();
 
