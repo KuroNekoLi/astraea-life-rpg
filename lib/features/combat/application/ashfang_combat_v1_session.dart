@@ -8,6 +8,7 @@ enum AshfangTutorialStageV1 {
   modifiedAnalysis,
   modifiedInterrupt,
   heroFullChant,
+  heroFullChantCasting,
   heroFinisher,
   victory,
   defeat,
@@ -210,7 +211,12 @@ final class AshfangCombatV1Session {
         targetId: 'ashfang',
       ),
     );
+    stage = AshfangTutorialStageV1.heroFullChantCasting;
     feedback = AshfangTutorialFeedbackV1.heroFullChantCasting;
+  }
+
+  void resolveHeroFireballIIFullChant() {
+    _requireStage(AshfangTutorialStageV1.heroFullChantCasting);
     _resolveHeroFullChant();
     if (state.outcome != CombatOutcome.active) {
       _finishFromOutcome();
