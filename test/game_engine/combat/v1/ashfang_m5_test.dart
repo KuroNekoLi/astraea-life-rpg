@@ -115,10 +115,7 @@ BattleStateV1 _advancePlayersUntil(
     }
     current = engine.useAction(
       current,
-      UseActionCommandV1(
-        next.event.actorId!,
-        action: waitAction(),
-      ),
+      UseActionCommandV1(next.event.actorId!, action: waitAction()),
     );
   }
   throw StateError('Battle ended before $actorId received a Turn');
@@ -254,36 +251,39 @@ BattleStateV1 runAshfangHeadlessScenario() {
 }
 
 void main() {
-  test('enemy Pattern selects authored intents from deterministic conditions', () {
-    const engine = HeadlessCombatEngineV1();
-    final state = engine.start(
-      combatants: [
-        scenarioActor('ashfang', BattleSide.enemy),
-        scenarioActor('hero', BattleSide.player),
-      ],
-      initialTurnTimes: const {'ashfang': 0, 'hero': 10},
-    );
-    final pattern = ashfangPattern();
+  test(
+    'enemy Pattern selects authored intents from deterministic conditions',
+    () {
+      const engine = HeadlessCombatEngineV1();
+      final state = engine.start(
+        combatants: [
+          scenarioActor('ashfang', BattleSide.enemy),
+          scenarioActor('hero', BattleSide.player),
+        ],
+        initialTurnTimes: const {'ashfang': 0, 'hero': 10},
+      );
+      final pattern = ashfangPattern();
 
-    final first = pattern.choose(
-      state: state,
-      actorId: 'ashfang',
-      targetId: 'hero',
-      context: EnemyPatternContextV1(turnIndex: 0),
-    );
-    final second = pattern.choose(
-      state: state,
-      actorId: 'ashfang',
-      targetId: 'hero',
-      context: EnemyPatternContextV1(
-        turnIndex: 1,
-        previousIntentIds: const ['known-fireball'],
-      ),
-    );
+      final first = pattern.choose(
+        state: state,
+        actorId: 'ashfang',
+        targetId: 'hero',
+        context: EnemyPatternContextV1(turnIndex: 0),
+      );
+      final second = pattern.choose(
+        state: state,
+        actorId: 'ashfang',
+        targetId: 'hero',
+        context: EnemyPatternContextV1(
+          turnIndex: 1,
+          previousIntentIds: const ['known-fireball'],
+        ),
+      );
 
-    expect(first.intentId, 'known-fireball');
-    expect(second.intentId, 'modified-fireball');
-  });
+      expect(first.intentId, 'known-fireball');
+      expect(second.intentId, 'modified-fireball');
+    },
+  );
 
   test('same Pattern state and context always choose the same Intent', () {
     const engine = HeadlessCombatEngineV1();

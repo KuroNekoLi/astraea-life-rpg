@@ -137,55 +137,58 @@ void main() {
     );
   });
 
-  test('Analysis exposes a real Weak Node that can change Interrupt outcome', () {
-    var state = engine.start(
-      combatants: [
-        m4Actor('enemy', BattleSide.enemy),
-        m4Actor('rio', BattleSide.player),
-      ],
-      initialTurnTimes: const {'enemy': 0, 'rio': 10},
-    );
-    state = engine.advance(state).state;
-    state = engine.beginFullChant(
-      state,
-      BeginFullChantCommandV1(
-        'enemy',
-        spell: modifiedFireball(),
-        targetId: 'rio',
-      ),
-    );
-    final functionId = state.castingFunctionFor('enemy')!.id;
+  test(
+    'Analysis exposes a real Weak Node that can change Interrupt outcome',
+    () {
+      var state = engine.start(
+        combatants: [
+          m4Actor('enemy', BattleSide.enemy),
+          m4Actor('rio', BattleSide.player),
+        ],
+        initialTurnTimes: const {'enemy': 0, 'rio': 10},
+      );
+      state = engine.advance(state).state;
+      state = engine.beginFullChant(
+        state,
+        BeginFullChantCommandV1(
+          'enemy',
+          spell: modifiedFireball(),
+          targetId: 'rio',
+        ),
+      );
+      final functionId = state.castingFunctionFor('enemy')!.id;
 
-    state = engine.advance(state).state;
-    state = engine.analyzeFunction(
-      state,
-      AnalyzeFunctionCommandV1(
-        'rio',
-        functionId: functionId,
-        analysis: deepAnalysis(),
-      ),
-    );
-    final knowledge = state.knowledgeFor('rio', 'modified-fireball')!;
-    expect(knowledge.revealedWeakNodeIds, contains('stabilization'));
+      state = engine.advance(state).state;
+      state = engine.analyzeFunction(
+        state,
+        AnalyzeFunctionCommandV1(
+          'rio',
+          functionId: functionId,
+          analysis: deepAnalysis(),
+        ),
+      );
+      final knowledge = state.knowledgeFor('rio', 'modified-fireball')!;
+      expect(knowledge.revealedWeakNodeIds, contains('stabilization'));
 
-    state = engine.advance(state).state;
-    state = engine.interruptFunction(
-      state,
-      InterruptFunctionCommandV1(
-        'rio',
-        functionId: functionId,
-        interrupt: m4Interrupt(power: 45),
-        weakNodeId: 'stabilization',
-        asReaction: false,
-      ),
-    );
+      state = engine.advance(state).state;
+      state = engine.interruptFunction(
+        state,
+        InterruptFunctionCommandV1(
+          'rio',
+          functionId: functionId,
+          interrupt: m4Interrupt(power: 45),
+          weakNodeId: 'stabilization',
+          asReaction: false,
+        ),
+      );
 
-    expect(state.castingFunctionFor('enemy'), isNull);
-    expect(
-      state.eventLog,
-      contains('interruptAttempt:rio:$functionId:ip=60'),
-    );
-  });
+      expect(state.castingFunctionFor('enemy'), isNull);
+      expect(
+        state.eventLog,
+        contains('interruptAttempt:rio:$functionId:ip=60'),
+      );
+    },
+  );
 
   test('Counter is rejected while a spell is still only casting', () {
     var state = engine.start(
@@ -326,10 +329,7 @@ void main() {
       state,
       BeginFullChantCommandV1(
         'enemy',
-        spell: modifiedFireball(
-          castTime: 20,
-          executionDelay: 30,
-        ),
+        spell: modifiedFireball(castTime: 20, executionDelay: 30),
         targetId: 'hero',
       ),
     );
@@ -384,10 +384,7 @@ void main() {
       state,
       BeginFullChantCommandV1(
         'enemy',
-        spell: modifiedFireball(
-          castTime: 20,
-          executionDelay: 30,
-        ),
+        spell: modifiedFireball(castTime: 20, executionDelay: 30),
         targetId: 'hero',
       ),
     );

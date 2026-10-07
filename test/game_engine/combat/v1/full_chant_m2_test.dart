@@ -54,18 +54,16 @@ void main() {
     final heroTurn = engine.advance(startedBattle()).state;
     final casting = engine.beginFullChant(
       heroTurn,
-      BeginFullChantCommandV1(
-        'hero',
-        spell: fireball(),
-        targetId: 'enemy',
-      ),
+      BeginFullChantCommandV1('hero', spell: fireball(), targetId: 'enemy'),
     );
 
     expect(casting.actor('hero').mana, 76);
     expect(casting.activeTurn, isNull);
     expect(casting.castingFunctionFor('hero'), isNotNull);
     expect(
-      casting.timeline.where((event) => event.type == TimelineEventType.spellResolve),
+      casting.timeline.where(
+        (event) => event.type == TimelineEventType.spellResolve,
+      ),
       hasLength(1),
     );
     expect(
@@ -80,11 +78,7 @@ void main() {
     final heroTurn = engine.advance(startedBattle()).state;
     final casting = engine.beginFullChant(
       heroTurn,
-      BeginFullChantCommandV1(
-        'hero',
-        spell: fireball(),
-        targetId: 'enemy',
-      ),
+      BeginFullChantCommandV1('hero', spell: fireball(), targetId: 'enemy'),
     );
 
     final enemyTurn = engine.advance(casting);
@@ -131,57 +125,52 @@ void main() {
     expect(resolve.state.currentTime, 90);
   });
 
-  test('resolve event applies spell and schedules recovery from resolve time', () {
-    final heroTurn = engine.advance(startedBattle()).state;
-    var state = engine.beginFullChant(
-      heroTurn,
-      BeginFullChantCommandV1(
-        'hero',
-        spell: fireball(),
-        targetId: 'enemy',
-      ),
-    );
+  test(
+    'resolve event applies spell and schedules recovery from resolve time',
+    () {
+      final heroTurn = engine.advance(startedBattle()).state;
+      var state = engine.beginFullChant(
+        heroTurn,
+        BeginFullChantCommandV1('hero', spell: fireball(), targetId: 'enemy'),
+      );
 
-    final enemyTurn = engine.advance(state);
-    state = engine.useAction(
-      enemyTurn.state,
-      UseActionCommandV1(
-        'enemy',
-        targetId: 'hero',
-        action: CombatActionDefinitionV1(
-          id: 'wait',
-          kind: CombatActionKind.technique,
-          actionDelay: 200,
-          rawDamage: 1,
-          damageType: DamageType.physical,
-          targetZones: const {BattleZone.mid},
+      final enemyTurn = engine.advance(state);
+      state = engine.useAction(
+        enemyTurn.state,
+        UseActionCommandV1(
+          'enemy',
+          targetId: 'hero',
+          action: CombatActionDefinitionV1(
+            id: 'wait',
+            kind: CombatActionKind.technique,
+            actionDelay: 200,
+            rawDamage: 1,
+            damageType: DamageType.physical,
+            targetZones: const {BattleZone.mid},
+          ),
         ),
-      ),
-    );
+      );
 
-    final ready = engine.advance(state);
-    expect(ready.event.type, TimelineEventType.spellResolve);
-    state = engine.resolveTimelineEvent(ready.state, ready.event);
+      final ready = engine.advance(state);
+      expect(ready.event.type, TimelineEventType.spellResolve);
+      state = engine.resolveTimelineEvent(ready.state, ready.event);
 
-    expect(state.actor('enemy').hp, 100);
-    expect(state.castingFunctionFor('hero'), isNull);
-    expect(
-      state.timeline
-          .firstWhere((event) => event.actorId == 'hero')
-          .scheduledAt,
-      190,
-    );
-  });
+      expect(state.actor('enemy').hp, 100);
+      expect(state.castingFunctionFor('hero'), isNull);
+      expect(
+        state.timeline
+            .firstWhere((event) => event.actorId == 'hero')
+            .scheduledAt,
+        190,
+      );
+    },
+  );
 
   test('cancelling Full Chant refunds half base Mana and keeps recovery', () {
     final heroTurn = engine.advance(startedBattle()).state;
     var state = engine.beginFullChant(
       heroTurn,
-      BeginFullChantCommandV1(
-        'hero',
-        spell: fireball(),
-        targetId: 'enemy',
-      ),
+      BeginFullChantCommandV1('hero', spell: fireball(), targetId: 'enemy'),
     );
     state = engine.cancelFullChant(
       state,
@@ -191,7 +180,9 @@ void main() {
     expect(state.actor('hero').mana, 88);
     expect(state.castingFunctionFor('hero'), isNull);
     expect(
-      state.timeline.where((event) => event.type == TimelineEventType.spellResolve),
+      state.timeline.where(
+        (event) => event.type == TimelineEventType.spellResolve,
+      ),
       isEmpty,
     );
     expect(
@@ -211,11 +202,7 @@ void main() {
     final heroTurn = engine.advance(state);
     state = engine.beginFullChant(
       heroTurn.state,
-      BeginFullChantCommandV1(
-        'hero',
-        spell: fireball(),
-        targetId: 'enemy',
-      ),
+      BeginFullChantCommandV1('hero', spell: fireball(), targetId: 'enemy'),
     );
 
     final enemyTurn = engine.advance(state);
@@ -243,9 +230,6 @@ void main() {
     state = engine.resolveTimelineEvent(ready.state, ready.event);
 
     expect(state.actor('enemy').hp, 200);
-    expect(
-      state.eventLog,
-      contains('fullChantFailed:hero:fireball-ii-full'),
-    );
+    expect(state.eventLog, contains('fullChantFailed:hero:fireball-ii-full'));
   });
 }

@@ -39,9 +39,7 @@ final class CombatReportV1 {
       outcome: state.outcome,
       actionTime: state.currentTime,
       mainActions:
-          count('action:') +
-          count('fullChantStarted:') +
-          count('analysis:'),
+          count('action:') + count('fullChantStarted:') + count('analysis:'),
       quickActions: count('quickAction:'),
       fullChantsStarted: count('fullChantStarted:'),
       interruptAttempts: count('interruptAttempt:'),
@@ -94,19 +92,19 @@ final class CombatStateFingerprintV1 {
       'turn=${state.activeTurn?.actorId ?? '-'}',
       for (final actor in actors)
         'actor=${actor.id},${actor.side.name},${actor.hp},${actor.mana},'
-        '${actor.zone.name},${actor.condition.name},${actor.reactionAvailable}',
+            '${actor.zone.name},${actor.condition.name},${actor.reactionAvailable}',
       for (final event in state.timeline)
         'event=${event.id},${event.type.name},${event.scheduledAt},'
-        '${event.sequence},${event.actorId ?? '-'},${event.functionId ?? '-'}',
+            '${event.sequence},${event.actorId ?? '-'},${event.functionId ?? '-'}',
       for (final function in functions)
         'function=${function.id},${function.actionId},${function.status.name},'
-        '${function.stability},${function.resolveAt}',
+            '${function.stability},${function.resolveAt}',
       for (final entry in knowledge)
         'knowledge=${entry.observerId},${entry.signatureId},'
-        '${entry.level.name},${entry.knownStability ?? -1},'
-        '${([...entry.revealedWeakNodeIds]..sort()).join(",")},'
-        '${([...entry.knownCounterTags]..sort()).join(",")},'
-        '${entry.reversibilityKnown}',
+            '${entry.level.name},${entry.knownStability ?? -1},'
+            '${([...entry.revealedWeakNodeIds]..sort()).join(",")},'
+            '${([...entry.knownCounterTags]..sort()).join(",")},'
+            '${entry.reversibilityKnown}',
       for (final event in state.eventLog) 'log=$event',
     ].join('||');
   }
