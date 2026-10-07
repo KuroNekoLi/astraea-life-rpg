@@ -966,7 +966,15 @@ class _EndPanel extends StatelessWidget {
                 : context.l10n.combatDefeatBody,
           ),
           const SizedBox(height: 14),
-          FilledButton(
+          if (victory) ...[
+            FilledButton.icon(
+              onPressed: () => context.go('/battle/ashfang/rematch'),
+              icon: const Icon(Icons.sports_esports_outlined),
+              label: Text(context.l10n.combatFreePractice),
+            ),
+            const SizedBox(height: 8),
+          ],
+          OutlinedButton(
             onPressed: controller.reset,
             child: Text(context.l10n.combatRestart),
           ),
