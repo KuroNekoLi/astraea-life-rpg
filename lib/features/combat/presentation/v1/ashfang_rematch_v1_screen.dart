@@ -390,10 +390,11 @@ class _RematchCommands extends StatelessWidget {
       final victory = view.phase == AshfangRematchPhaseV1.victory;
       return Container(
         color: const Color(0xFF0B1D34),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        padding: const EdgeInsets.all(12),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             Text(
               victory
                   ? context.l10n.combatRematchVictoryTitle
@@ -410,7 +411,7 @@ class _RematchCommands extends StatelessWidget {
                   ? context.l10n.combatRematchVictoryBody
                   : context.l10n.combatRematchDefeatBody,
             ),
-            const Spacer(),
+            const SizedBox(height: 16),
             FilledButton(
               onPressed: controller.reset,
               child: Text(context.l10n.combatRestart),
@@ -421,6 +422,7 @@ class _RematchCommands extends StatelessWidget {
             ),
           ],
         ),
+        ),
       );
     }
 
@@ -429,10 +431,11 @@ class _RematchCommands extends StatelessWidget {
 
     return Container(
       color: const Color(0xFF0B1D34),
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      padding: const EdgeInsets.all(10),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
           Text(
             context.l10n.combatRematchTitle,
             style: Theme.of(context).textTheme.titleMedium,
@@ -496,14 +499,15 @@ class _RematchCommands extends StatelessWidget {
               ),
             ],
           ] else ...[
-            const Spacer(),
+            const SizedBox(height: 24),
             Text(
               context.l10n.combatRematchCastingHint,
               textAlign: TextAlign.center,
             ),
-            const Spacer(),
+            const SizedBox(height: 24),
           ],
         ],
+      ),
       ),
     );
   }
