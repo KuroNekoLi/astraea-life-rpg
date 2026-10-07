@@ -561,12 +561,20 @@ class _ContextPanel extends StatelessWidget {
     };
     final actor = view.battle.actor(actorId);
 
-    return Container(
-      color: const Color(0xFF0B1D34),
-      padding: const EdgeInsets.fromLTRB(14, 16, 14, 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxHeight < 440;
+        return Container(
+          color: const Color(0xFF0B1D34),
+          padding: EdgeInsets.fromLTRB(
+            compact ? 10 : 14,
+            compact ? 8 : 16,
+            compact ? 10 : 14,
+            compact ? 8 : 14,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
           Text(
             context.l10n.combatCurrentActor,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
@@ -592,21 +600,25 @@ class _ContextPanel extends StatelessWidget {
                   : AstraeaColors.muted,
             ),
           ),
-          const SizedBox(height: 14),
-          _RootCommands(stage: view.stage),
-          const SizedBox(height: 14),
-          Expanded(
-            child: _StageAction(view: view, controller: controller),
-          ),
-        ],
-      ),
+            SizedBox(height: compact ? 6 : 14),
+            _RootCommands(stage: view.stage, compact: compact),
+            SizedBox(height: compact ? 6 : 14),
+            Expanded(
+              child: _StageAction(view: view, controller: controller),
+            ),
+          ],
+        ),
+      );
+      },
     );
   }
 }
 
 class _RootCommands extends StatelessWidget {
-  const _RootCommands({required this.stage});
+  const _RootCommands({required this.stage, required this.compact});
+
   final AshfangTutorialStageV1 stage;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -632,20 +644,30 @@ class _RootCommands extends StatelessWidget {
       children: [
         for (final item in items)
           SizedBox(
-            width: 92,
+            width: compact ? 82 : 92,
+            height: compact ? 34 : null,
             child: OutlinedButton.icon(
               onPressed: item.$1 == selected ? () {} : null,
-              icon: Icon(item.$3, size: 16),
+              icon: Icon(item.$3, size: compact ? 13 : 16),
               label: Text(
                 item.$2,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                style: compact
+                    ? Theme.of(context).textTheme.labelSmall
+                    : null,
               ),
-              style: item.$1 == selected
-                  ? OutlinedButton.styleFrom(
-                      side: const BorderSide(color: AstraeaColors.starlight),
-                    )
-                  : null,
+              style: OutlinedButton.styleFrom(
+                visualDensity: compact
+                    ? const VisualDensity(horizontal: -3, vertical: -3)
+                    : null,
+                padding: compact
+                    ? const EdgeInsets.symmetric(horizontal: 4)
+                    : null,
+                side: item.$1 == selected
+                    ? const BorderSide(color: AstraeaColors.starlight)
+                    : null,
+              ),
             ),
           ),
       ],
@@ -982,16 +1004,17 @@ class _EndPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AstraeaColors.panel,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AstraeaColors.gold.withValues(alpha: 0.5)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AstraeaColors.panel,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AstraeaColors.gold.withValues(alpha: 0.5)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
           Text(
             victory
                 ? context.l10n.combatVictoryTitle
@@ -1026,6 +1049,7 @@ class _EndPanel extends StatelessWidget {
             child: Text(context.l10n.combatReturnAdventure),
           ),
         ],
+      ),
       ),
     );
   }
