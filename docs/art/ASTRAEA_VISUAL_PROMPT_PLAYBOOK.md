@@ -231,7 +231,7 @@ Reject as a runtime asset if the output contains:
 Do not ship a cropped fragment of a rejected composite.
 
 
-# 6. General Prompt Template
+# 5. General Prompt Template
 
 Use this as the default skeleton.
 
