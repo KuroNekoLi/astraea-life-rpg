@@ -760,5 +760,35 @@
   "combatNodeCompression": "Compression",
   "combatNodeStabilization": "Stabilization",
   "combatNodeTrajectory": "Trajectory",
-  "combatIntentWhileHeroCasting": "Ashfang may act before Fireball II resolves."
+  "combatIntentWhileHeroCasting": "Ashfang may act before Fireball II resolves.",
+  "combatFreePractice": "Free Practice",
+  "combatRematchTitle": "Ashfang Free Practice",
+  "combatRematchSubtitle": "No highlighted answer. Read the Timeline and choose your own response.",
+  "combatRematchEnemyCasting": "Modified Fireball · Full Chant",
+  "combatRematchEnemyPressure": "Ashfang is looking for an opening.",
+  "combatRematchBasicAttack": "Basic Attack",
+  "combatRematchGuard": "Guard",
+  "combatRematchFireballI": "Fireball I · Chantless",
+  "combatRematchFireballII": "Fireball II · Full Chant",
+  "combatRematchAnalyze": "Analyze Function",
+  "combatRematchInterrupt": "Interrupt",
+  "combatRematchExploitWeakNode": "Exploit Weak Node",
+  "combatRematchSaveReaction": "Save Reaction",
+  "combatRematchReactionTitle": "REACTION WINDOW",
+  "combatRematchReactionBodyUnknown": "Ashfang is still constructing the Function. You can react now or preserve Rio's Reaction.",
+  "combatRematchReactionBodyKnown": "Analysis revealed a Stabilization Weak Node. You may exploit it or save the Reaction.",
+  "combatRematchVictoryTitle": "Free practice cleared",
+  "combatRematchVictoryBody": "You defeated Ashfang without tutorial highlighting.",
+  "combatRematchDefeatTitle": "Free practice failed",
+  "combatRematchDefeatBody": "Try again and change when you spend Mana, Analysis, and Reaction.",
+  "combatRematchPlayerTurn": "Choose an action for {name}",
+  "@combatRematchPlayerTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "combatRematchCastingHint": "A Function is still being constructed.",
+  "combatRematchNoCastingHint": "No enemy Function is currently available to analyze."
 }
