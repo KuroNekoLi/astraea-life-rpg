@@ -337,7 +337,7 @@ class _BattleActor extends StatelessWidget {
         ? Theme.of(context).colorScheme.error
         : AstraeaColors.starlight;
     return Container(
-      width: hostile ? 166 : 116,
+      width: hostile ? 176 : 116,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AstraeaColors.panel.withValues(alpha: 0.88),
@@ -352,9 +352,11 @@ class _BattleActor extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
                 assetPath!,
-                height: 82,
+                height: 112,
                 width: double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.medium,
+                excludeFromSemantics: true,
               ),
             )
           else

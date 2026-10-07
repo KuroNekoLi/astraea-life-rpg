@@ -363,7 +363,7 @@ class _ActorToken extends StatelessWidget {
         : AstraeaColors.starlight;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 220),
-      width: hostile ? 166 : 118,
+      width: hostile ? 176 : 118,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AstraeaColors.panel.withValues(alpha: 0.88),
@@ -385,9 +385,11 @@ class _ActorToken extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
                 assetPath!,
-                height: 82,
+                height: 112,
                 width: double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.medium,
+                excludeFromSemantics: true,
               ),
             )
           else

@@ -95,38 +95,68 @@ Do not integrate generated output into `pubspec.yaml` until these conditions pas
 
 The earlier rejected composite screenshots remain rejected and are not used as runtime UI.
 
-A later asset pass produced two isolated runtime-ready crops that were reviewed and integrated:
+The clean-room replacement pass supplied two production assets that passed the runtime gate:
+
+| Asset | Runtime spec | Decision |
+| --- | --- | --- |
+| `combat_bg_astraea_training_hall_v01.webp` | 960×540 RGB WebP · 80,840 bytes | PASS_RUNTIME |
+| `enemy_ashfang_training_v01.webp` | 420×560 RGBA WebP · 62,028 bytes · alpha preserved | PASS_RUNTIME |
+
+Canonical runtime paths:
 
 ```text
 assets/images/combat/combat_bg_astraea_training_hall_v01.webp
 assets/images/combat/enemy_ashfang_training_v01.webp
 ```
 
-They are registered through `pubspec.yaml` and used by both:
+They are registered in `pubspec.yaml` and consumed by both:
 
 ```text
 AshfangCombatV1Screen
 AshfangRematchV1Screen
 ```
 
-The interactive layer remains native Flutter:
+### Runtime composition decision
+
+The Training Hall remains environment content only and renders with:
+
+```text
+BoxFit.cover
++ native Flutter darkening overlay
+```
+
+This allows 16:9–20:9 landscape cropping while keeping the battlefield readable.
+
+Ashfang is a true-alpha isolated subject and renders with:
+
+```text
+BoxFit.contain
++ native Flutter actor frame / HP state
++ native casting / Function / Interrupt VFX
+```
+
+The transparent subject is never cropped with `BoxFit.cover`; the full silhouette, tail, halo, and limbs remain available to the battlefield composition.
+
+### Interactive-layer separation
+
+The following remain native Flutter rather than baked into generated art:
 
 - Action Timeline
 - HP / Mana
 - Intent ribbon
 - Reaction overlay
 - Analysis / Weak Node state
-- Function VFX
-- localized text
+- Function pulse
+- casting glow
+- Interrupt flash
+- localized English / zh-TW text
 
-The Ashfang asset is isolated to one subject and contains no HUD or baked UI text. Its current first-playable master retains a dark matte rather than true alpha transparency; this is acceptable for the current dark battlefield but remains a P2 future polish item.
-
-The Training Hall asset contains no runtime HUD/text and is darkened at render time so combat information remains readable.
-
-### Final first-playable decision
+### Final clean-room decision
 
 ```text
-Training Hall runtime asset: ACCEPT
-Ashfang runtime asset: ACCEPT WITH P2 TRANSPARENCY POLISH
-Generated full battle screenshot as UI: REJECT
+Training Hall clean-room runtime asset: PASS_RUNTIME
+Ashfang transparent clean-room runtime asset: PASS_RUNTIME
+Generated full battle screenshot as UI: REJECT_RUNTIME
 ```
+
+The previous dark-matte Ashfang first-playable asset is superseded by the transparent clean-room replacement.
