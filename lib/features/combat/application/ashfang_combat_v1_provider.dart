@@ -90,6 +90,11 @@ final class AshfangCombatV1Controller
     _sync();
   }
 
+  void resolveHeroFireballIIFullChant() {
+    _session.resolveHeroFireballIIFullChant();
+    _sync();
+  }
+
   void finishWithFireballI() {
     _session.finishWithFireballI();
     _sync();
