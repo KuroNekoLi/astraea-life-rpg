@@ -469,27 +469,31 @@ Mana 是施法者可觀察、可管理的施法成本。
 
 ## Canon
 
-Spell Card 是 Function / Function Graph 的具現化。
+Spell Card（SC）是角色在本場戰鬥前準備完成的 combat-ready Function template。
+
+角色可以學會比 Prepared Deck 更多的 Spell；戰鬥中只能使用本場已 Prepared 的 SC。
 
 它不是：
 
 ```text
-抽到卡 → 才能施法
+抽到卡 → 才學會／才會施法
 ```
 
 而是：
 
 ```text
-Constructed Function
+Learned Spell
 ↓
-Encoded / Stored
+Construct / Encode
 ↓
-Spell Card
+Prepare finite Function
 ↓
-Prepared
+Spell Card in battle loadout
 ↓
 Execute
 ```
+
+SC 仍可選擇 Full Chant 或 Chantless；Casting Mode 是 SC 的執行方式，不是另一張卡。
 
 ---
 
@@ -519,15 +523,16 @@ Random Draw Deck
 
 六張 Card 在戰鬥中皆可存取。
 
-限制來源：
+Prepared Deck 的世界觀限制來源是：**施術者能在戰鬥前維持的 Prepared Function 數量有限。**
 
+戰鬥中單張 SC 的使用限制則來自：
 - Mana
-- Complexity
-- Cooldown
+- Spell Tier / Complexity
 - Action Cost
 - Casting Method
 - Required State
 - Interrupt Risk
+- cooldown（若該 Spell 特別定義）
 
 ---
 
@@ -609,6 +614,37 @@ Ordinary caster + Full Chant
 - Precision / Efficiency 型天才可以靠高控制與低浪費彌補完整詠唱的輔助。
 - Capacity / Output 型天才即使效率較差，也可能靠巨量 Mana 讓 Chantless 輸出高於一般人的 Full Chant。
 
+
+# 16.1 Spell Tier and Chantless in Combat
+
+同一 Spell Family 的 Tier 會開放不同數量的 controllable parameters，並通常提高 Mana / Complexity 負擔。
+
+例如：
+
+```text
+Fireball I
+→ few exposed parameters
+→ low chantless burden
+→ common students can usually chantless
+
+Fireball III
+→ more exposed parameters
+→ higher control burden
+→ ordinary student may need Full Chant
+→ skilled caster may chantless
+```
+
+但 Tier 不是直接 damage rank。
+
+```text
+Expert Fireball I
+>
+Ordinary Fireball III
+```
+
+在實際威力上完全可能成立。
+
+不同 Spell Family 的 Tier 也不可直接橫向比較，例如 Fireball III 可能只在某些面向接近 Flame Lance I。
 
 # 17. Function Graph in Combat
 
