@@ -333,6 +333,27 @@ Do not bake UI text into spell artwork.
 
 Use generated art for content such as spell artwork, enemy concepts, backgrounds, cut-ins, magical phenomenon art, or tutorial illustrations. Do not replace precise interactive UI with generated raster screenshots.
 
+### Clean-room Image Generation Protocol
+
+All new Astraea runtime images must be generated or edited in an isolated image context.
+
+Required:
+
+```text
+Visual Asset Director
+→ one Asset Brief
+→ one isolated image worker
+→ one asset / one context
+→ reference-image edit preferred
+→ Visual Asset Director review
+→ PASS only
+→ runtime integration
+```
+
+Do not send long development conversations, CI/QA context, milestone status, or unrelated specs into the image worker.
+
+If generated output contains a presentation sheet, collage, fake HUD, baked text, progress visualization, or multiple variants when one asset was requested, reject it as a runtime asset.
+
 ---
 
 # 10. Localization

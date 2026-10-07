@@ -1,7 +1,7 @@
 ---
 name: astraea-visual-asset-director
 description: Direct, generate, review, and integrate Astraea visual content assets. Use when a feature needs spell art, enemy or character art, battle backgrounds, magical effects, Function/Analysis illustrations, tutorial imagery, cut-ins, or other generated visual content. Routes structural UI to Flutter/UI design and may use ChatGPT Images 2.5 for suitable image assets.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Astraea Visual Asset Director
@@ -45,6 +45,130 @@ For ordinary fictional Astraea project assets, do not stop to request per-image 
 Follow platform image-safety rules. If an image would depict a real person and the active tool requires a reference or consent step, follow that requirement.
 
 Do not claim a specific generation model was used unless the active environment actually exposes that model identity.
+
+
+## Clean-room Image Generation Protocol
+
+This protocol is **mandatory for every new Astraea runtime image asset**.
+
+Do not generate production/runtime art directly from a long product-development conversation that contains unrelated implementation, QA, CI, milestone, playtest, or project-status context.
+
+Use this flow:
+
+```text
+Orchestrator
+↓
+Domain owner when needed
+↓
+Visual Asset Director
+↓
+Asset Brief
+↓
+Isolated Image Worker
+↓
+one asset / one context
+↓
+Visual Asset Director review
+↓
+PASS only
+↓
+Flutter integration
+```
+
+### Image-worker context contract
+
+The isolated image worker receives only:
+
+1. the minimum approved Style Bible / visual-language excerpt needed for this asset;
+2. exactly one Asset Brief;
+3. optional canonical reference images required to preserve identity.
+
+The image worker must **not** receive unrelated context such as:
+
+- milestone status or completion percentages
+- GitHub Actions / CI failures
+- Flutter implementation discussion
+- QA dashboards
+- simulator or device-test results
+- playtest reports
+- unrelated combat/UI specifications
+- other asset briefs
+- long chat history
+
+### One asset / one context
+
+One image-generation context produces one independent asset.
+
+Do not generate a background, enemy, spell art, cut-in, and UI concept sequentially inside the same image-generation context.
+
+Start a fresh isolated image context for the next asset.
+
+### Reference edit preferred
+
+When a canonical or already-approved visual reference exists, prefer:
+
+```text
+approved reference
+→ targeted image edit
+→ preserve identity
+→ remove / change only what the brief requires
+```
+
+over:
+
+```text
+new text-to-image generation
+→ hope the identity is reproduced
+```
+
+Examples:
+
+- existing Ashfang reference → isolate subject → transparent background
+- approved Training Hall → remove characters/obstructions → preserve architecture
+- approved character art → create combat cut-in while preserving character identity
+
+Do not re-roll a known identity from text alone unless no usable reference exists.
+
+### Runtime-asset rejection gate
+
+Immediately reject output as a runtime asset if it contains any unrequested:
+
+- presentation sheet
+- concept-art turnaround
+- collage
+- multiple variants
+- dashboard
+- progress bars
+- QA/status information
+- fake HUD
+- baked application UI
+- generated text
+- card frame
+- localized copy
+- watermark
+
+Do not crop or salvage a failed composite merely because part of it looks attractive.
+
+A rejected image may be retained only as non-binding mood/reference material.
+
+### Prompt discipline
+
+Clean-room prompts should be short and closed.
+
+Prefer:
+
+```text
+asset-only task
++ one subject
++ one purpose
++ composition
++ Astraea visual identity
++ exact exclusions
++ output constraint
+```
+
+Do not paste entire GDDs, combat specifications, engineering documents, or project-status context into the image worker.
+
 
 ---
 

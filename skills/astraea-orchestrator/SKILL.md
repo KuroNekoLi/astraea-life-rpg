@@ -1,7 +1,7 @@
 ---
 name: astraea-orchestrator
 description: Orchestrate Astraea MVP work across product, game design, narrative, Flutter architecture, implementation, review, QA, and real-player validation. Use as the default coordinator for substantial feature work, milestones, cross-spec changes, vertical-slice implementation, and release readiness.
-version: "1.1.0"
+version: "1.2.0"
 ---
 
 # Astraea Orchestrator
@@ -199,7 +199,21 @@ PM
 
 Do not block on Figma unless the task actually provides or requires an approved Figma artifact.
 
-When an illustration or visual content asset is needed, prefer existing approved assets first. If no suitable asset exists, the Visual Asset Director may use ChatGPT Images 2.5 according to the project playbook.
+When an illustration or visual content asset is needed, prefer existing approved assets first. If no suitable asset exists, route generation through the Visual Asset Director and the mandatory Clean-room Image Generation Protocol.
+
+For runtime assets, the Orchestrator must enforce:
+
+```text
+Asset Brief
+→ isolated image worker
+→ one asset / one context
+→ reference-image edit preferred
+→ Visual Asset Director review
+→ PASS only
+→ implementation
+```
+
+Do not pass the parent development conversation wholesale into the image worker. The worker receives only the minimum Style Bible excerpt, one Asset Brief, and optional canonical references.
 
 ## T6 — Pure Engineering
 
@@ -798,6 +812,9 @@ Do not:
 - let PM dictate technical implementation
 - accept “tests passed” as player validation
 - accept “looks good” without screenshot/device evidence for important UI
+- generate runtime art directly from a long development / QA / CI conversation
+- reuse one image-generation context for multiple unrelated assets
+- accept generated dashboards, collages, presentation sheets, fake HUD, or baked text as runtime assets
 - create new frameworks when existing project conventions suffice
 
 Prefer:

@@ -87,7 +87,151 @@ This separation is mandatory for spell artwork and reusable combat illustrations
 
 ---
 
-# 4. General Prompt Template
+
+# 4. Clean-room Image Generation Protocol
+
+All new Astraea runtime images use a clean-room image worker.
+
+The purpose is to prevent unrelated product-development context from influencing the visual result.
+
+## Required production flow
+
+```text
+approved visual direction
+↓
+one Asset Brief
+↓
+fresh isolated image context
+↓
+optional canonical reference image
+↓
+one generated / edited asset
+↓
+Visual Asset Director review
+↓
+PASS → runtime integration
+FAIL → revise only the failed dimension
+```
+
+## Context allow-list
+
+The image worker may receive only:
+
+- the minimum visual-style excerpt needed for the asset
+- exactly one Asset Brief
+- canonical reference image(s), when necessary
+- target aspect ratio / transparency / crop requirements
+
+## Context deny-list
+
+Do not provide:
+
+- project status
+- milestone percentages
+- CI logs
+- Flutter implementation details unrelated to composition
+- QA reports
+- simulator screenshots unless they are the explicit edit target
+- playtest reports
+- unrelated UI flows
+- unrelated art briefs
+- full repository documentation
+- the entire parent chat
+
+## One asset / one context
+
+Each worker invocation owns exactly one asset identity.
+
+Examples:
+
+```text
+Training Hall background → one clean context
+Ashfang transparent enemy → a different clean context
+Fireball SC artwork → a different clean context
+Rio Analysis cut-in → a different clean context
+```
+
+Do not continue a previous image-generation conversation when changing to another asset.
+
+## Reference-edit priority
+
+If an approved or near-canonical reference already exists, edit it instead of regenerating the identity from text.
+
+Preferred:
+
+```text
+canonical Ashfang
+→ preserve body / silhouette / materials
+→ remove environment
+→ transparent background
+```
+
+Not preferred:
+
+```text
+describe Ashfang again from scratch
+→ generate a different creature
+```
+
+Text-to-image is appropriate when no suitable reference exists or the task intentionally creates a new visual identity.
+
+## Asset-only prompt pattern
+
+Keep production prompts compact:
+
+```text
+IMAGE-ASSET-ONLY TASK.
+
+Create exactly ONE independent asset.
+
+SUBJECT:
+...
+
+PURPOSE:
+...
+
+CANVAS / COMPOSITION:
+...
+
+ASTRAEA IDENTITY:
+...
+
+STRICT OUTPUT:
+one asset only
+
+NO:
+text
+UI
+HUD
+presentation sheet
+concept sheet
+turnaround sheet
+collage
+multiple variants
+watermark
+...
+```
+
+Do not compensate for contaminated context by endlessly adding negative prompts. Start a fresh isolated context instead.
+
+## Automatic rejection
+
+Reject as a runtime asset if the output contains:
+
+- multiple asset variants
+- a concept/presentation sheet
+- progress or QA visualization
+- fake mobile/desktop UI
+- baked HUD
+- generated localized text
+- unrelated characters
+- unrelated environment when transparent isolation was requested
+- watermark
+
+Do not ship a cropped fragment of a rejected composite.
+
+
+# 6. General Prompt Template
 
 Use this as the default skeleton.
 
@@ -143,7 +287,7 @@ Add aspect ratio, transparency, or background constraints only when required by 
 
 ---
 
-# 5. Spell Artwork Template
+# 6. Spell Artwork Template
 
 Spell artwork should depict the spell itself, not its application card.
 
@@ -197,7 +341,7 @@ Show one clear moment:
 
 ---
 
-# 6. Analysis / Weak Node Template
+# 7. Analysis / Weak Node Template
 
 Critical rule:
 
@@ -232,7 +376,7 @@ Never force a Weak Node into every analysis image.
 
 ---
 
-# 7. Full Chant Template
+# 8. Full Chant Template
 
 Full Chant should communicate:
 
@@ -260,7 +404,7 @@ The distinction is structural and temporal, not only power.
 
 ---
 
-# 8. Chantless Template
+# 9. Chantless Template
 
 Chantless should communicate:
 
@@ -277,7 +421,7 @@ Do not depict it as:
 
 ---
 
-# 9. Interrupt Template
+# 10. Interrupt Template
 
 Interrupt occurs **before Function establishment**.
 
@@ -298,7 +442,7 @@ Those belong to Counter / Reverse territory.
 
 ---
 
-# 10. Counter Template
+# 11. Counter Template
 
 Counter acts on an established or incoming active Function.
 
@@ -316,7 +460,7 @@ It does not need to look mathematically complicated.
 
 ---
 
-# 11. Reverse Template
+# 12. Reverse Template
 
 Reverse is rarer and more advanced than Counter.
 
@@ -337,7 +481,7 @@ The image should imply state transformation or inversion.
 
 ---
 
-# 12. Enemy / Construct Template
+# 13. Enemy / Construct Template
 
 ```text
 Create exactly ONE independent enemy concept image.
@@ -369,7 +513,7 @@ For tutorial enemies, readability outranks spectacle.
 
 ---
 
-# 13. Battle Background Template
+# 14. Battle Background Template
 
 Battle backgrounds must support gameplay readability.
 
@@ -403,7 +547,7 @@ For current combat, expect landscape-first composition.
 
 ---
 
-# 14. Character Cut-In Template
+# 15. Character Cut-In Template
 
 ```text
 Create exactly ONE character combat cut-in illustration.
@@ -439,7 +583,7 @@ Character canon must be verified before generation.
 
 ---
 
-# 15. Tutorial Illustration Template
+# 16. Tutorial Illustration Template
 
 Tutorial art should explain one concept, not decorate a paragraph.
 
@@ -472,7 +616,7 @@ all in one tutorial image.
 
 ---
 
-# 16. Composition Rules for Mobile
+# 17. Composition Rules for Mobile
 
 Before generating, identify target placement.
 
@@ -504,7 +648,7 @@ Before generating, identify target placement.
 
 ---
 
-# 17. Negative-Prompt Library
+# 18. Negative-Prompt Library
 
 Use only the exclusions relevant to the asset.
 
@@ -533,7 +677,7 @@ Do not blindly paste every exclusion into every prompt. Keep prompts semanticall
 
 ---
 
-# 18. Prompt Review Before Generation
+# 19. Prompt Review Before Generation
 
 Check:
 
@@ -551,7 +695,7 @@ If any answer is unresolved, fix the brief before generation.
 
 ---
 
-# 19. Output Review After Generation
+# 20. Output Review After Generation
 
 Score each dimension:
 
@@ -571,7 +715,7 @@ A visually impressive image is not acceptable if it teaches the wrong mechanic.
 
 ---
 
-# 20. Iteration Notes
+# 21. Iteration Notes
 
 When revising, write:
 
@@ -616,7 +760,7 @@ Change:
 
 ---
 
-# 21. Naming and Versioning
+# 22. Naming and Versioning
 
 Default:
 
@@ -640,7 +784,7 @@ An asset becomes `approved` through project review, not because the filename say
 
 ---
 
-# 22. Storage
+# 23. Storage
 
 Only create asset directories when real files are ready to be consumed.
 
@@ -662,7 +806,7 @@ Do not commit prompts as image metadata when that would expose unnecessary inter
 
 ---
 
-# 23. Multi-Agent Production Loop
+# 24. Multi-Agent Production Loop
 
 For non-trivial visual work:
 
@@ -690,7 +834,7 @@ The producer should not be the sole verifier of a player-facing visual.
 
 ---
 
-# 24. Current Figma Policy
+# 25. Current Figma Policy
 
 There is currently no required Figma file for this workflow.
 
