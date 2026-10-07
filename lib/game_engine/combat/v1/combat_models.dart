@@ -10,6 +10,8 @@ enum DamageType { physical, magic }
 
 enum TimelineEventType { characterTurn, spellResolve, battlefieldFunction }
 
+enum ActiveFunctionStatusV1 { casting, active, interrupted, resolved, countered }
+
 final class CombatantStateV1 {
   CombatantStateV1({
     required this.id,
@@ -84,6 +86,72 @@ final class CombatantStateV1 {
   }
 }
 
+final class ActiveFunctionV1 {
+  ActiveFunctionV1({
+    required this.id,
+    required this.actionId,
+    required this.casterId,
+    required this.targetId,
+    required this.status,
+    required this.manaCost,
+    required this.rawDamage,
+    required this.damageType,
+    required Iterable<BattleZone> targetZones,
+    required this.stability,
+    required this.startedAt,
+    required this.resolveAt,
+    required this.recoveryDelay,
+  }) : targetZones = Set.unmodifiable(targetZones) {
+    if (id.trim().isEmpty ||
+        actionId.trim().isEmpty ||
+        casterId.trim().isEmpty ||
+        targetId.trim().isEmpty ||
+        manaCost < 0 ||
+        rawDamage < 0 ||
+        stability < 0 ||
+        startedAt < 0 ||
+        resolveAt < startedAt ||
+        recoveryDelay < 0) {
+      throw ArgumentError('Invalid active Function');
+    }
+  }
+
+  final String id;
+  final String actionId;
+  final String casterId;
+  final String targetId;
+  final ActiveFunctionStatusV1 status;
+  final int manaCost;
+  final int rawDamage;
+  final DamageType damageType;
+  final Set<BattleZone> targetZones;
+  final int stability;
+  final int startedAt;
+  final int resolveAt;
+  final int recoveryDelay;
+
+  ActiveFunctionV1 copyWith({
+    ActiveFunctionStatusV1? status,
+    int? stability,
+  }) {
+    return ActiveFunctionV1(
+      id: id,
+      actionId: actionId,
+      casterId: casterId,
+      targetId: targetId,
+      status: status ?? this.status,
+      manaCost: manaCost,
+      rawDamage: rawDamage,
+      damageType: damageType,
+      targetZones: targetZones,
+      stability: stability ?? this.stability,
+      startedAt: startedAt,
+      resolveAt: resolveAt,
+      recoveryDelay: recoveryDelay,
+    );
+  }
+}
+
 final class TimelineEventV1 {
   TimelineEventV1({
     required this.id,
@@ -91,6 +159,7 @@ final class TimelineEventV1 {
     required this.scheduledAt,
     required this.sequence,
     this.actorId,
+    this.functionId,
   }) {
     if (id.trim().isEmpty || scheduledAt < 0 || sequence < 0) {
       throw ArgumentError('Invalid timeline event');
@@ -99,6 +168,10 @@ final class TimelineEventV1 {
         (actorId == null || actorId!.trim().isEmpty)) {
       throw ArgumentError('Character turns require an actor');
     }
+    if (type == TimelineEventType.spellResolve &&
+        (functionId == null || functionId!.trim().isEmpty)) {
+      throw ArgumentError('Spell resolve events require a Function');
+    }
   }
 
   final String id;
@@ -106,6 +179,7 @@ final class TimelineEventV1 {
   final int scheduledAt;
   final int sequence;
   final String? actorId;
+  final String? functionId;
 }
 
 final class ActiveTurnV1 {
@@ -128,13 +202,17 @@ final class BattleStateV1 {
     required this.revision,
     this.activeTurn,
     this.outcome = CombatOutcome.active,
+    Iterable<ActiveFunctionV1> activeFunctions = const [],
     Iterable<String> eventLog = const [],
   }) : combatants = List.unmodifiable(combatants),
        timeline = List.unmodifiable(_sorted(timeline)),
+       activeFunctions = List.unmodifiable(activeFunctions),
        eventLog = List.unmodifiable(eventLog) {
     if (this.combatants.isEmpty ||
         this.combatants.map((actor) => actor.id).toSet().length !=
             this.combatants.length ||
+        this.activeFunctions.map((function) => function.id).toSet().length !=
+            this.activeFunctions.length ||
         currentTime < 0 ||
         nextSequence < 0 ||
         revision < 0) {
@@ -150,6 +228,7 @@ final class BattleStateV1 {
 
   final List<CombatantStateV1> combatants;
   final List<TimelineEventV1> timeline;
+  final List<ActiveFunctionV1> activeFunctions;
   final int currentTime;
   final int nextSequence;
   final int revision;
@@ -159,6 +238,20 @@ final class BattleStateV1 {
 
   CombatantStateV1 actor(String id) {
     return combatants.firstWhere((actor) => actor.id == id);
+  }
+
+  ActiveFunctionV1 function(String id) {
+    return activeFunctions.firstWhere((function) => function.id == id);
+  }
+
+  ActiveFunctionV1? castingFunctionFor(String casterId) {
+    for (final function in activeFunctions) {
+      if (function.casterId == casterId &&
+          function.status == ActiveFunctionStatusV1.casting) {
+        return function;
+      }
+    }
+    return null;
   }
 
   static List<TimelineEventV1> _sorted(Iterable<TimelineEventV1> events) {
