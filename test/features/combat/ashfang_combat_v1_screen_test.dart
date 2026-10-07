@@ -66,7 +66,7 @@ void main() {
     expect(find.text('Full Chant is constructing'), findsOneWidget);
     expect(find.textContaining('Fireball II Resolve'), findsOneWidget);
 
-    await tester.tap(find.text('Advance to Resolve'));
+    await tester.tap(find.text('Hold Formation'));
     await tester.pumpAndSettle();
 
     expect(find.text('Finish with Fireball I'), findsOneWidget);
