@@ -190,6 +190,8 @@ Chantless 的戰術本質是以更高的個人運算／控制負擔換取速度�
 
 但這不是硬性倍率規則。真正的天才如果擁有極高的 Processing、Precision、Efficiency，或單純擁有壓倒性的 Mana Capacity / Output，即使使用 Chantless，其最終威力仍可能高於一般學生的 Full Chant。
 
+對基礎術式，例如 Fireball I，完成基礎訓練的學生通常已能進行詠唱破棄；但 Tier 越高、或 Spell Family 本身越複雜，Chantless 所要求的理解與個人處理能力就越高。
+
 因此世界中可以存在兩種不同的「天才」表現：
 
 1. **精密／效率型**：以極高控制精度與轉換效率，低浪費地完成術式，甚至不需要完整詠唱提供輔助。
@@ -244,6 +246,79 @@ Spell Card 不是「擁有這張卡才會這個魔法」的收藏卡牌邏輯，
 因此戰鬥前會把一組 Spell Card 放入 Prepared Deck，等於事先載入本場戰鬥可快速呼叫的術式。
 
 Scene 5 的教學上限固定為 6 張。
+
+### 5.4 Spell Tier 與參數開放
+
+同一個 Spell Family 具有完整 Signature，但不同 Tier 對施術者開放不同程度的 parameter control。
+
+例如完整 Fireball：
+
+```text
+Fireball(
+    power,
+    direction,
+    velocity,
+    radius,
+    temperature,
+    stability,
+    trajectory,
+    detonation,
+    ...
+)
+```
+
+一階 Fireball 可能只讓學生控制 target / power，其餘由標準術式模板完成；二階、三階逐步開放更多 parameters 與更複雜的 Function control。
+
+因此高 Tier 通常：
+- Mana Cost 更高；
+- 可控制的 parameters 更多；
+- Function execution 更複雜；
+- Chantless 門檻更高。
+
+Tier 是 **同一 Spell Family 內部的術式深化**，不是跨所有魔法的統一戰力數字。
+
+例如 Fireball III 可能在某些面向才接近另一個更高基礎難度 Spell「炎槍術」的 Tier I。不同 Spell Family 不需要共享相同起跑點。
+
+低 Tier 也不代表弱者限定。強大的施術者可以透過 Mana Output、Efficiency、Precision 與對術式的理解，讓 Fireball I 的實際效果超過普通學生的 Fireball III。
+
+### 5.5 SC、學會魔法與 Prepared Function
+
+角色「學會一個 Spell」與「本場戰鬥準備該 SC」是兩件事。
+
+角色理論上可以使用所有已學過的基礎魔法；但戰鬥中無法同時維持無限數量的 combat-ready Function。
+
+因此：
+
+```text
+Learned Spell Knowledge
+↓
+Pre-battle preparation
+↓
+Finite Prepared Functions
+↓
+Spell Cards available in this battle
+```
+
+Spell Card（SC）是術式的戰鬥用 prepared template，而不是角色是否學會該魔法的證明。
+
+目前 Scene 5 / MVP 的 Prepared SC 上限為 6。
+
+### 5.6 SC 成長與魔法系統分類
+
+Spell 會被歸入若干魔法系統；正式分類與命名尚待確定。
+
+角色可以取得／分配該系統的成長點數，投入同系統 SC 以增加其經驗。
+
+```text
+System growth
+→ SC XP
+→ Tier mastery
+→ next Tier unlock
+```
+
+例如 Fireball I 的 Tier 經驗完成後，可解鎖 Fireball II。更高 Tier 會逐步開放完整 Signature 中更多 parameters。
+
+SC Tier progression 與角色本身的 Mana / Processing / Precision 等能力是兩條不同軸線：術式可以已解鎖，但角色未必能以 Chantless 安全執行。
 
 ## 6. Last Spell
 
