@@ -8,6 +8,8 @@ import '../../../app/app_providers.dart';
 import '../../../design_system/theme/astraea_theme.dart';
 import '../../character/application/training_preview_provider.dart';
 import '../../life_quest/application/providers.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -21,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
           const Icon(Icons.auto_awesome, color: AstraeaColors.gold, size: 20),
           const SizedBox(width: 8),
           Text(
-            'ASTRAEA',
+            context.l10n.appTitle.toUpperCase(),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               letterSpacing: 2.4,
               fontWeight: FontWeight.w700,
@@ -29,7 +31,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 7),
           Text(
-            'LIFE × RPG',
+            context.l10n.homeBrandSubtitle,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
               color: AstraeaColors.muted,
               letterSpacing: 1,
@@ -39,7 +41,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       actions: [
         IconButton(
-          tooltip: 'Character profile',
+          tooltip: context.l10n.characterProfileTooltip,
           onPressed: () => context.go('/character'),
           icon: const CircleAvatar(
             radius: 17,
@@ -56,12 +58,11 @@ class HomeScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(18, 12, 18, 28),
         children: [
           AstraeaHeroPanel(
-            eyebrow: 'Astraea Academy · Chapter 01',
-            title: 'One real action starts your journey.',
-            description:
-                'Choose a Life Quest, earn Growth Potential, and shape the hero who explores Astraea.',
+            eyebrow: context.l10n.homeHeroEyebrow,
+            title: context.l10n.homeHeroTitle,
+            description: context.l10n.homeHeroDescription,
             icon: Icons.favorite_outline,
-            actionLabel: 'Choose a Life Quest',
+            actionLabel: context.l10n.chooseLifeQuest,
             onPressed: () => context.go('/life'),
           ),
           const SizedBox(height: 22),
@@ -69,11 +70,11 @@ class HomeScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'YOUR JOURNEY',
+                context.l10n.yourJourney,
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               Text(
-                'Continue your journey',
+                context.l10n.continueYourJourney,
                 style: Theme.of(
                   context,
                 ).textTheme.labelMedium?.copyWith(color: AstraeaColors.muted),
@@ -108,32 +109,32 @@ class _JourneyGrid extends StatelessWidget {
           _JourneyCard(
             width: width,
             icon: Icons.favorite_outline,
-            title: 'Life Quests',
-            subtitle: 'Start with one real action',
+            title: context.l10n.journeyLifeQuests,
+            subtitle: context.l10n.journeyLifeQuestsSubtitle,
             color: const Color(0xFFFFB5C7),
             onTap: () => context.go('/life'),
           ),
           _JourneyCard(
             width: width,
             icon: Icons.auto_awesome,
-            title: 'Adventure',
-            subtitle: 'Story & objectives',
+            title: context.l10n.journeyAdventure,
+            subtitle: context.l10n.journeyAdventureSubtitle,
             color: AstraeaColors.starlight,
             onTap: () => context.go('/adventure'),
           ),
           _JourneyCard(
             width: width,
             icon: Icons.person_outline,
-            title: 'Character',
-            subtitle: 'Your growing build',
+            title: context.l10n.journeyCharacter,
+            subtitle: context.l10n.journeyCharacterSubtitle,
             color: AstraeaColors.gold,
             onTap: () => context.go('/character'),
           ),
           _JourneyCard(
             width: width,
             icon: Icons.style_outlined,
-            title: 'Prepared Deck',
-            subtitle: 'Six spells',
+            title: context.l10n.journeyPreparedDeck,
+            subtitle: context.l10n.journeyPreparedDeckSubtitle,
             color: const Color(0xFFC3ADFF),
             onTap: () => context.go('/deck'),
           ),
@@ -222,27 +223,25 @@ class _TodayQuests extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('TODAY', style: Theme.of(context).textTheme.labelLarge),
+            Text(context.l10n.today, style: Theme.of(context).textTheme.labelLarge),
             TextButton(
               onPressed: () => context.go('/life'),
-              child: const Text('All Quests'),
+              child: Text(context.l10n.allQuests),
             ),
           ],
         ),
         quests.when(
           loading: () => const LinearProgressIndicator(),
-          error: (_, _) => const Card(
-            child: ListTile(
-              title: Text('Life Quests are temporarily unavailable.'),
-            ),
+          error: (_, _) => Card(
+            child: ListTile(title: Text(context.l10n.lifeQuestsUnavailable)),
           ),
           data: (items) {
             if (items.isEmpty) {
-              return const Card(
+              return Card(
                 child: ListTile(
-                  leading: Icon(Icons.spa_outlined),
-                  title: Text('A quiet day is okay.'),
-                  subtitle: Text('Choose a Life Quest whenever it fits.'),
+                  leading: const Icon(Icons.spa_outlined),
+                  title: Text(context.l10n.quietDayTitle),
+                  subtitle: Text(context.l10n.quietDaySubtitle),
                 ),
               );
             }
@@ -252,9 +251,12 @@ class _TodayQuests extends StatelessWidget {
                   Card(
                     child: ListTile(
                       leading: _domainBadge(quest['domain'] as String),
-                      title: Text(quest['title'] as String),
+                      title: Text(localizedQuestTitle(context.l10n, quest['id'] as String)),
                       subtitle: Text(
-                        '${_domainName(quest['domain'] as String)} · ${quest['durationMinutes']} min',
+                        context.l10n.questMetaShort(
+                          localizedDomain(context.l10n, quest['domain'] as String),
+                          quest['durationMinutes'] as int,
+                        ),
                       ),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => context.go('/life'),
@@ -293,8 +295,8 @@ class _GrowthReady extends StatelessWidget {
               backgroundColor: AstraeaColors.panelRaised,
               child: Icon(Icons.auto_awesome, color: AstraeaColors.gold),
             ),
-            title: const Text('Growth Potential ready'),
-            subtitle: Text('$available Potential · Choose how to train'),
+            title: Text(context.l10n.growthPotentialReady),
+            subtitle: Text(context.l10n.potentialChooseHowToTrain(available)),
             trailing: const Icon(Icons.arrow_forward),
             onTap: () => context.push('/training'),
           ),
@@ -322,13 +324,6 @@ Widget _domainBadge(String domain) {
     child: Icon(icon, color: color, size: 19),
   );
 }
-
-String _domainName(String domain) => switch (domain) {
-  'fitness' => 'Fitness',
-  'learning' => 'Learning',
-  'languages' => 'Languages',
-  _ => 'Life',
-};
 
 class _PilotMeasurementControl extends ConsumerStatefulWidget {
   const _PilotMeasurementControl();
@@ -368,22 +363,24 @@ class _PilotMeasurementControlState
       builder: (context) => AlertDialog(
         title: Text(
           currentlyEnabled
-              ? 'Turn off pilot measurement?'
-              : 'Enable private pilot measurement?',
+              ? context.l10n.pilotTurnOffTitle
+              : context.l10n.pilotEnableTitle,
         ),
         content: Text(
           currentlyEnabled
-              ? 'Turning this off deletes locally stored milestone events.'
-              : 'This stores a small set of gameplay milestones on this device only. It does not collect names, notes, evidence, health data, or custom quest text. There is no upload. You can turn it off and delete the events at any time.',
+              ? context.l10n.pilotTurnOffBody
+              : context.l10n.pilotEnableBody,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.commonCancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(currentlyEnabled ? 'Turn off' : 'Enable'),
+            child: Text(
+              currentlyEnabled ? context.l10n.commonTurnOff : context.l10n.commonEnable,
+            ),
           ),
         ],
       ),
@@ -400,8 +397,10 @@ class _PilotMeasurementControlState
   @override
   Widget build(BuildContext context) => Card(
     child: ListTile(
-      title: const Text('Optional pilot measurement'),
-      subtitle: Text(_enabled == true ? 'On · local only' : 'Off · default'),
+      title: Text(context.l10n.optionalPilotMeasurement),
+      subtitle: Text(
+      _enabled == true ? context.l10n.pilotOnLocalOnly : context.l10n.pilotOffDefault,
+    ),
       trailing: _enabled == null
           ? const Icon(Icons.hourglass_top)
           : Switch(value: _enabled!, onChanged: (_) => _changeConsent()),

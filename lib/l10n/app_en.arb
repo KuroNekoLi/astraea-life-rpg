@@ -552,5 +552,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "questMetaShort": "{domain} · {minutes} min",
+  "@questMetaShort": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "couldNotLoadTraining": "Could not load Training. Please try again."
 }

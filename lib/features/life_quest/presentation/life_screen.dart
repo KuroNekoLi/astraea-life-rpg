@@ -6,6 +6,8 @@ import '../../character/application/training_preview_provider.dart';
 import '../application/providers.dart';
 import '../data/life_quest_repository.dart';
 import '../../../design_system/theme/astraea_theme.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class LifeScreen extends ConsumerStatefulWidget {
   const LifeScreen({super.key});
@@ -23,11 +25,11 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
     final quests = ref.watch(lifeQuestsProvider);
     final repository = ref.watch(lifeQuestRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Life Quest')),
+      appBar: AppBar(title: Text(context.l10n.lifeQuest)),
       body: quests.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) =>
-            Center(child: Text('Could not load quests: $error')),
+            Center(child: Text(context.l10n.couldNotLoadQuests('$error'))),
         data: (items) {
           final filtered = _selectedDomain == 'All'
               ? items
@@ -38,7 +40,7 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
             padding: const EdgeInsets.all(16),
             children: [
               Text(
-                'TODAY',
+                context.l10n.today,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: AstraeaColors.starlight,
                   letterSpacing: 1.4,
@@ -46,12 +48,12 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                'Choose what fits your day.',
+                context.l10n.chooseWhatFitsYourDay,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 6),
               Text(
-                'Your progress is always here. There are no streak penalties.',
+                context.l10n.progressAlwaysHere,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: AstraeaColors.muted),
@@ -70,7 +72,11 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: ChoiceChip(
-                          label: Text(_domainLabel(domain)),
+                          label: Text(
+                            domain == 'All'
+                                ? context.l10n.domainAll
+                                : localizedDomain(context.l10n, domain),
+                          ),
                           selected: _selectedDomain == domain,
                           onSelected: (_) =>
                               setState(() => _selectedDomain = domain),
@@ -81,7 +87,7 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                '${filtered.length} available ${filtered.length == 1 ? 'quest' : 'quests'}',
+                context.l10n.availableQuestCount(filtered.length),
                 style: Theme.of(
                   context,
                 ).textTheme.labelMedium?.copyWith(color: AstraeaColors.muted),
@@ -95,23 +101,26 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
                       vertical: 5,
                     ),
                     leading: _LifeDomainIcon(domain: quest['domain'] as String),
-                    title: Text(quest['title'] as String),
+                    title: Text(localizedQuestTitle(context.l10n, quest['id'] as String)),
                     subtitle: Text(
-                      '${_domainLabel(quest['domain'] as String)} · ${quest['durationMinutes']} min',
+                      context.l10n.questMetaShort(
+                        localizedDomain(context.l10n, quest['domain'] as String),
+                        quest['durationMinutes'] as int,
+                      ),
                     ),
                     trailing: FilledButton.tonal(
                       onPressed: () => context.push('/life/${quest['id']}'),
-                      child: const Text('Start'),
+                      child: Text(context.l10n.commonStart),
                     ),
                     onTap: () => context.push('/life/${quest['id']}'),
                   ),
                 ),
               if (filtered.isEmpty)
-                const Card(
+                Card(
                   child: ListTile(
-                    leading: Icon(Icons.spa_outlined),
-                    title: Text('No quests in this category yet.'),
-                    subtitle: Text('Add one when you are ready.'),
+                    leading: const Icon(Icons.spa_outlined),
+                    title: Text(context.l10n.noQuestsCategory),
+                    subtitle: Text(context.l10n.addWhenReady),
                   ),
                 ),
               const SizedBox(height: 16),
@@ -129,9 +138,12 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
                           children: [
                             for (final template in templates)
                               ListTile(
-                                title: Text(template.title),
+                                title: Text(localizedQuestTitle(sheetContext.l10n, template.id)),
                                 subtitle: Text(
-                                  '${template.domain} · ${template.durationMinutes} min',
+                                  sheetContext.l10n.questMetaShort(
+                                    localizedDomain(sheetContext.l10n, template.domain),
+                                    template.durationMinutes,
+                                  ),
                                 ),
                                 onTap: () async {
                                   await repo.addQuest(template);
@@ -148,7 +160,7 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
                   }
                 },
                 icon: const Icon(Icons.add),
-                label: const Text('Add a Life Quest'),
+                label: Text(context.l10n.addLifeQuest),
               ),
             ],
           );
@@ -157,14 +169,6 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
     );
   }
 }
-
-String _domainLabel(String domain) => switch (domain) {
-  'All' => 'All',
-  'fitness' => 'Fitness',
-  'learning' => 'Learning',
-  'languages' => 'Languages',
-  _ => domain,
-};
 
 class _LifeDomainIcon extends StatelessWidget {
   const _LifeDomainIcon({required this.domain});
@@ -201,33 +205,34 @@ class LifeQuestDetailScreen extends ConsumerWidget {
     final quests = ref.watch(lifeQuestsProvider);
     final repository = ref.watch(lifeQuestRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Quest details')),
+      appBar: AppBar(title: Text(context.l10n.questDetails)),
       body: quests.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) =>
-            Center(child: Text('Could not load quest: $error')),
+            Center(child: Text(context.l10n.couldNotLoadQuest('$error'))),
         data: (items) {
           final quest = items
               .where((item) => item['id'] == questId)
               .firstOrNull;
           if (quest == null) {
-            return const Center(child: Text('Quest not found'));
+            return Center(child: Text(context.l10n.questNotFound));
           }
           return ListView(
             padding: const EdgeInsets.all(24),
             children: [
               Text(
-                quest['title'] as String,
+                localizedQuestTitle(context.l10n, quest['id'] as String),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
               Text(
-                '${quest['domain']} · about ${quest['durationMinutes']} minutes',
+                context.l10n.questAboutMinutes(
+                  localizedDomain(context.l10n, quest['domain'] as String),
+                  quest['durationMinutes'] as int,
+                ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Self-report is always available. A timer adds lightweight evidence.',
-              ),
+              Text(context.l10n.selfReportTimerEvidence),
               const SizedBox(height: 24),
               FilledButton.icon(
                 onPressed: () async {
@@ -239,13 +244,13 @@ class LifeQuestDetailScreen extends ConsumerWidget {
                   }
                 },
                 icon: const Icon(Icons.timer_outlined),
-                label: const Text('Start timer'),
+                label: Text(context.l10n.startTimer),
               ),
               TextButton(
                 onPressed: () => context.push(
                   '/life/complete/$questId?source=manual&completionId=${DateTime.now().microsecondsSinceEpoch}&seconds=${(quest['durationMinutes'] as int) * 60}',
                 ),
-                child: const Text('Complete with self-report'),
+                child: Text(context.l10n.completeSelfReport),
               ),
             ],
           );
@@ -273,7 +278,7 @@ class QuestCompletionScreen extends ConsumerWidget {
     final quests = ref.watch(lifeQuestsProvider);
     final repository = ref.watch(lifeQuestRepositoryProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Quest complete')),
+      appBar: AppBar(title: Text(context.l10n.questComplete)),
       body: quests.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) =>
@@ -310,15 +315,26 @@ class QuestCompletionScreen extends ConsumerWidget {
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 16),
-                    Text('+${quote.xp} ${quest['domain']} Life XP'),
                     Text(
-                      '+${quote.potential} ${_potentialLabel(quest['domain'] as String)} Potential',
+                      context.l10n.lifeXpReward(
+                        quote.xp,
+                        localizedDomain(context.l10n, quest['domain'] as String),
+                      ),
+                    ),
+                    Text(
+                      context.l10n.potentialReward(
+                        quote.potential,
+                        localizedPotentialForDomain(
+                          context.l10n,
+                          quest['domain'] as String,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       timerEvidence
-                          ? 'Timer evidence · bonus included'
-                          : 'Self-report · private',
+                          ? context.l10n.timerEvidenceBonus
+                          : context.l10n.selfReportPrivate,
                     ),
                     const Spacer(),
                     FilledButton(
@@ -339,7 +355,7 @@ class QuestCompletionScreen extends ConsumerWidget {
                           context.go('/training');
                         }
                       },
-                      child: const Text('Confirm reward'),
+                      child: Text(context.l10n.confirmReward),
                     ),
                   ],
                 ),
@@ -351,13 +367,6 @@ class QuestCompletionScreen extends ConsumerWidget {
     );
   }
 }
-
-String _potentialLabel(String domain) => switch (domain) {
-  'fitness' => 'Physical',
-  'learning' => 'Cognitive',
-  'languages' => 'Communication',
-  _ => 'Growth',
-};
 
 class LifeQuestTimerScreen extends ConsumerStatefulWidget {
   const LifeQuestTimerScreen({required this.questId, super.key});
@@ -390,13 +399,13 @@ class _LifeQuestTimerScreenState extends ConsumerState<LifeQuestTimerScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Quest timer')),
+    appBar: AppBar(title: Text(context.l10n.questTimer)),
     body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Timer runs while you are away.',
+            context.l10n.timerRunsAway,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 24),
@@ -433,12 +442,12 @@ class _LifeQuestTimerScreenState extends ConsumerState<LifeQuestTimerScreen> {
                   }
                   if (mounted) setState(() => _paused = !_paused);
                 },
-                child: Text(_paused ? 'Resume' : 'Pause'),
+                child: Text(_paused ? context.l10n.commonResume : context.l10n.commonPause),
               ),
               FilledButton(
                 onPressed: () =>
                     context.go('/life/complete/${widget.questId}?source=timer'),
-                child: const Text('Finish'),
+                child: Text(context.l10n.commonFinish),
               ),
             ],
           ),

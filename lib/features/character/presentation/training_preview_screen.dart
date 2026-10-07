@@ -7,6 +7,8 @@ import '../../life_quest/domain/life_domain.dart';
 import '../data/training_repository.dart';
 import '../application/character_profile_provider.dart';
 import '../application/training_preview_provider.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class TrainingPreviewScreen extends ConsumerStatefulWidget {
   const TrainingPreviewScreen({super.key});
@@ -17,12 +19,6 @@ class TrainingPreviewScreen extends ConsumerStatefulWidget {
 }
 
 class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
-  static const _labels = {
-    GrowthPotentialCategory.physical: 'Physical Potential',
-    GrowthPotentialCategory.cognitive: 'Cognitive Potential',
-    GrowthPotentialCategory.communication: 'Communication Potential',
-  };
-
   bool _training = false;
   String? _pendingIdempotencyKey;
 
@@ -30,17 +26,17 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(trainingGoldenPathProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Training')),
+      appBar: AppBar(title: Text(context.l10n.training)),
       body: state.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('$error'),
+              Text(context.l10n.couldNotLoadTraining),
               TextButton(
                 onPressed: () => ref.invalidate(trainingGoldenPathProvider),
-                child: const Text('Retry'),
+                child: Text(context.l10n.commonRetry),
               ),
             ],
           ),
@@ -49,18 +45,22 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
           children: [
             Text(
-              'Choose a Training',
+              context.l10n.chooseTraining,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Life Quest rewards become Growth Potential. Choose a matching drill to turn it into permanent character growth.',
-            ),
+            Text(context.l10n.trainingDescription),
             const SizedBox(height: 16),
             for (final category in GrowthPotentialCategory.values)
               Card(
                 child: ListTile(
-                  title: Text(_labels[category]!),
+                  title: Text(
+                    switch (category) {
+                      GrowthPotentialCategory.physical => context.l10n.physicalPotential,
+                      GrowthPotentialCategory.cognitive => context.l10n.cognitivePotential,
+                      GrowthPotentialCategory.communication => context.l10n.communicationPotential,
+                    },
+                  ),
                   trailing: Text('${value.balances[category] ?? 0}'),
                 ),
               ),
@@ -73,25 +73,31 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Potential is building toward your next Training',
+                        context.l10n.potentialBuilding,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'A new character starts with 0 Growth Potential. Your first Life Quest adds its authored reward to the matching category. Training stays locked until that category covers the quoted cost; no reward or cost is changed.',
-                      ),
+                      Text(context.l10n.potentialBuildingDescription),
                       const SizedBox(height: 8),
                       for (final option in value.options.where(
                         (item) => item.availablePotential > 0,
                       ))
                         Text(
-                          '${_labels[option.quote.potentialCategory]}: ${option.availablePotential} / ${option.quote.potentialCost} · ${option.quote.attribute.name}',
+                          context.l10n.trainingPotentialProgress(
+                            localizedPotentialCategory(
+                              context.l10n,
+                              option.quote.potentialCategory,
+                            ),
+                            option.availablePotential,
+                            option.quote.potentialCost,
+                            localizedAttribute(context.l10n, option.quote.attribute),
+                          ),
                         ),
                       const SizedBox(height: 12),
                       OutlinedButton.icon(
                         onPressed: () => context.go('/life'),
                         icon: const Icon(Icons.checklist),
-                        label: const Text('Choose another Life Quest'),
+                        label: Text(context.l10n.chooseAnotherLifeQuest),
                       ),
                     ],
                   ),
@@ -100,7 +106,7 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
             ],
             const SizedBox(height: 20),
             Text(
-              'AVAILABLE DRILLS',
+              context.l10n.availableDrills,
               style: Theme.of(context).textTheme.labelLarge,
             ),
             const SizedBox(height: 8),
@@ -113,9 +119,9 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
             if (value.analysisPermanentGrowth > 0)
               Card(
                 child: ListTile(
-                  title: const Text('Analysis growth is active'),
+                  title: Text(context.l10n.analysisGrowthActive),
                   subtitle: Text(
-                    '+${value.analysisPermanentGrowth} permanent Analysis from Training',
+                    context.l10n.permanentAnalysisGrowth(value.analysisPermanentGrowth),
                   ),
                   trailing: const Icon(Icons.auto_awesome),
                 ),
@@ -128,13 +134,11 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Keep your journey moving',
+                      context.l10n.keepJourneyMoving,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'Training changes your character permanently. Check the updated build, then return to the academy.',
-                    ),
+                    Text(context.l10n.trainingPermanentDescription),
                     const SizedBox(height: 12),
                     Wrap(
                       spacing: 8,
@@ -143,12 +147,12 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                         OutlinedButton.icon(
                           onPressed: () => context.go('/character'),
                           icon: const Icon(Icons.person_outline),
-                          label: const Text('View Character'),
+                          label: Text(context.l10n.viewCharacter),
                         ),
                         FilledButton.icon(
                           onPressed: () => context.go('/adventure'),
                           icon: const Icon(Icons.auto_awesome),
-                          label: const Text('Continue Adventure'),
+                          label: Text(context.l10n.continueAdventure),
                         ),
                       ],
                     ),
@@ -161,7 +165,7 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
               FilledButton.tonalIcon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.visibility),
-                label: const Text('Try Analysis against Ashfang'),
+                label: Text(context.l10n.tryAnalysisAshfang),
               ),
             ],
           ],
@@ -188,11 +192,7 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
       ref.invalidate(characterProfileProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Training complete. Your attribute grew permanently.',
-            ),
-          ),
+          SnackBar(content: Text(context.l10n.trainingComplete)),
         );
       }
     } finally {
@@ -212,48 +212,11 @@ class _TrainingOptionCard extends StatelessWidget {
   final bool training;
   final VoidCallback onTrain;
 
-  static const _details = {
-    'reaction-drill': (
-      'Reaction Drill',
-      'Processing',
-      'Build focus: initiative, reactions, and fast battle decisions.',
-    ),
-    'precision-movement': (
-      'Precision Movement',
-      'Precision',
-      'Build focus: targeting, interrupts, and precise control.',
-    ),
-    'function-analysis-drill': (
-      'Function Analysis Drill',
-      'Analysis',
-      'Build focus: revealing enemy Function Weak Nodes.',
-    ),
-    'complexity-exercise': (
-      'Complexity Exercise',
-      'Computation',
-      'Build focus: complex Functions and counter reasoning.',
-    ),
-    'mana-control-drill': (
-      'Mana Control Drill',
-      'Efficiency',
-      'Build focus: Mana use and resource efficiency.',
-    ),
-    'intent-encoding-drill': (
-      'Intent Encoding Drill',
-      'Mana Output',
-      'Build focus: safe output and burst spell capacity.',
-    ),
-  };
-
   @override
   Widget build(BuildContext context) {
-    final detail = _details[option.definitionId]!;
+    final detail = localizedTrainingDefinition(context.l10n, option.definitionId);
     final category = option.quote.potentialCategory;
-    final categoryLabel = switch (category) {
-      GrowthPotentialCategory.physical => 'Physical',
-      GrowthPotentialCategory.cognitive => 'Cognitive',
-      GrowthPotentialCategory.communication => 'Communication',
-    };
+    final categoryLabel = localizedPotentialCategory(context.l10n, category);
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -262,7 +225,7 @@ class _TrainingOptionCard extends StatelessWidget {
           children: [
             Text(detail.$1, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
-            Text('$categoryLabel Potential → ${detail.$2}'),
+            Text(context.l10n.trainingPotentialToAttribute(categoryLabel, detail.$2)),
             const SizedBox(height: 6),
             Text(
               detail.$3,
@@ -272,11 +235,19 @@ class _TrainingOptionCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              '${detail.$2} ${option.currentAttributeValue} → ${option.currentAttributeValue + option.quote.attributeGrowth}',
+              context.l10n.trainingAttributeChange(
+                detail.$2,
+                option.currentAttributeValue,
+                option.currentAttributeValue + option.quote.attributeGrowth,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
-              'Aptitude ${option.quote.aptitudeRating}/6 · Cost ${option.quote.potentialCost} $categoryLabel Potential',
+              context.l10n.aptitudeCost(
+                option.quote.aptitudeRating,
+                option.quote.potentialCost,
+                categoryLabel,
+              ),
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 10),
@@ -286,10 +257,13 @@ class _TrainingOptionCard extends StatelessWidget {
                 onPressed: option.canTrain && !training ? onTrain : null,
                 child: Text(
                   training
-                      ? 'Training…'
+                      ? context.l10n.trainingInProgress
                       : option.canTrain
-                      ? 'Train ${detail.$2}'
-                      : 'Need ${option.quote.potentialCost - option.availablePotential} more $categoryLabel Potential',
+                      ? context.l10n.trainAttribute(detail.$2)
+                      : context.l10n.needMorePotential(
+                          option.quote.potentialCost - option.availablePotential,
+                          categoryLabel,
+                        ),
                 ),
               ),
             ),

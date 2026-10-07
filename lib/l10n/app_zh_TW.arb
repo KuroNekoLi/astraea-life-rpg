@@ -552,5 +552,17 @@
         "type": "int"
       }
     }
-  }
+  },
+  "questMetaShort": "{domain} · {minutes} 分鐘",
+  "@questMetaShort": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "couldNotLoadTraining": "無法載入訓練資料，請稍後再試。"
 }
