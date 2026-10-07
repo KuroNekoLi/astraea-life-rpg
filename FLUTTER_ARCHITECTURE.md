@@ -291,28 +291,26 @@ Do not implement rules in:
 
 # 7. Combat Determinism
 
-Combat must support seeded RNG.
+Combat v1 uses deterministic CTB resolution as the default.
 
-Use cases:
+Core baseline:
 
-- deterministic tests
-- replay/debug
-- bug reproduction
-- balance simulation
-
-Randomness must be injected.
-
-Bad:
-
-```dart
-final roll = Random().nextInt(20) + 1;
+```text
+Continuous / CTB-like Action Timeline
++ Action Delay
++ deterministic rule resolution
 ```
 
-Better:
+Examples:
 
-```dart
-final roll = rng.d20();
-```
+- Interrupt succeeds when `Interrupt Power >= current Function Stability`
+- Timeline ordering is deterministic
+- authored enemy Pattern + Conditions is deterministic
+- state fingerprints support replay/debug and balance simulation
+
+Randomness is allowed only when an explicit mechanic requires it. Any such randomness must be injected through a deterministic RNG abstraction and covered by reproducible tests.
+
+Do not reintroduce generic d20 initiative or attack-roll RNG into Combat v1.
 
 ---
 
@@ -489,7 +487,7 @@ Rules:
 
 ---
 
-# 22. Assets
+# 15. Assets
 
 Generated art assets are content, not UI chrome.
 
@@ -513,7 +511,7 @@ Flutter composes these at runtime.
 
 ---
 
-# 22. Story Runtime
+# 16. Story Runtime
 
 Story content should be data-driven where practical.
 
@@ -534,7 +532,7 @@ Canon content remains authored/reviewed by narrative roles.
 
 ---
 
-# 22. Content Validation
+# 17. Content Validation
 
 Static content should have validation before runtime.
 
@@ -552,7 +550,7 @@ Fail fast in development.
 
 ---
 
-# 22. Error Handling
+# 18. Error Handling
 
 Use explicit failure types.
 
@@ -577,7 +575,7 @@ Core gameplay simulation should not depend on UI error strings.
 
 ---
 
-# 22. Offline-First MVP
+# 19. Offline-First MVP
 
 Default MVP assumption:
 
@@ -596,7 +594,7 @@ Future sync should be layered on top of a stable local model.
 
 ---
 
-# 22. Testing Architecture
+# 20. Testing Architecture
 
 ## Domain / Game Engine
 
@@ -605,8 +603,8 @@ Use fast pure Dart unit tests.
 High priority:
 
 - combat resolution
-- initiative
-- attack roll
+- Timeline ordering / Action Delay
+- Full Chant / resolve lifecycle
 - Function interruption
 - Weak Node
 - reward idempotency
@@ -648,7 +646,7 @@ Life Quest
 
 ---
 
-# 22. Architecture Rules That Require ADR
+# 21. Architecture Rules That Require ADR
 
 Create an ADR before:
 

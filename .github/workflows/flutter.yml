@@ -16,6 +16,8 @@ jobs:
           cache: true
       - run: flutter pub get --enforce-lockfile
       - run: dart run build_runner build
+      - name: Verify localized UI strings
+        run: dart run tool/check_localized_ui.dart
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze

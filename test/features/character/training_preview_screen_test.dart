@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/localized_test_app.dart';
+
 void main() {
   testWidgets('shows authored Analysis quote and commits Training', (
     tester,
@@ -61,7 +63,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [databaseProvider.overrideWith((ref) async => database)],
-        child: const MaterialApp(home: TrainingPreviewScreen()),
+        child: localizedTestApp(home: const TrainingPreviewScreen()),
       ),
     );
     await tester.pumpAndSettle();

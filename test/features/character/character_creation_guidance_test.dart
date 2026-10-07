@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/localized_test_app.dart';
+
 void main() {
   testWidgets('character allocation explains each Attribute build focus', (
     tester,
@@ -15,7 +17,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [databaseProvider.overrideWith((ref) async => database)],
-        child: const MaterialApp(home: CharacterCreationScreen()),
+        child: localizedTestApp(home: const CharacterCreationScreen()),
       ),
     );
     await tester.pumpAndSettle();
