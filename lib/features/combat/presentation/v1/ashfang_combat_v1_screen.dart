@@ -938,7 +938,9 @@ class _EndPanel extends StatelessWidget {
                 ? context.l10n.combatVictoryTitle
                 : context.l10n.combatDefeatTitle,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: victory ? AstraeaColors.gold : Theme.of(context).colorScheme.error,
+              color: victory
+                  ? AstraeaColors.gold
+                  : Theme.of(context).colorScheme.error,
             ),
           ),
           const SizedBox(height: 8),
