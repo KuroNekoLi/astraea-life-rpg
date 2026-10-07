@@ -9,6 +9,7 @@ import '../../../../game_engine/combat/v1/combat_models.dart';
 import '../../../../l10n/l10n.dart';
 import '../../application/ashfang_combat_v1_provider.dart';
 import '../../application/ashfang_combat_v1_session.dart';
+import 'combat_vfx.dart';
 
 class AshfangCombatV1Screen extends ConsumerWidget {
   const AshfangCombatV1Screen({super.key});
@@ -193,6 +194,16 @@ class _Battlefield extends StatelessWidget {
             child: Stack(
               children: [
                 const Positioned.fill(child: _ArcaneFieldPainter()),
+                if (view.feedback ==
+                        AshfangTutorialFeedbackV1.knownFireballInterrupted ||
+                    view.feedback ==
+                        AshfangTutorialFeedbackV1.modifiedFireballInterrupted)
+                  Positioned.fill(
+                    child: CombatImpactFlash(
+                      triggerKey: view.feedback,
+                      color: AstraeaColors.starlight,
+                    ),
+                  ),
                 Positioned(
                   top: 14,
                   left: 0,
@@ -423,12 +434,19 @@ class _FunctionOrb extends StatelessWidget {
           ),
         ],
       ),
-      child: Center(
-        child: Icon(
-          revealed ? Icons.hub_outlined : Icons.blur_circular,
-          color: revealed ? AstraeaColors.gold : AstraeaColors.starlight,
-          size: 34,
-        ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CombatPulseRing(
+            color: revealed ? AstraeaColors.gold : AstraeaColors.starlight,
+            size: 64,
+          ),
+          Icon(
+            revealed ? Icons.hub_outlined : Icons.blur_circular,
+            color: revealed ? AstraeaColors.gold : AstraeaColors.starlight,
+            size: 34,
+          ),
+        ],
       ),
     );
   }
