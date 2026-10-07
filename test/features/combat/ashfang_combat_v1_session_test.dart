@@ -30,6 +30,16 @@ void main() {
       expect(session.state.activeTurn?.actorId, 'hero');
 
       session.beginHeroFireballIIFullChant();
+      expect(session.stage, AshfangTutorialStageV1.heroFullChantCasting);
+      expect(session.state.castingFunctionFor('hero'), isNotNull);
+      expect(
+        session.state.timeline.any(
+          (event) => event.type == TimelineEventType.spellResolve,
+        ),
+        isTrue,
+      );
+
+      session.resolveHeroFireballIIFullChant();
       expect(session.stage, AshfangTutorialStageV1.heroFinisher);
       expect(session.state.actor('ashfang').hp, 15);
       expect(session.state.activeTurn?.actorId, 'hero');
