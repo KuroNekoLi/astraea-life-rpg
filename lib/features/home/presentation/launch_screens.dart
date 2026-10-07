@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/app_providers.dart';
 import '../../../design_system/theme/astraea_theme.dart';
+import '../../../l10n/l10n.dart';
 
 class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
@@ -56,14 +57,14 @@ class SplashScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 18),
                     Text(
-                      'ASTRAEA',
+                      context.l10n.appTitle.toUpperCase(),
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         fontWeight: FontWeight.w300,
                         letterSpacing: 7,
                       ),
                     ),
                     Text(
-                      'LIFE  ×  RPG',
+                      context.l10n.homeBrandSubtitle,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         color: AstraeaColors.starlight,
                         letterSpacing: 4,
@@ -71,7 +72,7 @@ class SplashScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      '讓現實的努力，成為改變世界的魔法。',
+                      context.l10n.splashTagline,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AstraeaColors.pale.withValues(alpha: 0.82),
@@ -82,7 +83,7 @@ class SplashScreen extends ConsumerWidget {
                       width: double.infinity,
                       child: FilledButton(
                         onPressed: () => _start(context, ref),
-                        child: const Text('Tap to start'),
+                        child: Text(context.l10n.tapToStart),
                       ),
                     ),
                   ],
@@ -117,11 +118,11 @@ class OnboardingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
     appBar: AppBar(
       leading: IconButton(
-        tooltip: 'Back',
+        tooltip: context.l10n.commonBack,
         onPressed: () => context.go('/splash'),
         icon: const Icon(Icons.arrow_back),
       ),
-      title: const Text('Welcome to Astraea'),
+      title: Text(context.l10n.welcomeToAstraea),
     ),
     body: SafeArea(
       child: Column(
@@ -150,34 +151,31 @@ class OnboardingScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 22),
                 Text(
-                  'Your everyday effort can shape your Astraea self.',
+                  context.l10n.onboardingHeadline,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Real life and the academy are connected, while your actions remain yours to choose.',
+                  context.l10n.onboardingBody,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: AstraeaColors.muted),
                 ),
                 const SizedBox(height: 18),
-                const _OnboardingStep(
+                _OnboardingStep(
                   icon: Icons.favorite_outline,
-                  title: 'Choose a Life Quest',
-                  description:
-                      'Pick a real-world action when it fits your day.',
+                  title: context.l10n.chooseLifeQuest,
+                  description: context.l10n.chooseLifeQuestDescription,
                 ),
-                const _OnboardingStep(
+                _OnboardingStep(
                   icon: Icons.auto_awesome,
-                  title: 'Earn Growth Potential',
-                  description:
-                      'Your action creates an opportunity to grow in-game.',
+                  title: context.l10n.earnGrowthPotential,
+                  description: context.l10n.earnGrowthPotentialDescription,
                 ),
-                const _OnboardingStep(
+                _OnboardingStep(
                   icon: Icons.shield_outlined,
-                  title: 'Build your RPG self',
-                  description:
-                      'Train, prepare your deck, and explore the academy.',
+                  title: context.l10n.buildRpgSelf,
+                  description: context.l10n.buildRpgSelfDescription,
                 ),
               ],
             ),
@@ -191,12 +189,12 @@ class OnboardingScreen extends ConsumerWidget {
                   width: double.infinity,
                   child: FilledButton(
                     onPressed: () => _enter(context, ref),
-                    child: const Text('Enter Astraea'),
+                    child: Text(context.l10n.enterAstraea),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'No streak penalties. Progress waits whenever you do.',
+                  context.l10n.noStreakPenalty,
                   textAlign: TextAlign.center,
                   style: Theme.of(
                     context,

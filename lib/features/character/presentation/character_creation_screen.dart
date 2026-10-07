@@ -10,6 +10,8 @@ import '../../../core/measurement/prototype_event_recorder.dart';
 import '../domain/attribute.dart';
 import '../domain/character_growth_policy.dart';
 import '../../../game_engine/rng/rng.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class CharacterCreationScreen extends ConsumerStatefulWidget {
   const CharacterCreationScreen({super.key});
@@ -37,7 +39,7 @@ class _CharacterCreationScreenState
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Create your Astraea self')),
+    appBar: AppBar(title: Text(context.l10n.createAstraeaSelf)),
     bottomNavigationBar: SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -48,7 +50,7 @@ class _CharacterCreationScreenState
                   _name.text.trim().isNotEmpty
               ? _save
               : null,
-          child: Text(_saving ? 'Saving…' : 'Continue'),
+          child: Text(_saving ? context.l10n.saving : context.l10n.commonContinue),
         ),
       ),
     ),
@@ -58,24 +60,27 @@ class _CharacterCreationScreenState
         TextField(
           controller: _name,
           onChanged: (_) => setState(() {}),
-          decoration: const InputDecoration(labelText: 'Character name'),
+          decoration: InputDecoration(labelText: context.l10n.characterName),
         ),
         const SizedBox(height: 20),
         Text(
-          'Distribute 32 points · Base 8 · Maximum 15',
+          context.l10n.distributePoints,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 4),
-        const Text(
-          'Choose your hero’s build focus. These Attributes are planned to shape combat options; no choice blocks the main story.',
-        ),
+        Text(context.l10n.characterBuildFocusDescription),
         const SizedBox(height: 4),
-        Text('$_spent / $initialAllocationBudget points'),
+        Text(context.l10n.pointsSpent(_spent, initialAllocationBudget)),
         for (final attribute in AttributeType.values)
           ListTile(
-            title: Text(_label(attribute)),
+            title: Text(localizedAttribute(context.l10n, attribute)),
             subtitle: Text(
-              'Base $baseAttributeValue + ${_allocation[attribute]} allocated = ${baseAttributeValue + _allocation[attribute]!} starting value\n${_effect(attribute)}',
+              context.l10n.attributeAllocationSummary(
+                baseAttributeValue,
+                _allocation[attribute]!,
+                baseAttributeValue + _allocation[attribute]!,
+                localizedAttributeEffect(context.l10n, attribute),
+              ),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -108,24 +113,18 @@ class _CharacterCreationScreenState
         const SizedBox(height: 16),
         DropdownButtonFormField<String>(
           initialValue: _weapon,
-          decoration: const InputDecoration(labelText: 'Initial weapon'),
-          items: const [
-            DropdownMenuItem(
-              value: 'astraea_longsword',
-              child: Text('Astraea Longsword'),
-            ),
-            DropdownMenuItem(
-              value: 'standard_spear',
-              child: Text('Standard Spear'),
-            ),
-            DropdownMenuItem(
-              value: 'training_arcane_gun',
-              child: Text('Training Arcane Gun'),
-            ),
-            DropdownMenuItem(
-              value: 'standard_staff',
-              child: Text('Standard Staff'),
-            ),
+          decoration: InputDecoration(labelText: context.l10n.initialWeapon),
+          items: [
+            for (final weaponId in const [
+              'astraea_longsword',
+              'standard_spear',
+              'training_arcane_gun',
+              'standard_staff',
+            ])
+              DropdownMenuItem(
+                value: weaponId,
+                child: Text(localizedWeapon(context.l10n, weaponId)),
+              ),
           ],
           onChanged: (value) => setState(() => _weapon = value ?? _weapon),
         ),
@@ -199,24 +198,3 @@ class _CharacterCreationScreenState
   }
 }
 
-String _label(AttributeType value) => switch (value) {
-  AttributeType.manaCapacity => 'Mana Capacity',
-  AttributeType.manaOutput => 'Mana Output',
-  AttributeType.computation => 'Computation',
-  AttributeType.processing => 'Processing',
-  AttributeType.precision => 'Precision',
-  AttributeType.efficiency => 'Efficiency',
-  AttributeType.ambientSync => 'Ambient Sync',
-  AttributeType.analysis => 'Analysis',
-};
-
-String _effect(AttributeType value) => switch (value) {
-  AttributeType.manaCapacity => 'Focus: Mana limit and costly spell stamina',
-  AttributeType.manaOutput => 'Focus: Safe output and burst spell size',
-  AttributeType.computation => 'Focus: Complex Functions and counter reasoning',
-  AttributeType.processing => 'Focus: Initiative, reactions, and fast actions',
-  AttributeType.precision => 'Focus: Targeting, interrupts, and control',
-  AttributeType.efficiency => 'Focus: Mana use and resource efficiency',
-  AttributeType.ambientSync => 'Focus: Environmental and support magic',
-  AttributeType.analysis => 'Focus: Reveal enemy Weak Nodes and counters',
-};

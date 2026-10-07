@@ -6,20 +6,11 @@ import '../../../app/app_shell.dart';
 import '../../../design_system/theme/astraea_theme.dart';
 import '../application/character_profile_provider.dart';
 import '../domain/attribute.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class CharacterProfileScreen extends ConsumerWidget {
   const CharacterProfileScreen({super.key});
-
-  static const _labels = {
-    AttributeType.manaCapacity: 'Mana Capacity',
-    AttributeType.manaOutput: 'Mana Output',
-    AttributeType.computation: 'Computation',
-    AttributeType.processing: 'Processing',
-    AttributeType.precision: 'Precision',
-    AttributeType.efficiency: 'Efficiency',
-    AttributeType.ambientSync: 'Ambient Sync',
-    AttributeType.analysis: 'Analysis',
-  };
 
   static const _icons = {
     AttributeType.manaCapacity: Icons.water_drop_outlined,
@@ -36,11 +27,11 @@ class CharacterProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(characterProfileProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Character')),
+      appBar: AppBar(title: Text(context.l10n.character)),
       body: profile.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => _ErrorState(
-          message: 'Could not load your character.',
+          message: context.l10n.couldNotLoadCharacter,
           onRetry: () => ref.invalidate(characterProfileProvider),
         ),
         data: (value) {
@@ -53,9 +44,9 @@ class CharacterProfileScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
             children: [
               AstraeaSectionHeader(
-                eyebrow: 'Your Astraea self',
+                eyebrow: context.l10n.yourAstraeaSelf,
                 title: value.name,
-                subtitle: value.weaponId.replaceAll('_', ' '),
+                subtitle: localizedWeapon(context.l10n, value.weaponId),
               ),
               const SizedBox(height: 18),
               Container(
@@ -85,12 +76,12 @@ class CharacterProfileScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Character Attributes',
+                            context.l10n.characterAttributes,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Training grows your chosen build over time.',
+                            context.l10n.trainingGrowsBuild,
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                                   color: AstraeaColors.pale.withValues(
@@ -105,7 +96,7 @@ class CharacterProfileScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 18),
-              Text('ATTRIBUTES', style: Theme.of(context).textTheme.labelLarge),
+              Text(context.l10n.attributesSection, style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(height: 10),
               GridView.builder(
                 itemCount: AttributeType.values.length,
@@ -137,7 +128,7 @@ class CharacterProfileScreen extends ConsumerWidget {
                               const SizedBox(width: 6),
                               Expanded(
                                 child: Text(
-                                  _labels[attribute]!,
+                                  localizedAttribute(context.l10n, attribute),
                                   style: Theme.of(
                                     context,
                                   ).textTheme.labelMedium,
@@ -160,7 +151,7 @@ class CharacterProfileScreen extends ConsumerWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 3),
                                   child: Text(
-                                    '+${attributeValue.permanentGrowth} trained',
+                                    context.l10n.trainedDelta(attributeValue.permanentGrowth),
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall
@@ -179,7 +170,7 @@ class CharacterProfileScreen extends ConsumerWidget {
               FilledButton.icon(
                 onPressed: () => context.push('/training'),
                 icon: const Icon(Icons.auto_awesome),
-                label: const Text('View Training'),
+                label: Text(context.l10n.viewTraining),
               ),
             ],
           );
@@ -204,15 +195,15 @@ class _EmptyCharacter extends StatelessWidget {
           const Icon(Icons.person_add_alt_1, size: 48),
           const SizedBox(height: 16),
           Text(
-            'Create your Astraea self',
+            context.l10n.createAstraeaSelf,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
-          const Text('Choose your starting Attributes and weapon to begin.'),
+          Text(context.l10n.chooseStartingAttributesWeapon),
           const SizedBox(height: 18),
           FilledButton(
             onPressed: onCreate,
-            child: const Text('Create Character'),
+            child: Text(context.l10n.createCharacter),
           ),
         ],
       ),
@@ -233,7 +224,7 @@ class _ErrorState extends StatelessWidget {
       children: [
         Text(message),
         const SizedBox(height: 8),
-        TextButton(onPressed: onRetry, child: const Text('Retry')),
+        TextButton(onPressed: onRetry, child: Text(context.l10n.commonRetry)),
       ],
     ),
   );

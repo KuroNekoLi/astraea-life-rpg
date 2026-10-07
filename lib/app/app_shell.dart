@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../design_system/theme/astraea_theme.dart';
+import '../l10n/l10n.dart';
 
 class AppShell extends StatelessWidget {
   const AppShell({required this.child, required this.location, super.key});
@@ -10,21 +11,15 @@ class AppShell extends StatelessWidget {
   final String location;
 
   static const _destinations = [
-    _AppDestination('Home', '/home', Icons.home_outlined, Icons.home),
-    _AppDestination('Life', '/life', Icons.checklist_outlined, Icons.checklist),
+    _AppDestination('/home', Icons.home_outlined, Icons.home),
+    _AppDestination('/life', Icons.checklist_outlined, Icons.checklist),
     _AppDestination(
-      'Adventure',
       '/adventure',
       Icons.auto_awesome_outlined,
       Icons.auto_awesome,
     ),
-    _AppDestination('Deck', '/deck', Icons.style_outlined, Icons.style),
-    _AppDestination(
-      'Character',
-      '/character',
-      Icons.person_outline,
-      Icons.person,
-    ),
+    _AppDestination('/deck', Icons.style_outlined, Icons.style),
+    _AppDestination('/character', Icons.person_outline, Icons.person),
   ];
 
   @override
@@ -43,12 +38,21 @@ class AppShell extends StatelessWidget {
             NavigationDestination(
               icon: Icon(destination.icon),
               selectedIcon: Icon(destination.selectedIcon),
-              label: destination.label,
+              label: _destinationLabel(context, destination.path),
             ),
         ],
       ),
     );
   }
+
+  String _destinationLabel(BuildContext context, String path) => switch (path) {
+    '/home' => context.l10n.navHome,
+    '/life' => context.l10n.navLife,
+    '/adventure' => context.l10n.navAdventure,
+    '/deck' => context.l10n.navDeck,
+    '/character' => context.l10n.navCharacter,
+    _ => path,
+  };
 
   int get _selectedIndex {
     for (var index = 0; index < _destinations.length; index++) {
@@ -66,9 +70,8 @@ class AppShell extends StatelessWidget {
 }
 
 final class _AppDestination {
-  const _AppDestination(this.label, this.path, this.icon, this.selectedIcon);
+  const _AppDestination(this.path, this.icon, this.selectedIcon);
 
-  final String label;
   final String path;
   final IconData icon;
   final IconData selectedIcon;

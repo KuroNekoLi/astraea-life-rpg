@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/app_shell.dart';
 import '../../../design_system/theme/astraea_theme.dart';
 import '../application/overview_providers.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class DeckScreen extends ConsumerWidget {
   const DeckScreen({super.key});
@@ -13,24 +15,24 @@ class DeckScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final deck = ref.watch(preparedDeckProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Prepared Deck')),
+      appBar: AppBar(title: Text(context.l10n.preparedDeck)),
       body: deck.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(
           child: TextButton(
             onPressed: () => ref.invalidate(preparedDeckProvider),
-            child: const Text('Could not load deck · Retry'),
+            child: Text(context.l10n.couldNotLoadDeckRetry),
           ),
         ),
         data: (value) => ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
           children: [
             AstraeaSectionHeader(
-              eyebrow: 'Spell Cards',
+              eyebrow: context.l10n.spellCards,
               title: value.selectedSpellIds.isEmpty
-                  ? 'Build your Prepared Deck'
-                  : 'Your Prepared Deck',
-              subtitle: 'Choose six ready-to-cast Functions for your build.',
+                  ? context.l10n.buildPreparedDeck
+                  : context.l10n.yourPreparedDeck,
+              subtitle: context.l10n.chooseSixFunctions,
             ),
             const SizedBox(height: 16),
             Card(
@@ -43,25 +45,25 @@ class DeckScreen extends ConsumerWidget {
                     Expanded(
                       child: Text(
                         value.selectedSpellIds.isEmpty
-                            ? 'No deck prepared yet'
-                            : 'Prepared ${value.selectedSpellIds.length} / 6',
+                            ? context.l10n.noDeckPrepared
+                            : context.l10n.preparedCount(value.selectedSpellIds.length),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
-                    Text('${value.allSpells.length} cards'),
+                    Text(context.l10n.cardsCount(value.allSpells.length)),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 14),
             if (value.selectedSpells.isNotEmpty) ...[
-              Text('READY', style: Theme.of(context).textTheme.labelLarge),
+              Text(context.l10n.readySection, style: Theme.of(context).textTheme.labelLarge),
               const SizedBox(height: 8),
               for (final spell in value.selectedSpells)
                 _SpellCardTile(spell: spell, selected: true),
               const SizedBox(height: 12),
             ],
-            Text('CARD LIBRARY', style: Theme.of(context).textTheme.labelLarge),
+            Text(context.l10n.cardLibrary, style: Theme.of(context).textTheme.labelLarge),
             const SizedBox(height: 8),
             LayoutBuilder(
               builder: (context, constraints) {
@@ -90,7 +92,7 @@ class DeckScreen extends ConsumerWidget {
               FilledButton.icon(
                 onPressed: () => context.push('/story'),
                 icon: const Icon(Icons.auto_awesome),
-                label: const Text('Continue to Deck Setup'),
+                label: Text(context.l10n.continueDeckSetup),
               ),
             ],
           ],
@@ -143,7 +145,7 @@ class _SpellCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                spell.role.toUpperCase(),
+                localizedSpellRole(context.l10n, spell.role).toUpperCase(),
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: color,
                   letterSpacing: 1,
@@ -151,7 +153,7 @@ class _SpellCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                spell.name,
+                localizedSpellName(context.l10n, spell.id),
                 style: Theme.of(
                   context,
                 ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
@@ -179,7 +181,7 @@ class _SpellCardTile extends StatelessWidget {
       child: ListTile(
         leading: Icon(_roleIcon(spell.role), color: _roleColor(spell.role)),
         title: Text(spell.name),
-        subtitle: Text(spell.role),
+        subtitle: Text(localizedSpellRole(context.l10n, spell.role)),
         trailing: selected
             ? const Icon(Icons.check_circle, color: AstraeaColors.gold)
             : null,
