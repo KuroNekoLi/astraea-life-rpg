@@ -129,7 +129,11 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
         return Scaffold(
           appBar: AppBar(title: Text(context.l10n.ashfangEncounter)),
           body: snapshot.hasError
-              ? Center(child: Text(context.l10n.battleUnavailable('${snapshot.error}')))
+              ? Center(
+                  child: Text(
+                    context.l10n.battleUnavailable('${snapshot.error}'),
+                  ),
+                )
               : const Center(child: CircularProgressIndicator()),
         );
       }
@@ -172,7 +176,9 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
               name: context.l10n.battleHeroName,
               hp: player.hp,
               maxHp: player.maxHp,
-              detail: context.l10n.analysisModifierLabel(battle.analysisModifier),
+              detail: context.l10n.analysisModifierLabel(
+                battle.analysisModifier,
+              ),
             ),
             _UnitCard(
               name: context.l10n.ashfangTrainingConstruct,
@@ -181,7 +187,10 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
               detail: context.l10n.functionPathLabel,
             ),
             const SizedBox(height: 12),
-            Text(_feedbackLabel(context, battle.feedbackCode), style: Theme.of(context).textTheme.bodyLarge),
+            Text(
+              _feedbackLabel(context, battle.feedbackCode),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             if (battle.knowledge.revealedWeakNodeIds.contains('lock-target'))
               Card(
                 child: ListTile(
@@ -288,8 +297,7 @@ String _feedbackLabel(
   AshfangFeedbackCode.attackResolved => context.l10n.feedbackAttackResolved,
   AshfangFeedbackCode.enemyFunctionBegins =>
     context.l10n.feedbackEnemyFunctionBegins,
-  AshfangFeedbackCode.weakNodeFound =>
-    context.l10n.feedbackWeakNodeFoundLegacy,
+  AshfangFeedbackCode.weakNodeFound => context.l10n.feedbackWeakNodeFoundLegacy,
   AshfangFeedbackCode.weakNodeMiss => context.l10n.feedbackWeakNodeMissLegacy,
   AshfangFeedbackCode.interrupted => context.l10n.feedbackInterruptedLegacy,
   AshfangFeedbackCode.pounceResolved => context.l10n.feedbackPounceResolved,

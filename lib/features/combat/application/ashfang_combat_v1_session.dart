@@ -40,8 +40,7 @@ final class AshfangCombatV1Session {
   late AshfangTutorialStageV1 stage;
   late AshfangTutorialFeedbackV1 feedback;
 
-  String? get castingFunctionId =>
-      state.castingFunctionFor('ashfang')?.id;
+  String? get castingFunctionId => state.castingFunctionFor('ashfang')?.id;
 
   ActiveFunctionV1? get enemyCastingFunction =>
       state.castingFunctionFor('ashfang');
@@ -104,12 +103,7 @@ final class AshfangCombatV1Session {
           magicResistance: 20,
         ),
       ],
-      initialTurnTimes: const {
-        'hero': 0,
-        'ashfang': 40,
-        'rio': 60,
-        'yuma': 80,
-      },
+      initialTurnTimes: const {'hero': 0, 'ashfang': 40, 'rio': 60, 'yuma': 80},
     );
     state = engine.advance(state).state;
     stage = AshfangTutorialStageV1.heroChantless;
@@ -276,10 +270,7 @@ final class AshfangCombatV1Session {
       if (next.event.type == TimelineEventType.characterTurn) {
         state = engine.useAction(
           state,
-          UseActionCommandV1(
-            next.event.actorId!,
-            action: _waitAction,
-          ),
+          UseActionCommandV1(next.event.actorId!, action: _waitAction),
         );
       } else {
         state = engine.resolveTimelineEvent(state, next.event);
@@ -315,10 +306,7 @@ final class AshfangCombatV1Session {
         } else {
           state = engine.useAction(
             state,
-            UseActionCommandV1(
-              next.event.actorId!,
-              action: _waitAction,
-            ),
+            UseActionCommandV1(next.event.actorId!, action: _waitAction),
           );
         }
       } else {
@@ -341,10 +329,7 @@ final class AshfangCombatV1Session {
 
       state = engine.useAction(
         state,
-        UseActionCommandV1(
-          next.event.actorId!,
-          action: _waitAction,
-        ),
+        UseActionCommandV1(next.event.actorId!, action: _waitAction),
       );
     }
 
