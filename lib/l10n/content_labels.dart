@@ -160,3 +160,10 @@ String localizedFunctionNodeType(AppLocalizations l10n, String type) =>
   ),
   _ => (id, id, id),
 };
+
+
+String localizedBalanceStatus(AppLocalizations l10n, String status) =>
+    switch (status) {
+      'illustrative-inputs-awaiting-playtest' => l10n.balanceAwaitingPlaytest,
+      _ => status,
+    };

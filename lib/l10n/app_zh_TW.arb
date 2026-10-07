@@ -577,5 +577,22 @@
   "graphMoveSummary": "導向結果",
   "graphNodeSummary": "{name} · {summary}",
   "graphCorrectMove": "正確——Move 會把效果導向目標。",
-  "graphWrongMove": "還不對。負責把效果導向目標的是 Move。"
+  "graphWrongMove": "還不對。負責把效果導向目標的是 Move。",
+  "functionNodeSemantics": "{node}，{state}",
+  "balanceAwaitingPlaytest": "示意數值 · 等待實際測試",
+  "contentVersionStatus": "{version} · {status}",
+  "battleHeroName": "Astraea 主角",
+  "analysisModifierLabel": "Analysis 修正 +{modifier}",
+  "functionPathLabel": "Function：DetectTarget → LockTarget → Pounce",
+  "battleOutcomeActive": "進行中",
+  "battleOutcomeVictory": "勝利",
+  "battleOutcomeDefeat": "失敗",
+  "feedbackGuarding": "Ashfang 正守著訓練場。",
+  "feedbackAshfangDefeated": "Ashfang 已被擊敗。Weak Node 改變了這場戰鬥。",
+  "feedbackAttackResolved": "攻擊已由戰鬥引擎解析。",
+  "feedbackEnemyFunctionBegins": "Ashfang 開始執行 DetectTarget → LockTarget → Pounce。",
+  "feedbackWeakNodeFoundLegacy": "找到 Weak Node。Interrupt LockTarget 即可取消 Pounce。",
+  "feedbackWeakNodeMissLegacy": "這次沒有揭露 Weak Node，Ashfang 將執行 Pounce。",
+  "feedbackInterruptedLegacy": "LockTarget 已被 Interrupt，後續 Pounce 已取消。",
+  "feedbackPounceResolved": "Pounce 已由戰鬥引擎解析。"
 }

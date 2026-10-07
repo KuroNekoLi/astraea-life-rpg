@@ -10,6 +10,8 @@ import '../../../game_engine/function_graph/function_runtime.dart';
 import '../../character/data/training_repository.dart';
 import '../data/ashfang_battle_repository.dart';
 import '../domain/ashfang_battle_engine.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class AshfangBattleScreen extends ConsumerStatefulWidget {
   const AshfangBattleScreen({super.key});
@@ -125,9 +127,9 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
     builder: (context, snapshot) {
       if (!snapshot.hasData) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Ashfang Encounter')),
+          appBar: AppBar(title: Text(context.l10n.ashfangEncounter)),
           body: snapshot.hasError
-              ? Center(child: Text('Battle unavailable: ${snapshot.error}'))
+              ? Center(child: Text(context.l10n.battleUnavailable('${snapshot.error}')))
               : const Center(child: CircularProgressIndicator()),
         );
       }
@@ -142,67 +144,67 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
           battle.state.outcome.name == 'active' &&
           battle.activeFunction?.activeNodeId == 'lock-target';
       return Scaffold(
-        appBar: AppBar(title: const Text('Ashfang Encounter')),
+        appBar: AppBar(title: Text(context.l10n.ashfangEncounter)),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             Card(
               child: ListTile(
                 leading: const Icon(Icons.science_outlined),
-                title: const Text('Prototype encounter inputs'),
+                title: Text(context.l10n.prototypeEncounterInputs),
                 subtitle: Text(
-                  '${data.content['contentVersion']} · ${data.balanceStatus}',
+                  context.l10n.contentVersionStatus(
+                    data.content['contentVersion'] as String,
+                    localizedBalanceStatus(context.l10n, data.balanceStatus),
+                  ),
                 ),
               ),
             ),
             Text(
-              'Round ${battle.state.round} · ${battle.state.outcome.name.toUpperCase()}',
+              context.l10n.battleRoundStatus(
+                battle.state.round,
+                _outcomeLabel(context, battle.state.outcome.name),
+              ),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
             _UnitCard(
-              name: 'Astraea Hero',
+              name: context.l10n.battleHeroName,
               hp: player.hp,
               maxHp: player.maxHp,
-              detail: 'Analysis modifier +${battle.analysisModifier}',
+              detail: context.l10n.analysisModifierLabel(battle.analysisModifier),
             ),
             _UnitCard(
-              name: 'Ashfang Training Construct',
+              name: context.l10n.ashfangTrainingConstruct,
               hp: enemy.hp,
               maxHp: enemy.maxHp,
-              detail: 'Function: DetectTarget → LockTarget → Pounce',
+              detail: context.l10n.functionPathLabel,
             ),
             const SizedBox(height: 12),
-            Text(battle.feedback, style: Theme.of(context).textTheme.bodyLarge),
+            Text(_feedbackLabel(context, battle.feedbackCode), style: Theme.of(context).textTheme.bodyLarge),
             if (battle.knowledge.revealedWeakNodeIds.contains('lock-target'))
-              const Card(
+              Card(
                 child: ListTile(
-                  leading: Icon(Icons.visibility),
-                  title: Text('Weak Node revealed: LockTarget'),
-                  subtitle: Text(
-                    'Interrupting this node cancels downstream Pounce.',
-                  ),
+                  leading: const Icon(Icons.visibility),
+                  title: Text(context.l10n.weakNodeRevealed),
+                  subtitle: Text(context.l10n.weakNodeCancelsPounce),
                 ),
               ),
             const SizedBox(height: 12),
             if (battle.state.outcome.name == 'victory')
-              const Card(
+              Card(
                 child: ListTile(
-                  leading: Icon(Icons.emoji_events),
-                  title: Text('Training encounter complete'),
-                  subtitle: Text(
-                    'Your trained Analysis informed the Weak Node interaction. Battle state is saved.',
-                  ),
+                  leading: const Icon(Icons.emoji_events),
+                  title: Text(context.l10n.trainingEncounterComplete),
+                  subtitle: Text(context.l10n.trainingAnalysisSaved),
                 ),
               )
             else if (battle.state.outcome.name == 'defeat')
-              const Card(
+              Card(
                 child: ListTile(
-                  leading: Icon(Icons.favorite_border),
-                  title: Text('Encounter ended'),
-                  subtitle: Text(
-                    'Ashfang overwhelmed your character. This result is saved.',
-                  ),
+                  leading: const Icon(Icons.favorite_border),
+                  title: Text(context.l10n.encounterEnded),
+                  subtitle: Text(context.l10n.ashfangOverwhelmed),
                 ),
               )
             else if (playerTurn) ...[
@@ -211,11 +213,11 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
                     ? () => _act(data, battle.attack)
                     : null,
                 icon: const Icon(Icons.gps_fixed),
-                label: const Text('Attack Ashfang'),
+                label: Text(context.l10n.attackAshfang),
               ),
               FilledButton.tonal(
                 onPressed: () => _act(data, battle.endPlayerTurn),
-                child: const Text('End turn'),
+                child: Text(context.l10n.endTurn),
               ),
             ] else if (isLock) ...[
               FilledButton.icon(
@@ -224,7 +226,7 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
                     ? () => _act(data, battle.analyzeWeakNode)
                     : null,
                 icon: const Icon(Icons.search),
-                label: const Text('Analyze Weak Node'),
+                label: Text(context.l10n.analyzeWeakNode),
               ),
               FilledButton.icon(
                 onPressed:
@@ -232,12 +234,12 @@ class _AshfangBattleScreenState extends ConsumerState<AshfangBattleScreen> {
                     ? () => _act(data, battle.interruptWeakNode)
                     : null,
                 icon: const Icon(Icons.bolt),
-                label: const Text('Interrupt LockTarget'),
+                label: Text(context.l10n.interruptLockTarget),
               ),
               if (!battle.knowledge.revealedWeakNodeIds.contains('lock-target'))
                 FilledButton.tonal(
                   onPressed: () => _act(data, battle.resolveEnemyAction),
-                  child: const Text('Resolve Pounce'),
+                  child: Text(context.l10n.resolvePounce),
                 ),
             ],
           ],
@@ -262,7 +264,7 @@ class _UnitCard extends StatelessWidget {
   Widget build(BuildContext context) => Card(
     child: ListTile(
       title: Text(name),
-      subtitle: Text('$detail · HP $hp / $maxHp'),
+      subtitle: Text(context.l10n.unitHpDetail(detail, hp, maxHp)),
       trailing: SizedBox(
         width: 70,
         child: LinearProgressIndicator(value: hp / maxHp),
@@ -270,6 +272,28 @@ class _UnitCard extends StatelessWidget {
     ),
   );
 }
+
+String _outcomeLabel(BuildContext context, String outcome) => switch (outcome) {
+  'victory' => context.l10n.battleOutcomeVictory,
+  'defeat' => context.l10n.battleOutcomeDefeat,
+  _ => context.l10n.battleOutcomeActive,
+};
+
+String _feedbackLabel(
+  BuildContext context,
+  AshfangFeedbackCode code,
+) => switch (code) {
+  AshfangFeedbackCode.guarding => context.l10n.feedbackGuarding,
+  AshfangFeedbackCode.ashfangDefeated => context.l10n.feedbackAshfangDefeated,
+  AshfangFeedbackCode.attackResolved => context.l10n.feedbackAttackResolved,
+  AshfangFeedbackCode.enemyFunctionBegins =>
+    context.l10n.feedbackEnemyFunctionBegins,
+  AshfangFeedbackCode.weakNodeFound =>
+    context.l10n.feedbackWeakNodeFoundLegacy,
+  AshfangFeedbackCode.weakNodeMiss => context.l10n.feedbackWeakNodeMissLegacy,
+  AshfangFeedbackCode.interrupted => context.l10n.feedbackInterruptedLegacy,
+  AshfangFeedbackCode.pounceResolved => context.l10n.feedbackPounceResolved,
+};
 
 final class _BattleData {
   const _BattleData(

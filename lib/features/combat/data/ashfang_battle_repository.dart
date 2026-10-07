@@ -29,7 +29,7 @@ final class AshfangBattleRepository {
       'eventLog': state.eventLog,
       'enemyActionPending': engine.enemyActionPending,
       'analysisAttempts': engine.analysisAttempts,
-      'feedback': engine.feedback,
+      'feedbackCode': engine.feedbackCode.name,
       'analysedNodeIds': engine.knowledge.analysedNodeIds.toList(),
       'revealedWeakNodeIds': engine.knowledge.revealedWeakNodeIds.toList(),
       'activeFunction': engine.activeFunction == null
@@ -116,7 +116,9 @@ final class AshfangBattleRepository {
     );
     engine.enemyActionPending = json['enemyActionPending'] as bool;
     engine.analysisAttempts = json['analysisAttempts'] as int;
-    engine.feedback = json['feedback'] as String;
+    engine.feedbackCode = AshfangFeedbackCode.values.byName(
+      json['feedbackCode'] as String? ?? 'guarding',
+    );
     engine.knowledge = FunctionKnowledge(
       analysedNodeIds: (json['analysedNodeIds'] as List<dynamic>)
           .cast<String>(),

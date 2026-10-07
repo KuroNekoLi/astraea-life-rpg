@@ -587,5 +587,49 @@
     }
   },
   "graphCorrectMove": "Correct — Move directs the effect to its target.",
-  "graphWrongMove": "Not quite. Move is the step that directs the effect to its target."
+  "graphWrongMove": "Not quite. Move is the step that directs the effect to its target.",
+  "functionNodeSemantics": "{node}, {state}",
+  "@functionNodeSemantics": {
+    "placeholders": {
+      "node": {
+        "type": "String"
+      },
+      "state": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceAwaitingPlaytest": "Illustrative inputs · awaiting playtest",
+  "contentVersionStatus": "{version} · {status}",
+  "@contentVersionStatus": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "battleHeroName": "Astraea Hero",
+  "analysisModifierLabel": "Analysis modifier +{modifier}",
+  "@analysisModifierLabel": {
+    "placeholders": {
+      "modifier": {
+        "type": "int"
+      }
+    }
+  },
+  "functionPathLabel": "Function: DetectTarget → LockTarget → Pounce",
+  "battleOutcomeActive": "ACTIVE",
+  "battleOutcomeVictory": "VICTORY",
+  "battleOutcomeDefeat": "DEFEAT",
+  "feedbackGuarding": "Ashfang is guarding the training arena.",
+  "feedbackAshfangDefeated": "Ashfang is defeated. The Weak Node changed the battle.",
+  "feedbackAttackResolved": "Attack resolved through the combat engine.",
+  "feedbackEnemyFunctionBegins": "Ashfang begins DetectTarget → LockTarget → Pounce.",
+  "feedbackWeakNodeFoundLegacy": "Weak Node found. Interrupt LockTarget to cancel Pounce.",
+  "feedbackWeakNodeMissLegacy": "Weak Node not revealed this time. Ashfang resolves Pounce.",
+  "feedbackInterruptedLegacy": "LockTarget interrupted. Downstream Pounce was cancelled.",
+  "feedbackPounceResolved": "Pounce resolved through the combat engine."
 }

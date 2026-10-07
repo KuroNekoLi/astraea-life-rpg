@@ -3,6 +3,17 @@ import '../../../game_engine/function_graph/function_graph.dart';
 import '../../../game_engine/function_graph/function_runtime.dart';
 import '../../../game_engine/rng/rng.dart';
 
+enum AshfangFeedbackCode {
+  guarding,
+  ashfangDefeated,
+  attackResolved,
+  enemyFunctionBegins,
+  weakNodeFound,
+  weakNodeMiss,
+  interrupted,
+  pounceResolved,
+}
+
 /// First playable adapter: all numeric inputs come from versioned encounter content.
 final class AshfangBattleEngine {
   AshfangBattleEngine({
@@ -77,7 +88,7 @@ final class AshfangBattleEngine {
   ActiveFunctionState? activeFunction;
   int analysisAttempts = 0;
   bool enemyActionPending = false;
-  String feedback = 'Ashfang is guarding the training arena.';
+  AshfangFeedbackCode feedbackCode = AshfangFeedbackCode.guarding;
 
   void attack() {
     final result = _combat.resolve(
@@ -90,9 +101,9 @@ final class AshfangBattleEngine {
       ),
     );
     state = result.state;
-    feedback = state.outcome == CombatOutcome.victory
-        ? 'Ashfang is defeated. The Weak Node changed the battle.'
-        : 'Attack resolved through the combat engine.';
+    feedbackCode = state.outcome == CombatOutcome.victory
+        ? AshfangFeedbackCode.ashfangDefeated
+        : AshfangFeedbackCode.attackResolved;
   }
 
   void endPlayerTurn() {
@@ -113,7 +124,7 @@ final class AshfangBattleEngine {
       function: activeFunction!,
       nextNodeId: 'lock-target',
     );
-    feedback = 'Ashfang begins DetectTarget → LockTarget → Pounce.';
+    feedbackCode = AshfangFeedbackCode.enemyFunctionBegins;
   }
 
   bool analyzeWeakNode() {
@@ -131,9 +142,9 @@ final class AshfangBattleEngine {
       rules: rules,
     );
     knowledge = result.knowledge;
-    feedback = result.revealed
-        ? 'Weak Node found. Interrupt LockTarget to cancel Pounce.'
-        : 'Weak Node not revealed this time. Ashfang resolves Pounce.';
+    feedbackCode = result.revealed
+        ? AshfangFeedbackCode.weakNodeFound
+        : AshfangFeedbackCode.weakNodeMiss;
     if (!result.revealed) resolveEnemyAction();
     return result.revealed;
   }
@@ -150,7 +161,7 @@ final class AshfangBattleEngine {
     );
     if (!result.success) return false;
     activeFunction = result.function;
-    feedback = 'LockTarget interrupted. Downstream Pounce was cancelled.';
+    feedbackCode = AshfangFeedbackCode.interrupted;
     _finishEnemyTurn();
     return true;
   }
@@ -167,7 +178,7 @@ final class AshfangBattleEngine {
       ),
     );
     state = result.state;
-    feedback = 'Pounce resolved through the combat engine.';
+    feedbackCode = AshfangFeedbackCode.pounceResolved;
     _finishEnemyTurn();
   }
 

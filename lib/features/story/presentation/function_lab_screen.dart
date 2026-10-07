@@ -11,6 +11,8 @@ import '../../character/data/training_repository.dart';
 import '../../../game_engine/function_graph/function_graph.dart';
 import '../../../game_engine/function_graph/function_runtime.dart';
 import '../../../game_engine/rng/rng.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class FunctionLabScreen extends ConsumerStatefulWidget {
   const FunctionLabScreen({super.key});
@@ -23,8 +25,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
   late Future<_AshfangData> _data;
   FunctionKnowledge _knowledge = FunctionKnowledge();
   ActiveFunctionState? _function;
-  String _feedback =
-      'Ashfang is preparing Pounce. Inspect the Function before it resolves.';
+  String _feedbackCode = 'preparingPounce';
   int _analysisAttempt = 0;
 
   @override
@@ -111,7 +112,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
       if (snapshot.hasError) {
         return Scaffold(
           body: Center(
-            child: Text('Could not load Function: ${snapshot.error}'),
+            child: Text(context.l10n.couldNotLoadFunction('${snapshot.error}')),
           ),
         );
       }
@@ -126,21 +127,27 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
         status: FunctionRuntimeStatus.active,
       );
       return Scaffold(
-        appBar: AppBar(title: const Text('Function Analysis')),
+        appBar: AppBar(title: Text(context.l10n.functionAnalysis)),
         body: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Text(data.enemy, style: Theme.of(context).textTheme.headlineSmall),
+            Text(context.l10n.ashfangTrainingConstruct, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 8),
-            const Text('Enemy Function: DetectTarget → LockTarget → Pounce'),
+            Text(context.l10n.enemyFunctionPath),
             const SizedBox(height: 8),
             Text(
-              'Character Analysis: ${data.effectiveAnalysis} → +${data.analysisModifier} Function analysis modifier',
+              context.l10n.characterAnalysisModifier(
+                data.effectiveAnalysis,
+                data.analysisModifier,
+              ),
             ),
             const SizedBox(height: 16),
             for (final node in data.graph.nodes)
               Semantics(
-                label: '${node.type}, ${_nodeState(node.id, data)}',
+                label: context.l10n.functionNodeSemantics(
+                  localizedFunctionNodeType(context.l10n, node.type),
+                  _nodeState(context, node.id),
+                ),
                 child: Card(
                   color: _knowledge.revealedWeakNodeIds.contains(node.id)
                       ? Theme.of(context).colorScheme.tertiaryContainer
@@ -151,30 +158,30 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
                           ? Icons.visibility
                           : Icons.circle_outlined,
                     ),
-                    title: Text(node.type),
-                    subtitle: Text(_nodeState(node.id, data)),
+                    title: Text(localizedFunctionNodeType(context.l10n, node.type)),
+                    subtitle: Text(_nodeState(context, node.id)),
                   ),
                 ),
               ),
             const SizedBox(height: 8),
-            Text(_feedback, style: Theme.of(context).textTheme.bodyLarge),
+            Text(_feedbackText(context), style: Theme.of(context).textTheme.bodyLarge),
             const SizedBox(height: 16),
             if (_function!.activeNodeId == 'lock-target' &&
                 !_knowledge.revealedWeakNodeIds.contains('lock-target'))
               FilledButton(
                 onPressed: () => _analyze(data),
-                child: const Text('Analyze active Function'),
+                child: Text(context.l10n.analyzeActiveFunction),
               ),
             if (_function!.activeNodeId == 'lock-target' &&
                 _knowledge.revealedWeakNodeIds.contains('lock-target'))
               FilledButton(
                 onPressed: () => _interrupt(data),
-                child: const Text('Interrupt LockTarget'),
+                child: Text(context.l10n.interruptLockTarget),
               ),
             if (_function!.activeNodeId == 'detect-target')
               FilledButton(
                 onPressed: () => _advanceToLock(data),
-                child: const Text('Observe next Function node'),
+                child: Text(context.l10n.observeNextFunctionNode),
               ),
             if (_function!.status != FunctionRuntimeStatus.active)
               OutlinedButton(
@@ -186,14 +193,16 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
                     status: FunctionRuntimeStatus.active,
                   );
                   _knowledge = FunctionKnowledge();
-                  _feedback = 'Ashfang is preparing Pounce again.';
+                  _feedbackCode = 'preparingAgain';
                 }),
-                child: const Text('Reset tutorial pattern'),
+                child: Text(context.l10n.resetTutorialPattern),
               ),
             Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
-                'Content balance: ${data.balanceStatus}',
+                context.l10n.contentBalance(
+                  localizedBalanceStatus(context.l10n, data.balanceStatus),
+                ),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
@@ -203,18 +212,28 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
     },
   );
 
-  String _nodeState(String id, _AshfangData data) {
+  String _nodeState(BuildContext context, String id) {
     if (_function?.cancelledNodeIds.contains(id) ?? false) {
-      return 'Cancelled by Weak Node interruption';
+      return context.l10n.nodeStateCancelled;
     }
     if (_knowledge.revealedWeakNodeIds.contains(id)) {
-      return 'Weak Node revealed · interruptible';
+      return context.l10n.nodeStateWeak;
     }
     if (_function?.activeNodeId == id) {
-      return 'Active Function';
+      return context.l10n.nodeStateActive;
     }
-    return 'Awaiting execution';
+    return context.l10n.nodeStateAwaiting;
   }
+
+  String _feedbackText(BuildContext context) => switch (_feedbackCode) {
+    'preparingAgain' => context.l10n.feedbackPreparingAgain,
+    'lockActive' => context.l10n.feedbackLockActive,
+    'weakFound' => context.l10n.feedbackWeakFound,
+    'analysisMiss' => context.l10n.feedbackAnalysisMiss,
+    'interrupted' => context.l10n.feedbackInterrupted,
+    'interruptFailed' => context.l10n.feedbackInterruptFailed,
+    _ => context.l10n.feedbackPreparingPounce,
+  };
 
   void _advanceToLock(_AshfangData data) => setState(() {
     _function = const FunctionRuntimeEngine().resolveNext(
@@ -222,8 +241,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
       function: _function!,
       nextNodeId: 'lock-target',
     );
-    _feedback =
-        'LockTarget is active. It is interruptible, but its role is not yet analyzed.';
+    _feedbackCode = 'lockActive';
   });
 
   void _analyze(_AshfangData data) {
@@ -241,9 +259,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
       );
       _knowledge = result.knowledge;
       revealed = result.revealed;
-      _feedback = result.revealed
-          ? 'Weak Node found: interrupting LockTarget cancels downstream Pounce.'
-          : 'Analysis did not reveal the node. Try again.';
+      _feedbackCode = result.revealed ? 'weakFound' : 'analysisMiss';
     });
     if (revealed) {
       unawaited(
@@ -264,9 +280,7 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
       );
       _function = result.function;
       exploited = result.success;
-      _feedback = result.success
-          ? 'LockTarget interrupted. Pounce is cancelled.'
-          : 'This Function could not be interrupted.';
+      _feedbackCode = result.success ? 'interrupted' : 'interruptFailed';
     });
     if (exploited) {
       unawaited(
