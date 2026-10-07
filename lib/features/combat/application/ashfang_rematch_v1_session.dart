@@ -46,10 +46,38 @@ final class AshfangRematchV1Session {
     _ashfangTurns = 0;
     state = engine.start(
       combatants: [
-        _actor('hero', BattleSide.player, hp: 220, mana: 100, physical: 20, magic: 18),
-        _actor('rio', BattleSide.player, hp: 180, mana: 120, physical: 18, magic: 22),
-        _actor('yuma', BattleSide.player, hp: 210, mana: 80, physical: 24, magic: 18),
-        _actor('ashfang', BattleSide.enemy, hp: 320, mana: 100, physical: 28, magic: 20),
+        _actor(
+          'hero',
+          BattleSide.player,
+          hp: 220,
+          mana: 100,
+          physical: 20,
+          magic: 18,
+        ),
+        _actor(
+          'rio',
+          BattleSide.player,
+          hp: 180,
+          mana: 120,
+          physical: 18,
+          magic: 22,
+        ),
+        _actor(
+          'yuma',
+          BattleSide.player,
+          hp: 210,
+          mana: 80,
+          physical: 24,
+          magic: 18,
+        ),
+        _actor(
+          'ashfang',
+          BattleSide.enemy,
+          hp: 320,
+          mana: 100,
+          physical: 28,
+          magic: 20,
+        ),
       ],
       initialTurnTimes: const {'hero': 0, 'ashfang': 40, 'rio': 60, 'yuma': 80},
     );
@@ -97,11 +125,7 @@ final class AshfangRematchV1Session {
     }
     state = engine.beginFullChant(
       state,
-      BeginFullChantCommandV1(
-        'hero',
-        spell: _fireballII,
-        targetId: 'ashfang',
-      ),
+      BeginFullChantCommandV1('hero', spell: _fireballII, targetId: 'ashfang'),
     );
     _advanceUntilDecision();
   }
@@ -143,8 +167,9 @@ final class AshfangRematchV1Session {
       throw StateError('No Reaction window');
     }
     final function = enemyCastingFunction!;
-    final weakNodeId =
-        exploitWeakNode && weakNodeRevealed ? 'stabilization' : null;
+    final weakNodeId = exploitWeakNode && weakNodeRevealed
+        ? 'stabilization'
+        : null;
     state = engine.interruptFunction(
       state,
       InterruptFunctionCommandV1(
@@ -216,11 +241,7 @@ final class AshfangRematchV1Session {
 
     state = engine.useAction(
       state,
-      UseActionCommandV1(
-        'ashfang',
-        targetId: 'hero',
-        action: _ashfangClaw,
-      ),
+      UseActionCommandV1('ashfang', targetId: 'hero', action: _ashfangClaw),
     );
     _setTerminalPhaseIfNeeded();
   }

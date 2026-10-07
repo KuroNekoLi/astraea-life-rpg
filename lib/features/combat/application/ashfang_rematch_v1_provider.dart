@@ -9,10 +9,7 @@ final ashfangRematchV1Provider =
     );
 
 final class AshfangRematchV1ViewState {
-  const AshfangRematchV1ViewState({
-    required this.battle,
-    required this.phase,
-  });
+  const AshfangRematchV1ViewState({required this.battle, required this.phase});
 
   factory AshfangRematchV1ViewState.fromSession(
     AshfangRematchV1Session session,
