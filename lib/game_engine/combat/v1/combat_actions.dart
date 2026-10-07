@@ -26,8 +26,7 @@ final class CombatActionDefinitionV1 {
     if (rawDamage > 0 && damageType == null) {
       throw ArgumentError('Damaging actions require a damage type');
     }
-    if (kind == CombatActionKind.guard &&
-        guardDamageReductionPercent == 0) {
+    if (kind == CombatActionKind.guard && guardDamageReductionPercent == 0) {
       throw ArgumentError('Guard must provide damage reduction');
     }
   }

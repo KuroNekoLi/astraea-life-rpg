@@ -92,9 +92,7 @@ final class HeadlessCombatEngineV1 {
           continue;
         }
 
-        final refreshedActor = actor.copyWith(
-          guardDamageReductionPercent: 0,
-        );
+        final refreshedActor = actor.copyWith(guardDamageReductionPercent: 0);
         final actors = _replaceActor(state.combatants, refreshedActor);
         final nextState = BattleStateV1(
           combatants: actors,
@@ -151,10 +149,7 @@ final class HeadlessCombatEngineV1 {
     );
   }
 
-  BattleStateV1 useAction(
-    BattleStateV1 state,
-    UseActionCommandV1 command,
-  ) {
+  BattleStateV1 useAction(BattleStateV1 state, UseActionCommandV1 command) {
     _requireActorTurn(state, command.actorId);
     final action = command.action;
     final actor = state.actor(command.actorId);
@@ -170,10 +165,7 @@ final class HeadlessCombatEngineV1 {
         .toInt();
     units[actor.id] = actor.copyWith(mana: manaAfterRecovery);
 
-    final log = <String>[
-      ...state.eventLog,
-      'action:${actor.id}:${action.id}',
-    ];
+    final log = <String>[...state.eventLog, 'action:${actor.id}:${action.id}'];
 
     if (action.dealsDamage) {
       final targetId = command.targetId;
@@ -195,15 +187,11 @@ final class HeadlessCombatEngineV1 {
         target,
       );
       final finalDamage = _applyGuard(resisted, target);
-      final hpAfter = (target.hp - finalDamage)
-          .clamp(0, target.maxHp)
-          .toInt();
+      final hpAfter = (target.hp - finalDamage).clamp(0, target.maxHp).toInt();
       final defeated = hpAfter == 0;
       units[target.id] = target.copyWith(
         hp: hpAfter,
-        condition: defeated
-            ? CombatantCondition.defeated
-            : target.condition,
+        condition: defeated ? CombatantCondition.defeated : target.condition,
       );
       log.add('damage:${actor.id}:${target.id}:$finalDamage');
       if (defeated) {
@@ -217,9 +205,7 @@ final class HeadlessCombatEngineV1 {
       units[actor.id] = units[actor.id]!.copyWith(
         guardDamageReductionPercent: action.guardDamageReductionPercent,
       );
-      log.add(
-        'guarded:${actor.id}:${action.guardDamageReductionPercent}',
-      );
+      log.add('guarded:${actor.id}:${action.guardDamageReductionPercent}');
     }
 
     var timeline = state.timeline
@@ -303,8 +289,7 @@ final class HeadlessCombatEngineV1 {
 
   static int _applyGuard(int damage, CombatantStateV1 target) {
     if (target.guardDamageReductionPercent == 0) return damage;
-    return (damage * (100 - target.guardDamageReductionPercent) / 100)
-        .round();
+    return (damage * (100 - target.guardDamageReductionPercent) / 100).round();
   }
 
   static CombatOutcome _outcome(Iterable<CombatantStateV1> actors) {

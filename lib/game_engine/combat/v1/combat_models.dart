@@ -115,10 +115,7 @@ final class ActiveTurnV1 {
   final bool moveUsed;
 
   ActiveTurnV1 copyWith({bool? moveUsed}) {
-    return ActiveTurnV1(
-      actorId: actorId,
-      moveUsed: moveUsed ?? this.moveUsed,
-    );
+    return ActiveTurnV1(actorId: actorId, moveUsed: moveUsed ?? this.moveUsed);
   }
 }
 
@@ -164,9 +161,7 @@ final class BattleStateV1 {
     return combatants.firstWhere((actor) => actor.id == id);
   }
 
-  static List<TimelineEventV1> _sorted(
-    Iterable<TimelineEventV1> events,
-  ) {
+  static List<TimelineEventV1> _sorted(Iterable<TimelineEventV1> events) {
     final sorted = events.toList()
       ..sort((a, b) {
         final byTime = a.scheduledAt.compareTo(b.scheduledAt);

@@ -48,8 +48,7 @@ BattleStateV1 battle({
 }) {
   return const HeadlessCombatEngineV1().start(
     combatants: [player ?? hero(), enemy ?? ashfang()],
-    initialTurnTimes:
-        initialTurnTimes ?? const {'hero': 0, 'ashfang': 20},
+    initialTurnTimes: initialTurnTimes ?? const {'hero': 0, 'ashfang': 20},
   );
 }
 
@@ -63,10 +62,7 @@ void main() {
         initialTurnTimes: const {'hero': 0, 'ashfang': 0},
       );
 
-      expect(state.timeline.map((event) => event.actorId), [
-        'hero',
-        'ashfang',
-      ]);
+      expect(state.timeline.map((event) => event.actorId), ['hero', 'ashfang']);
     });
 
     test('Main Action ends the turn and reschedules by Action Delay', () {
@@ -180,9 +176,7 @@ void main() {
     });
 
     test('cannot start an action without its full Mana cost', () {
-      final started = engine.advance(
-        battle(player: hero(mana: 10)),
-      ).state;
+      final started = engine.advance(battle(player: hero(mana: 10))).state;
 
       expect(
         () => engine.useAction(
@@ -249,9 +243,9 @@ void main() {
 
   group('Near / Mid / Far movement', () {
     test('Normal Move allows one adjacent Zone and does not advance time', () {
-      final started = engine.advance(
-        battle(player: hero(zone: BattleZone.far)),
-      ).state;
+      final started = engine
+          .advance(battle(player: hero(zone: BattleZone.far)))
+          .state;
       final moved = engine.move(
         started,
         const MoveCommandV1('hero', destination: BattleZone.mid),
@@ -284,9 +278,9 @@ void main() {
     });
 
     test('action range rejects a target outside allowed Zones', () {
-      final started = engine.advance(
-        battle(enemy: ashfang(zone: BattleZone.far)),
-      ).state;
+      final started = engine
+          .advance(battle(enemy: ashfang(zone: BattleZone.far)))
+          .state;
 
       expect(
         () => engine.useAction(
@@ -310,9 +304,7 @@ void main() {
   });
 
   test('defeating the final enemy removes its turns and ends battle', () {
-    final started = engine.advance(
-      battle(enemy: ashfang(hp: 30)),
-    ).state;
+    final started = engine.advance(battle(enemy: ashfang(hp: 30))).state;
     final result = engine.useAction(
       started,
       UseActionCommandV1(
