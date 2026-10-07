@@ -575,40 +575,40 @@ class _ContextPanel extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-          Text(
-            context.l10n.combatCurrentActor,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AstraeaColors.muted,
-              letterSpacing: 1.2,
-            ),
+              Text(
+                context.l10n.combatCurrentActor,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: AstraeaColors.muted,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                _actorName(context, actorId),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 6),
+              Text(context.l10n.combatHp(actor.hp, actor.maxHp)),
+              Text(context.l10n.combatMana(actor.mana, actor.maxMana)),
+              Text(
+                actor.reactionAvailable
+                    ? context.l10n.combatReactionReady
+                    : context.l10n.combatReactionSpent,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: actor.reactionAvailable
+                      ? AstraeaColors.gold
+                      : AstraeaColors.muted,
+                ),
+              ),
+              SizedBox(height: compact ? 6 : 14),
+              _RootCommands(stage: view.stage, compact: compact),
+              SizedBox(height: compact ? 6 : 14),
+              Expanded(
+                child: _StageAction(view: view, controller: controller),
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            _actorName(context, actorId),
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 6),
-          Text(context.l10n.combatHp(actor.hp, actor.maxHp)),
-          Text(context.l10n.combatMana(actor.mana, actor.maxMana)),
-          Text(
-            actor.reactionAvailable
-                ? context.l10n.combatReactionReady
-                : context.l10n.combatReactionSpent,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: actor.reactionAvailable
-                  ? AstraeaColors.gold
-                  : AstraeaColors.muted,
-            ),
-          ),
-            SizedBox(height: compact ? 6 : 14),
-            _RootCommands(stage: view.stage, compact: compact),
-            SizedBox(height: compact ? 6 : 14),
-            Expanded(
-              child: _StageAction(view: view, controller: controller),
-            ),
-          ],
-        ),
-      );
+        );
       },
     );
   }
@@ -653,9 +653,7 @@ class _RootCommands extends StatelessWidget {
                 item.$2,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: compact
-                    ? Theme.of(context).textTheme.labelSmall
-                    : null,
+                style: compact ? Theme.of(context).textTheme.labelSmall : null,
               ),
               style: OutlinedButton.styleFrom(
                 visualDensity: compact
@@ -1015,41 +1013,41 @@ class _EndPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-          Text(
-            victory
-                ? context.l10n.combatVictoryTitle
-                : context.l10n.combatDefeatTitle,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: victory
-                  ? AstraeaColors.gold
-                  : Theme.of(context).colorScheme.error,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            victory
-                ? context.l10n.combatVictoryBody
-                : context.l10n.combatDefeatBody,
-          ),
-          const SizedBox(height: 14),
-          if (victory) ...[
-            FilledButton.icon(
-              onPressed: () => context.go('/battle/ashfang/rematch'),
-              icon: const Icon(Icons.sports_esports_outlined),
-              label: Text(context.l10n.combatFreePractice),
+            Text(
+              victory
+                  ? context.l10n.combatVictoryTitle
+                  : context.l10n.combatDefeatTitle,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: victory
+                    ? AstraeaColors.gold
+                    : Theme.of(context).colorScheme.error,
+              ),
             ),
             const SizedBox(height: 8),
+            Text(
+              victory
+                  ? context.l10n.combatVictoryBody
+                  : context.l10n.combatDefeatBody,
+            ),
+            const SizedBox(height: 14),
+            if (victory) ...[
+              FilledButton.icon(
+                onPressed: () => context.go('/battle/ashfang/rematch'),
+                icon: const Icon(Icons.sports_esports_outlined),
+                label: Text(context.l10n.combatFreePractice),
+              ),
+              const SizedBox(height: 8),
+            ],
+            OutlinedButton(
+              onPressed: controller.reset,
+              child: Text(context.l10n.combatRestart),
+            ),
+            TextButton(
+              onPressed: () => context.go('/adventure'),
+              child: Text(context.l10n.combatReturnAdventure),
+            ),
           ],
-          OutlinedButton(
-            onPressed: controller.reset,
-            child: Text(context.l10n.combatRestart),
-          ),
-          TextButton(
-            onPressed: () => context.go('/adventure'),
-            child: Text(context.l10n.combatReturnAdventure),
-          ),
-        ],
-      ),
+        ),
       ),
     );
   }
