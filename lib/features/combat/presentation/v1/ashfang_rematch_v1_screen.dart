@@ -144,11 +144,21 @@ class _RematchBattlefield extends StatelessWidget {
   Widget build(BuildContext context) {
     final enemyCasting = view.enemyCastingFunction != null;
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [Color(0xFF102647), Color(0xFF071426)],
+        ),
+        image: DecorationImage(
+          image: const AssetImage(
+            'assets/images/combat/combat_bg_astraea_training_hall_v01.webp',
+          ),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            AstraeaColors.night.withValues(alpha: 0.34),
+            BlendMode.darken,
+          ),
         ),
       ),
       child: Column(
@@ -235,6 +245,8 @@ class _RematchBattlefield extends StatelessWidget {
                     actor: view.battle.actor('ashfang'),
                     icon: Icons.pets,
                     hostile: true,
+                    assetPath:
+                        'assets/images/combat/enemy_ashfang_training_v01.webp',
                   ),
                 ),
                 if (enemyCasting)
@@ -298,12 +310,14 @@ class _BattleActor extends StatelessWidget {
     required this.actor,
     required this.icon,
     this.hostile = false,
+    this.assetPath,
   });
 
   final String name;
   final CombatantStateV1 actor;
   final IconData icon;
   final bool hostile;
+  final String? assetPath;
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +325,7 @@ class _BattleActor extends StatelessWidget {
         ? Theme.of(context).colorScheme.error
         : AstraeaColors.starlight;
     return Container(
-      width: 116,
+      width: hostile ? 166 : 116,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AstraeaColors.panel.withValues(alpha: 0.88),
@@ -321,7 +335,18 @@ class _BattleActor extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: accent, size: 30),
+          if (assetPath != null)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                assetPath!,
+                height: 82,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            )
+          else
+            Icon(icon, color: accent, size: 30),
           const SizedBox(height: 6),
           Text(
             name,

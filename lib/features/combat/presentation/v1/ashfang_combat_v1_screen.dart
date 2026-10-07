@@ -169,11 +169,21 @@ class _Battlefield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [Color(0xFF102647), Color(0xFF071426)],
+        ),
+        image: DecorationImage(
+          image: const AssetImage(
+            'assets/images/combat/combat_bg_astraea_training_hall_v01.webp',
+          ),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            AstraeaColors.night.withValues(alpha: 0.34),
+            BlendMode.darken,
+          ),
         ),
       ),
       child: Column(
@@ -233,6 +243,8 @@ class _Battlefield extends StatelessWidget {
                     active: view.battle.activeTurn?.actorId == 'ashfang',
                     hostile: true,
                     casting: view.enemyCastingFunction != null,
+                    assetPath:
+                        'assets/images/combat/enemy_ashfang_training_v01.webp',
                   ),
                 ),
                 if (view.enemyCastingFunction != null)
@@ -320,6 +332,7 @@ class _ActorToken extends StatelessWidget {
     required this.active,
     this.hostile = false,
     this.casting = false,
+    this.assetPath,
   });
 
   final String name;
@@ -328,6 +341,7 @@ class _ActorToken extends StatelessWidget {
   final bool active;
   final bool hostile;
   final bool casting;
+  final String? assetPath;
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +352,7 @@ class _ActorToken extends StatelessWidget {
         : AstraeaColors.starlight;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 220),
-      width: 118,
+      width: hostile ? 166 : 118,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AstraeaColors.panel.withValues(alpha: 0.88),
@@ -355,7 +369,18 @@ class _ActorToken extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: accent, size: 30),
+          if (assetPath != null)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                assetPath!,
+                height: 82,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            )
+          else
+            Icon(icon, color: accent, size: 30),
           const SizedBox(height: 6),
           Text(
             name,
