@@ -6,12 +6,14 @@ import 'combat_models.dart';
 /// M1: Timeline, Move, Main Action, Mana, damage/resistance, Guard and KO.
 /// M2: Full Chant / Chantless lifecycle and recovery.
 /// M3: Quick Actions, Reaction charges and deterministic Interrupt/Stability.
+/// M4: Analysis, Function Knowledge, Weak Nodes and active-Function Counter.
 final class HeadlessCombatEngineV1 {
   const HeadlessCombatEngineV1();
 
   BattleStateV1 start({
     required Iterable<CombatantStateV1> combatants,
     required Map<String, int> initialTurnTimes,
+    Iterable<FunctionKnowledgeV1> initialKnowledge = const [],
   }) {
     final actors = combatants.toList(growable: false);
     final ids = actors.map((actor) => actor.id).toSet();
@@ -40,6 +42,7 @@ final class HeadlessCombatEngineV1 {
       currentTime: 0,
       nextSequence: sequence,
       revision: 0,
+      functionKnowledge: initialKnowledge,
     );
   }
 
@@ -70,6 +73,7 @@ final class HeadlessCombatEngineV1 {
       combatants: state.combatants,
       timeline: [...state.timeline, event],
       activeFunctions: state.activeFunctions,
+      functionKnowledge: state.functionKnowledge,
       currentTime: state.currentTime,
       nextSequence: state.nextSequence + 1,
       revision: state.revision + 1,
@@ -145,6 +149,7 @@ final class HeadlessCombatEngineV1 {
       combatants: _replaceActor(state.combatants, moved),
       timeline: state.timeline,
       activeFunctions: state.activeFunctions,
+      functionKnowledge: state.functionKnowledge,
       currentTime: state.currentTime,
       nextSequence: state.nextSequence,
       revision: state.revision + 1,
@@ -237,6 +242,7 @@ final class HeadlessCombatEngineV1 {
       combatants: _replaceActor(state.combatants, paidActor),
       timeline: state.timeline,
       activeFunctions: state.activeFunctions,
+      functionKnowledge: state.functionKnowledge,
       currentTime: state.currentTime,
       nextSequence: state.nextSequence,
       revision: state.revision + 1,
@@ -305,10 +311,28 @@ final class HeadlessCombatEngineV1 {
       activeTurn = null;
     }
 
-    final success = command.interrupt.interruptPower >= function.stability;
+    var weakNodeBonus = 0;
+    if (command.weakNodeId != null) {
+      final knowledge = state.knowledgeFor(
+        interrupter.id,
+        function.actionId,
+      );
+      if (knowledge == null ||
+          !knowledge.revealedWeakNodeIds.contains(command.weakNodeId)) {
+        throw StateError('Weak Node has not been revealed to this combatant');
+      }
+      final bonus = function.weakNodeInterruptBonuses[command.weakNodeId];
+      if (bonus == null) {
+        throw StateError('Weak Node is not valid for this Function');
+      }
+      weakNodeBonus = bonus;
+    }
+    final effectiveInterruptPower =
+        command.interrupt.interruptPower + weakNodeBonus;
+    final success = effectiveInterruptPower >= function.stability;
     final log = <String>[
       ...state.eventLog,
-      'interruptAttempt:${interrupter.id}:${function.id}',
+      'interruptAttempt:${interrupter.id}:${function.id}:ip=$effectiveInterruptPower',
     ];
 
     if (success) {
@@ -379,12 +403,191 @@ final class HeadlessCombatEngineV1 {
       combatants: units.values,
       timeline: timeline,
       activeFunctions: functions,
+      functionKnowledge: state.functionKnowledge,
       currentTime: state.currentTime,
       nextSequence: nextSequence,
       revision: state.revision + 1,
       activeTurn: activeTurn,
-      outcome: state.outcome,
+      outcome: _outcome(units.values, functions),
       eventLog: log,
+    );
+  }
+
+  BattleStateV1 analyzeFunction(
+    BattleStateV1 state,
+    AnalyzeFunctionCommandV1 command,
+  ) {
+    _requireActorTurn(state, command.actorId);
+    final analyst = state.actor(command.actorId);
+    final function = state.function(command.functionId);
+    final caster = state.actor(function.casterId);
+    if (analyst.side == caster.side) {
+      throw StateError('Analysis target must be an opposing Function');
+    }
+    if (analyst.mana < command.analysis.manaCost) {
+      throw StateError('Insufficient Mana');
+    }
+
+    final existing =
+        state.knowledgeFor(analyst.id, function.actionId) ??
+        FunctionKnowledgeV1(
+          observerId: analyst.id,
+          signatureId: function.actionId,
+        );
+    var level = existing.level;
+    if (command.analysis.revealLevel.index > level.index) {
+      level = command.analysis.revealLevel;
+    }
+    if (command.analysis.revealWeakNodes &&
+        FunctionKnowledgeLevelV1.weakNode.index > level.index) {
+      level = FunctionKnowledgeLevelV1.weakNode;
+    }
+    if (command.analysis.revealCounterPath &&
+        FunctionKnowledgeLevelV1.counterPath.index > level.index) {
+      level = FunctionKnowledgeLevelV1.counterPath;
+    }
+
+    final updatedKnowledge = existing.copyWith(
+      level: level,
+      knownStability: command.analysis.revealStability
+          ? function.stability
+          : existing.knownStability,
+      revealedWeakNodeIds: command.analysis.revealWeakNodes
+          ? {
+              ...existing.revealedWeakNodeIds,
+              ...function.weakNodeInterruptBonuses.keys,
+            }
+          : existing.revealedWeakNodeIds,
+      knownCounterTags: command.analysis.revealCounterPath
+          ? {...existing.knownCounterTags, ...function.counterTags}
+          : existing.knownCounterTags,
+      reversibilityKnown: command.analysis.revealCounterPath
+          ? function.reversible
+          : existing.reversibilityKnown,
+    );
+    final knowledge = _upsertKnowledge(
+      state.functionKnowledge,
+      updatedKnowledge,
+    );
+    final units = {for (final unit in state.combatants) unit.id: unit};
+    units[analyst.id] = analyst.copyWith(
+      mana: analyst.mana - command.analysis.manaCost,
+    );
+    return _finishMainAction(
+      state,
+      units: units,
+      actionDelay: command.analysis.actionDelay,
+      log: [
+        ...state.eventLog,
+        'analysis:${analyst.id}:${function.id}:${level.name}',
+      ],
+      functionKnowledge: knowledge,
+    );
+  }
+
+  BattleStateV1 counterFunction(
+    BattleStateV1 state,
+    CounterFunctionCommandV1 command,
+  ) {
+    _ensureBattleActive(state);
+    final function = state.function(command.functionId);
+    if (function.status != ActiveFunctionStatusV1.active ||
+        state.currentTime >= function.resolveAt) {
+      throw StateError('Counter window is closed');
+    }
+
+    final counterUser = state.actor(command.actorId);
+    final caster = state.actor(function.casterId);
+    if (!counterUser.isActive || counterUser.side == caster.side) {
+      throw StateError('Counter must target an opposing active Function');
+    }
+    if (counterUser.mana < command.counter.manaCost) {
+      throw StateError('Insufficient Mana');
+    }
+    if (command.counter.requiresReversibility && !function.reversible) {
+      throw StateError('Function is not reversible');
+    }
+    if (command.counter.compatibleTags.intersection(function.counterTags).isEmpty) {
+      throw StateError('Counter is not compatible with this Function');
+    }
+    if (command.counter.requiresCounterPath) {
+      final knowledge = state.knowledgeFor(
+        counterUser.id,
+        function.actionId,
+      );
+      if (knowledge == null ||
+          knowledge.level.index < FunctionKnowledgeLevelV1.counterPath.index ||
+          knowledge.knownCounterTags
+              .intersection(function.counterTags)
+              .isEmpty) {
+        throw StateError('Counter path has not been established');
+      }
+      if (command.counter.requiresReversibility &&
+          !knowledge.reversibilityKnown) {
+        throw StateError('Reversibility has not been established');
+      }
+    }
+
+    final units = {for (final unit in state.combatants) unit.id: unit};
+    var activeTurn = state.activeTurn;
+    if (command.asReaction) {
+      if (!counterUser.reactionAvailable) {
+        throw StateError('Reaction charge is not available');
+      }
+      if (function.reactionConsumed) {
+        throw StateError('This trigger window already resolved a Party Reaction');
+      }
+      if (state.castingFunctionFor(counterUser.id) != null &&
+          !command.counter.castingCompatible) {
+        throw StateError('Reaction is not Casting-Compatible');
+      }
+      units[counterUser.id] = counterUser.copyWith(
+        mana: counterUser.mana - command.counter.manaCost,
+        reactionAvailable: false,
+      );
+    } else {
+      _requireActorTurn(state, command.actorId);
+      units[counterUser.id] = counterUser.copyWith(
+        mana: counterUser.mana - command.counter.manaCost,
+      );
+      activeTurn = null;
+    }
+
+    var timeline = state.timeline
+        .where((event) => event.functionId != function.id)
+        .toList();
+    final functions = state.activeFunctions
+        .where((candidate) => candidate.id != function.id)
+        .toList();
+    var nextSequence = state.nextSequence;
+    if (!command.asReaction && units[counterUser.id]!.isActive) {
+      timeline.add(
+        TimelineEventV1(
+          id: 'turn:${counterUser.id}:$nextSequence',
+          type: TimelineEventType.characterTurn,
+          scheduledAt: state.currentTime + command.counter.actionDelay,
+          sequence: nextSequence,
+          actorId: counterUser.id,
+        ),
+      );
+      nextSequence++;
+    }
+
+    final outcome = _outcome(units.values, functions);
+    return BattleStateV1(
+      combatants: units.values,
+      timeline: timeline,
+      activeFunctions: functions,
+      functionKnowledge: state.functionKnowledge,
+      currentTime: state.currentTime,
+      nextSequence: nextSequence,
+      revision: state.revision + 1,
+      activeTurn: activeTurn,
+      outcome: outcome,
+      eventLog: [
+        ...state.eventLog,
+        'countered:${counterUser.id}:${function.id}:${command.counter.id}',
+      ],
     );
   }
 
@@ -420,6 +623,10 @@ final class HeadlessCombatEngineV1 {
       startedAt: state.currentTime,
       resolveAt: resolveAt,
       recoveryDelay: spell.recoveryDelay,
+      executionDelay: spell.executionDelay,
+      weakNodeInterruptBonuses: spell.weakNodeInterruptBonuses,
+      reversible: spell.reversible,
+      counterTags: spell.counterTags,
     );
     final event = TimelineEventV1(
       id: 'resolve:$functionId',
@@ -435,6 +642,7 @@ final class HeadlessCombatEngineV1 {
       combatants: _replaceActor(state.combatants, paidActor),
       timeline: [...state.timeline, event],
       activeFunctions: [...state.activeFunctions, function],
+      functionKnowledge: state.functionKnowledge,
       currentTime: state.currentTime,
       nextSequence: state.nextSequence + 1,
       revision: state.revision + 1,
@@ -484,6 +692,7 @@ final class HeadlessCombatEngineV1 {
       combatants: _replaceActor(state.combatants, refundedActor),
       timeline: timeline,
       activeFunctions: functions,
+      functionKnowledge: state.functionKnowledge,
       currentTime: state.currentTime,
       nextSequence: nextSequence,
       revision: state.revision + 1,
@@ -507,80 +716,91 @@ final class HeadlessCombatEngineV1 {
     if (event.scheduledAt != state.currentTime) {
       throw StateError('Timeline event is not ready at the current time');
     }
-    if (event.type != TimelineEventType.spellResolve) {
+    if (event.functionId == null) {
       return state;
     }
 
-    final functionId = event.functionId!;
-    final function = state.function(functionId);
-    if (function.status != ActiveFunctionStatusV1.casting) {
-      throw StateError('Only a casting Function can resolve');
-    }
-
-    final units = {for (final unit in state.combatants) unit.id: unit};
-    final caster = units[function.casterId]!;
-    final target = units[function.targetId]!;
-    final log = <String>[...state.eventLog];
-    if (caster.isActive &&
-        target.isActive &&
-        _targetIsInRange(target, function.targetZones)) {
-      final resisted = _applyResistance(
-        function.rawDamage,
-        function.damageType,
-        target,
-      );
-      final damage = _applyGuard(resisted, target);
-      final hpAfter = (target.hp - damage).clamp(0, target.maxHp).toInt();
-      final defeated = hpAfter == 0;
-      units[target.id] = target.copyWith(
-        hp: hpAfter,
-        condition: defeated ? CombatantCondition.defeated : target.condition,
-      );
-      log.add('fullChantResolved:${caster.id}:${function.actionId}');
-      log.add('damage:${caster.id}:${target.id}:$damage');
-      if (defeated) {
-        log.add('defeated:${target.id}');
+    final function = state.function(event.functionId!);
+    if (event.type == TimelineEventType.spellResolve) {
+      if (function.status != ActiveFunctionStatusV1.casting) {
+        throw StateError('Only a casting Function can become established');
       }
-    } else {
-      log.add('fullChantFailed:${caster.id}:${function.actionId}');
-    }
+      final caster = state.actor(function.casterId);
+      final target = state.actor(function.targetId);
+      if (!caster.isActive ||
+          !target.isActive ||
+          !_targetIsInRange(target, function.targetZones)) {
+        return _finishFailedFunction(state, function);
+      }
 
-    final functions = state.activeFunctions
-        .where((candidate) => candidate.id != function.id)
-        .toList();
-    final outcome = _outcome(units.values);
-    final timeline = state.timeline
-        .where(
-          (pending) =>
-              pending.type != TimelineEventType.characterTurn ||
-              pending.actorId == null ||
-              units[pending.actorId]?.isActive != false,
-        )
-        .toList();
-    var nextSequence = state.nextSequence;
-    if (outcome == CombatOutcome.active && units[caster.id]!.isActive) {
-      timeline.add(
-        TimelineEventV1(
-          id: 'turn:${caster.id}:$nextSequence',
-          type: TimelineEventType.characterTurn,
-          scheduledAt: state.currentTime + function.recoveryDelay,
-          sequence: nextSequence,
-          actorId: caster.id,
-        ),
+      if (function.executionDelay > 0) {
+        final effectAt = state.currentTime + function.executionDelay;
+        final established = function.copyWith(
+          status: ActiveFunctionStatusV1.active,
+          resolveAt: effectAt,
+          reactionConsumed: false,
+        );
+        final functions = [
+          for (final candidate in state.activeFunctions)
+            if (candidate.id == function.id) established else candidate,
+        ];
+        final timeline = [
+          ...state.timeline,
+          TimelineEventV1(
+            id: 'effect:${function.id}',
+            type: TimelineEventType.battlefieldFunction,
+            scheduledAt: effectAt,
+            sequence: state.nextSequence,
+            actorId: function.casterId,
+            functionId: function.id,
+          ),
+        ];
+        var nextSequence = state.nextSequence + 1;
+        if (caster.isActive) {
+          timeline.add(
+            TimelineEventV1(
+              id: 'turn:${caster.id}:$nextSequence',
+              type: TimelineEventType.characterTurn,
+              scheduledAt: state.currentTime + function.recoveryDelay,
+              sequence: nextSequence,
+              actorId: caster.id,
+            ),
+          );
+          nextSequence++;
+        }
+        return BattleStateV1(
+          combatants: state.combatants,
+          timeline: timeline,
+          activeFunctions: functions,
+          functionKnowledge: state.functionKnowledge,
+          currentTime: state.currentTime,
+          nextSequence: nextSequence,
+          revision: state.revision + 1,
+          outcome: _outcome(state.combatants, functions),
+          eventLog: [
+            ...state.eventLog,
+            'functionEstablished:${function.casterId}:${function.actionId}',
+          ],
+        );
+      }
+      return _resolveFunctionEffect(
+        state,
+        function,
+        scheduleCasterRecovery: true,
       );
-      nextSequence++;
     }
 
-    return BattleStateV1(
-      combatants: units.values,
-      timeline: timeline,
-      activeFunctions: functions,
-      currentTime: state.currentTime,
-      nextSequence: nextSequence,
-      revision: state.revision + 1,
-      outcome: outcome,
-      eventLog: log,
-    );
+    if (event.type == TimelineEventType.battlefieldFunction) {
+      if (function.status != ActiveFunctionStatusV1.active) {
+        throw StateError('Only an active Function can resolve its effect');
+      }
+      return _resolveFunctionEffect(
+        state,
+        function,
+        scheduleCasterRecovery: false,
+      );
+    }
+    return state;
   }
 
   int previewDamage({
@@ -599,18 +819,26 @@ final class HeadlessCombatEngineV1 {
     required Map<String, CombatantStateV1> units,
     required int actionDelay,
     required List<String> log,
+    Iterable<FunctionKnowledgeV1>? functionKnowledge,
   }) {
+    final functions = state.activeFunctions.where((function) {
+      final casterActive = units[function.casterId]?.isActive == true;
+      return casterActive || function.status == ActiveFunctionStatusV1.active;
+    }).toList();
+    final validFunctionIds = functions.map((function) => function.id).toSet();
     var timeline = state.timeline
         .where(
           (event) =>
-              event.type != TimelineEventType.characterTurn ||
-              event.actorId == null ||
-              units[event.actorId]?.isActive != false,
+              (event.functionId == null ||
+                  validFunctionIds.contains(event.functionId)) &&
+              (event.type != TimelineEventType.characterTurn ||
+                  event.actorId == null ||
+                  units[event.actorId]?.isActive != false),
         )
         .toList();
 
     final actorId = state.activeTurn!.actorId;
-    final outcome = _outcome(units.values);
+    final outcome = _outcome(units.values, functions);
     var nextSequence = state.nextSequence;
     if (outcome == CombatOutcome.active && units[actorId]!.isActive) {
       timeline.add(
@@ -628,13 +856,150 @@ final class HeadlessCombatEngineV1 {
     return BattleStateV1(
       combatants: units.values,
       timeline: timeline,
-      activeFunctions: state.activeFunctions,
+      activeFunctions: functions,
+      functionKnowledge: functionKnowledge ?? state.functionKnowledge,
       currentTime: state.currentTime,
       nextSequence: nextSequence,
       revision: state.revision + 1,
       outcome: outcome,
       eventLog: log,
     );
+  }
+
+  BattleStateV1 _finishFailedFunction(
+    BattleStateV1 state,
+    ActiveFunctionV1 function,
+  ) {
+    final functions = state.activeFunctions
+        .where((candidate) => candidate.id != function.id)
+        .toList();
+    final timeline = state.timeline
+        .where((event) => event.functionId != function.id)
+        .toList();
+    var nextSequence = state.nextSequence;
+    final caster = state.actor(function.casterId);
+    if (caster.isActive) {
+      timeline.add(
+        TimelineEventV1(
+          id: 'turn:${caster.id}:$nextSequence',
+          type: TimelineEventType.characterTurn,
+          scheduledAt: state.currentTime + function.recoveryDelay,
+          sequence: nextSequence,
+          actorId: caster.id,
+        ),
+      );
+      nextSequence++;
+    }
+    return BattleStateV1(
+      combatants: state.combatants,
+      timeline: timeline,
+      activeFunctions: functions,
+      functionKnowledge: state.functionKnowledge,
+      currentTime: state.currentTime,
+      nextSequence: nextSequence,
+      revision: state.revision + 1,
+      outcome: _outcome(state.combatants, functions),
+      eventLog: [
+        ...state.eventLog,
+        'functionFailed:${function.casterId}:${function.actionId}',
+      ],
+    );
+  }
+
+  BattleStateV1 _resolveFunctionEffect(
+    BattleStateV1 state,
+    ActiveFunctionV1 function, {
+    required bool scheduleCasterRecovery,
+  }) {
+    final units = {for (final unit in state.combatants) unit.id: unit};
+    final target = units[function.targetId]!;
+    final caster = units[function.casterId]!;
+    final log = <String>[...state.eventLog];
+
+    if (target.isActive && _targetIsInRange(target, function.targetZones)) {
+      final resisted = _applyResistance(
+        function.rawDamage,
+        function.damageType,
+        target,
+      );
+      final damage = _applyGuard(resisted, target);
+      final hpAfter = (target.hp - damage).clamp(0, target.maxHp).toInt();
+      final defeated = hpAfter == 0;
+      units[target.id] = target.copyWith(
+        hp: hpAfter,
+        condition: defeated ? CombatantCondition.defeated : target.condition,
+      );
+      log
+        ..add('functionResolved:${caster.id}:${function.actionId}')
+        ..add('damage:${caster.id}:${target.id}:$damage');
+      if (defeated) {
+        log.add('defeated:${target.id}');
+      }
+    } else {
+      log.add('functionFailed:${caster.id}:${function.actionId}');
+    }
+
+    final functions = state.activeFunctions
+        .where((candidate) => candidate.id != function.id)
+        .toList();
+    final outcome = _outcome(units.values, functions);
+    final timeline = state.timeline
+        .where(
+          (pending) =>
+              pending.functionId != function.id &&
+              (pending.type != TimelineEventType.characterTurn ||
+                  pending.actorId == null ||
+                  units[pending.actorId]?.isActive != false),
+        )
+        .toList();
+    var nextSequence = state.nextSequence;
+    if (scheduleCasterRecovery &&
+        outcome == CombatOutcome.active &&
+        units[caster.id]!.isActive) {
+      timeline.add(
+        TimelineEventV1(
+          id: 'turn:${caster.id}:$nextSequence',
+          type: TimelineEventType.characterTurn,
+          scheduledAt: state.currentTime + function.recoveryDelay,
+          sequence: nextSequence,
+          actorId: caster.id,
+        ),
+      );
+      nextSequence++;
+    }
+
+    return BattleStateV1(
+      combatants: units.values,
+      timeline: timeline,
+      activeFunctions: functions,
+      functionKnowledge: state.functionKnowledge,
+      currentTime: state.currentTime,
+      nextSequence: nextSequence,
+      revision: state.revision + 1,
+      outcome: outcome,
+      eventLog: log,
+    );
+  }
+
+  static List<FunctionKnowledgeV1> _upsertKnowledge(
+    Iterable<FunctionKnowledgeV1> entries,
+    FunctionKnowledgeV1 updated,
+  ) {
+    final result = <FunctionKnowledgeV1>[];
+    var replaced = false;
+    for (final entry in entries) {
+      if (entry.observerId == updated.observerId &&
+          entry.signatureId == updated.signatureId) {
+        result.add(updated);
+        replaced = true;
+      } else {
+        result.add(entry);
+      }
+    }
+    if (!replaced) {
+      result.add(updated);
+    }
+    return result;
   }
 
   ActiveTurnV1 _requireActorTurn(BattleStateV1 state, String actorId) {
@@ -695,15 +1060,30 @@ final class HeadlessCombatEngineV1 {
     return (damage * (100 - target.guardDamageReductionPercent) / 100).round();
   }
 
-  static CombatOutcome _outcome(Iterable<CombatantStateV1> actors) {
-    final playerAlive = actors.any(
-      (actor) => actor.side == BattleSide.player && actor.isActive,
-    );
-    final enemyAlive = actors.any(
-      (actor) => actor.side == BattleSide.enemy && actor.isActive,
-    );
-    if (!enemyAlive) return CombatOutcome.victory;
-    if (!playerAlive) return CombatOutcome.defeat;
+  static CombatOutcome _outcome(
+    Iterable<CombatantStateV1> actors, [
+    Iterable<ActiveFunctionV1> functions = const [],
+  ]) {
+    final actorList = actors.toList(growable: false);
+    bool sideHasThreat(BattleSide side) {
+      if (actorList.any((actor) => actor.side == side && actor.isActive)) {
+        return true;
+      }
+      return functions.any((function) {
+        if (function.status != ActiveFunctionStatusV1.active) {
+          return false;
+        }
+        return actorList
+                .firstWhere((actor) => actor.id == function.casterId)
+                .side ==
+            side;
+      });
+    }
+
+    final playerThreat = sideHasThreat(BattleSide.player);
+    final enemyThreat = sideHasThreat(BattleSide.enemy);
+    if (!playerThreat) return CombatOutcome.defeat;
+    if (!enemyThreat) return CombatOutcome.victory;
     return CombatOutcome.active;
   }
 

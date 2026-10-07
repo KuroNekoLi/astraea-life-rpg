@@ -81,6 +81,57 @@ final class InterruptDefinitionV1 {
   final bool castingCompatible;
 }
 
+final class AnalysisDefinitionV1 {
+  AnalysisDefinitionV1({
+    required this.id,
+    required this.actionDelay,
+    this.manaCost = 0,
+    this.revealLevel = FunctionKnowledgeLevelV1.nodes,
+    this.revealStability = false,
+    this.revealWeakNodes = false,
+    this.revealCounterPath = false,
+  }) {
+    if (id.trim().isEmpty || actionDelay < 1 || manaCost < 0) {
+      throw ArgumentError('Invalid Analysis definition');
+    }
+  }
+
+  final String id;
+  final int actionDelay;
+  final int manaCost;
+  final FunctionKnowledgeLevelV1 revealLevel;
+  final bool revealStability;
+  final bool revealWeakNodes;
+  final bool revealCounterPath;
+}
+
+final class CounterDefinitionV1 {
+  CounterDefinitionV1({
+    required this.id,
+    required this.actionDelay,
+    Iterable<String> compatibleTags = const [],
+    this.manaCost = 0,
+    this.requiresCounterPath = true,
+    this.requiresReversibility = false,
+    this.castingCompatible = false,
+  }) : compatibleTags = Set.unmodifiable(compatibleTags) {
+    if (id.trim().isEmpty ||
+        actionDelay < 1 ||
+        manaCost < 0 ||
+        this.compatibleTags.isEmpty) {
+      throw ArgumentError('Invalid Counter definition');
+    }
+  }
+
+  final String id;
+  final int actionDelay;
+  final int manaCost;
+  final Set<String> compatibleTags;
+  final bool requiresCounterPath;
+  final bool requiresReversibility;
+  final bool castingCompatible;
+}
+
 final class FullChantDefinitionV1 {
   FullChantDefinitionV1({
     required this.id,
@@ -90,14 +141,22 @@ final class FullChantDefinitionV1 {
     required this.castTime,
     required this.stability,
     required this.recoveryDelay,
+    this.executionDelay = 0,
+    Map<String, int> weakNodeInterruptBonuses = const {},
+    this.reversible = false,
+    Iterable<String> counterTags = const [],
     Iterable<BattleZone> targetZones = const [],
-  }) : targetZones = Set.unmodifiable(targetZones) {
+  }) : targetZones = Set.unmodifiable(targetZones),
+       weakNodeInterruptBonuses = Map.unmodifiable(weakNodeInterruptBonuses),
+       counterTags = Set.unmodifiable(counterTags) {
     if (id.trim().isEmpty ||
         manaCost < 0 ||
         rawDamage < 0 ||
         castTime < 1 ||
         stability < 0 ||
-        recoveryDelay < 0) {
+        recoveryDelay < 0 ||
+        executionDelay < 0 ||
+        this.weakNodeInterruptBonuses.values.any((bonus) => bonus < 0)) {
       throw ArgumentError('Invalid Full Chant definition');
     }
   }
@@ -109,6 +168,10 @@ final class FullChantDefinitionV1 {
   final int castTime;
   final int stability;
   final int recoveryDelay;
+  final int executionDelay;
+  final Map<String, int> weakNodeInterruptBonuses;
+  final bool reversible;
+  final Set<String> counterTags;
   final Set<BattleZone> targetZones;
 }
 
@@ -147,10 +210,36 @@ final class InterruptFunctionCommandV1 extends CombatCommandV1 {
     required this.functionId,
     required this.interrupt,
     this.asReaction = true,
+    this.weakNodeId,
   });
 
   final String functionId;
   final InterruptDefinitionV1 interrupt;
+  final bool asReaction;
+  final String? weakNodeId;
+}
+
+final class AnalyzeFunctionCommandV1 extends CombatCommandV1 {
+  const AnalyzeFunctionCommandV1(
+    super.actorId, {
+    required this.functionId,
+    required this.analysis,
+  });
+
+  final String functionId;
+  final AnalysisDefinitionV1 analysis;
+}
+
+final class CounterFunctionCommandV1 extends CombatCommandV1 {
+  const CounterFunctionCommandV1(
+    super.actorId, {
+    required this.functionId,
+    required this.counter,
+    this.asReaction = true,
+  });
+
+  final String functionId;
+  final CounterDefinitionV1 counter;
   final bool asReaction;
 }
 

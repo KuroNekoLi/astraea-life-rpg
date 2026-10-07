@@ -12,6 +12,54 @@ enum TimelineEventType { characterTurn, spellResolve, battlefieldFunction }
 
 enum ActiveFunctionStatusV1 { casting, active, interrupted, resolved, countered }
 
+enum FunctionKnowledgeLevelV1 { unknown, intent, nodes, weakNode, counterPath }
+
+final class FunctionKnowledgeV1 {
+  FunctionKnowledgeV1({
+    required this.observerId,
+    required this.signatureId,
+    this.level = FunctionKnowledgeLevelV1.unknown,
+    this.knownStability,
+    Iterable<String> revealedWeakNodeIds = const [],
+    Iterable<String> knownCounterTags = const [],
+    this.reversibilityKnown = false,
+  }) : revealedWeakNodeIds = Set.unmodifiable(revealedWeakNodeIds),
+       knownCounterTags = Set.unmodifiable(knownCounterTags) {
+    if (observerId.trim().isEmpty ||
+        signatureId.trim().isEmpty ||
+        (knownStability != null && knownStability! < 0)) {
+      throw ArgumentError('Invalid Function knowledge');
+    }
+  }
+
+  final String observerId;
+  final String signatureId;
+  final FunctionKnowledgeLevelV1 level;
+  final int? knownStability;
+  final Set<String> revealedWeakNodeIds;
+  final Set<String> knownCounterTags;
+  final bool reversibilityKnown;
+
+  FunctionKnowledgeV1 copyWith({
+    FunctionKnowledgeLevelV1? level,
+    int? knownStability,
+    Set<String>? revealedWeakNodeIds,
+    Set<String>? knownCounterTags,
+    bool? reversibilityKnown,
+  }) {
+    return FunctionKnowledgeV1(
+      observerId: observerId,
+      signatureId: signatureId,
+      level: level ?? this.level,
+      knownStability: knownStability ?? this.knownStability,
+      revealedWeakNodeIds:
+          revealedWeakNodeIds ?? this.revealedWeakNodeIds,
+      knownCounterTags: knownCounterTags ?? this.knownCounterTags,
+      reversibilityKnown: reversibilityKnown ?? this.reversibilityKnown,
+    );
+  }
+}
+
 final class CombatantStateV1 {
   CombatantStateV1({
     required this.id,
@@ -105,8 +153,14 @@ final class ActiveFunctionV1 {
     required this.startedAt,
     required this.resolveAt,
     required this.recoveryDelay,
+    this.executionDelay = 0,
+    Map<String, int> weakNodeInterruptBonuses = const {},
+    this.reversible = false,
+    Iterable<String> counterTags = const [],
     this.reactionConsumed = false,
-  }) : targetZones = Set.unmodifiable(targetZones) {
+  }) : targetZones = Set.unmodifiable(targetZones),
+       weakNodeInterruptBonuses = Map.unmodifiable(weakNodeInterruptBonuses),
+       counterTags = Set.unmodifiable(counterTags) {
     if (id.trim().isEmpty ||
         actionId.trim().isEmpty ||
         casterId.trim().isEmpty ||
@@ -116,7 +170,9 @@ final class ActiveFunctionV1 {
         stability < 0 ||
         startedAt < 0 ||
         resolveAt < startedAt ||
-        recoveryDelay < 0) {
+        recoveryDelay < 0 ||
+        executionDelay < 0 ||
+        this.weakNodeInterruptBonuses.values.any((bonus) => bonus < 0)) {
       throw ArgumentError('Invalid active Function');
     }
   }
@@ -134,12 +190,17 @@ final class ActiveFunctionV1 {
   final int startedAt;
   final int resolveAt;
   final int recoveryDelay;
+  final int executionDelay;
+  final Map<String, int> weakNodeInterruptBonuses;
+  final bool reversible;
+  final Set<String> counterTags;
   final bool reactionConsumed;
 
   ActiveFunctionV1 copyWith({
     ActiveFunctionStatusV1? status,
     int? stability,
     bool? reactionConsumed,
+    int? resolveAt,
   }) {
     return ActiveFunctionV1(
       id: id,
@@ -153,8 +214,12 @@ final class ActiveFunctionV1 {
       targetZones: targetZones,
       stability: stability ?? this.stability,
       startedAt: startedAt,
-      resolveAt: resolveAt,
+      resolveAt: resolveAt ?? this.resolveAt,
       recoveryDelay: recoveryDelay,
+      executionDelay: executionDelay,
+      weakNodeInterruptBonuses: weakNodeInterruptBonuses,
+      reversible: reversible,
+      counterTags: counterTags,
       reactionConsumed: reactionConsumed ?? this.reactionConsumed,
     );
   }
@@ -220,16 +285,23 @@ final class BattleStateV1 {
     this.activeTurn,
     this.outcome = CombatOutcome.active,
     Iterable<ActiveFunctionV1> activeFunctions = const [],
+    Iterable<FunctionKnowledgeV1> functionKnowledge = const [],
     Iterable<String> eventLog = const [],
   }) : combatants = List.unmodifiable(combatants),
        timeline = List.unmodifiable(_sorted(timeline)),
        activeFunctions = List.unmodifiable(activeFunctions),
+       functionKnowledge = List.unmodifiable(functionKnowledge),
        eventLog = List.unmodifiable(eventLog) {
     if (this.combatants.isEmpty ||
         this.combatants.map((actor) => actor.id).toSet().length !=
             this.combatants.length ||
         this.activeFunctions.map((function) => function.id).toSet().length !=
             this.activeFunctions.length ||
+        this.functionKnowledge
+                .map((entry) => '${entry.observerId}|${entry.signatureId}')
+                .toSet()
+                .length !=
+            this.functionKnowledge.length ||
         currentTime < 0 ||
         nextSequence < 0 ||
         revision < 0) {
@@ -246,6 +318,7 @@ final class BattleStateV1 {
   final List<CombatantStateV1> combatants;
   final List<TimelineEventV1> timeline;
   final List<ActiveFunctionV1> activeFunctions;
+  final List<FunctionKnowledgeV1> functionKnowledge;
   final int currentTime;
   final int nextSequence;
   final int revision;
@@ -259,6 +332,15 @@ final class BattleStateV1 {
 
   ActiveFunctionV1 function(String id) {
     return activeFunctions.firstWhere((function) => function.id == id);
+  }
+
+  FunctionKnowledgeV1? knowledgeFor(String observerId, String signatureId) {
+    for (final entry in functionKnowledge) {
+      if (entry.observerId == observerId && entry.signatureId == signatureId) {
+        return entry;
+      }
+    }
+    return null;
   }
 
   ActiveFunctionV1? castingFunctionFor(String casterId) {
