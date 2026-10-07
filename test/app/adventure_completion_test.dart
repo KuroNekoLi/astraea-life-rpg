@@ -4,7 +4,7 @@ import 'package:astraea_life_rpg/app/app.dart';
 import 'package:astraea_life_rpg/app/app_providers.dart';
 import 'package:astraea_life_rpg/app/router.dart';
 import 'package:astraea_life_rpg/core/persistence/app_database.dart';
-import 'package:astraea_life_rpg/features/combat/presentation/ashfang_battle_screen.dart';
+import 'package:astraea_life_rpg/features/combat/presentation/v1/ashfang_combat_v1_screen.dart';
 import 'package:astraea_life_rpg/features/character/domain/attribute.dart';
 import 'package:astraea_life_rpg/features/story/presentation/function_lab_screen.dart';
 import 'package:drift/native.dart';
@@ -66,8 +66,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Start Ashfang Training Battle'));
     await tester.pumpAndSettle();
-    expect(find.byType(AshfangBattleScreen), findsOneWidget);
-    expect(find.text('Prototype encounter inputs'), findsOneWidget);
+    expect(find.byType(AshfangCombatV1Screen), findsOneWidget);
+    expect(find.text('Cast Fireball I'), findsOneWidget);
 
     container.read(routerProvider).go('/adventure');
     await tester.pumpAndSettle();

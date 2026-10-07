@@ -177,25 +177,30 @@ void main() {
       );
       resumedContainer.read(routerProvider).go('/battle/ashfang');
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Attack Ashfang'));
+
+      expect(find.text('ACTION TIMELINE'), findsOneWidget);
+      await tester.tap(find.text('Cast Fireball I'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('End turn'));
+
+      expect(find.text('REACTION'), findsOneWidget);
+      await tester.tap(find.text('Interrupt'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Analyze Weak Node'));
+
+      expect(find.text('Analyze Modified Function'), findsOneWidget);
+      await tester.tap(find.text('Analyze Modified Function'));
       await tester.pumpAndSettle();
-      expect(find.text('Weak Node revealed: LockTarget'), findsOneWidget);
-      await tester.scrollUntilVisible(
-        find.text('Interrupt LockTarget'),
-        180,
-        scrollable: find.byType(Scrollable).first,
-      );
+
+      expect(find.text('Weak Node revealed'), findsOneWidget);
+      await tester.tap(find.text('Interrupt'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Interrupt LockTarget'));
+
+      await tester.tap(find.text('Begin Fireball II · Full Chant'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Attack Ashfang'));
+
+      await tester.tap(find.text('Finish with Fireball I'));
       await tester.pumpAndSettle();
-      expect(find.text('Training encounter complete'), findsOneWidget);
-      expect(await database.recordsOf('ashfangBattle'), hasLength(1));
+
+      expect(find.text('Training battle complete'), findsOneWidget);
       expect(tester.takeException(), isNull);
       resumedContainer.dispose();
     },
