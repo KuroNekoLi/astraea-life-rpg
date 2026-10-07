@@ -10,6 +10,8 @@ import '../../../core/persistence/app_database.dart';
 import '../../../core/measurement/prototype_event_recorder.dart';
 import '../domain/story_state.dart';
 import '../../../game_engine/function_graph/function_graph.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class StoryScreen extends ConsumerStatefulWidget {
   const StoryScreen({super.key});
@@ -60,7 +62,7 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
     builder: (context, snapshot) {
       if (snapshot.hasError) {
         return Scaffold(
-          body: Center(child: Text('Could not load story: ${snapshot.error}')),
+          body: Center(child: Text(context.l10n.couldNotLoadStory('${snapshot.error}'))),
         );
       }
       if (!snapshot.hasData) {
@@ -72,14 +74,14 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
       final sceneIndex = state?['sceneIndex'] as int? ?? 0;
       if (sceneIndex >= sceneList.length) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Academy Story')),
+          appBar: AppBar(title: Text(context.l10n.academyStory)),
           bottomNavigationBar: SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
               child: FilledButton.icon(
                 onPressed: () => context.push('/battle/ashfang'),
                 icon: const Icon(Icons.sports_martial_arts),
-                label: const Text('Start Ashfang Training Battle'),
+                label: Text(context.l10n.startAshfangBattle),
               ),
             ),
           ),
@@ -87,23 +89,21 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
             children: [
               Text(
-                'Chapter One complete',
+                context.l10n.chapterOneComplete,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Your Prepared Deck is saved. Continue by practicing how to read an enemy Function and discover its Weak Node.',
-              ),
+              Text(context.l10n.preparedDeckSavedNext),
               const SizedBox(height: 20),
               OutlinedButton.icon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.account_tree_outlined),
-                label: const Text('Practice Function Analysis'),
+                label: Text(context.l10n.practiceFunctionAnalysis),
               ),
               OutlinedButton.icon(
                 onPressed: () => context.go('/adventure'),
                 icon: const Icon(Icons.map_outlined),
-                label: const Text('Return to Adventure'),
+                label: Text(context.l10n.returnToAdventure),
               ),
             ],
           ),
@@ -112,29 +112,31 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
       final scene = sceneList[sceneIndex] as Map<String, dynamic>;
       final isDeck = scene['id'] == 'scene-5';
       return Scaffold(
-        appBar: AppBar(title: Text(scene['title'] as String)),
+        appBar: AppBar(
+          title: Text(localizedSceneTitle(context.l10n, scene['id'] as String)),
+        ),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 104),
           children: [
-            for (final beat in scene['beats'] as List<dynamic>)
+            for (final beat in localizedSceneBeats(context.l10n, scene['id'] as String))
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Text(
-                  beat as String,
+                  beat,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
             if (sceneIndex == 2) _functionGraphCard(context),
-            if (sceneIndex == 3) _castingMethodChoices(),
+            if (sceneIndex == 3) _castingMethodChoices(context),
             if (isDeck) ...[
-              Text('Prepared Deck: ${_selectedSpells.length} / 6'),
+              Text(context.l10n.preparedDeckCount(_selectedSpells.length)),
               for (final spell in view.spells['spells'] as List<dynamic>)
                 CheckboxListTile(
                   value: _selectedSpells.contains(
                     (spell as Map<String, dynamic>)['id'],
                   ),
-                  title: Text(spell['name'] as String),
-                  subtitle: Text(spell['role'] as String),
+                  title: Text(localizedSpellName(context.l10n, spell['id'] as String)),
+                  subtitle: Text(localizedSpellRole(context.l10n, spell['role'] as String)),
                   onChanged: (selected) => setState(() {
                     final id = spell['id'] as String;
                     if (selected == true && _selectedSpells.length < 6) {
@@ -158,7 +160,9 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
                         });
                       }
                     },
-              child: Text(isDeck ? 'Confirm Prepared Deck' : 'Continue'),
+              child: Text(
+                isDeck ? context.l10n.confirmPreparedDeck : context.l10n.commonContinue,
+              ),
             ),
           ],
         ),
@@ -167,12 +171,23 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
   );
 
   Widget _functionGraphCard(BuildContext context) {
-    const nodes = [
-      ('Gather', 'Collects the energy the Function will use.'),
-      ('Shape', 'Forms that energy into the intended effect, such as a bolt.'),
-      ('Move', 'Directs the formed effect toward its target.'),
+    final nodes = [
+      (
+        context.l10n.graphGather,
+        context.l10n.graphGatherDescription,
+        context.l10n.graphGatherSummary,
+      ),
+      (
+        context.l10n.graphShape,
+        context.l10n.graphShapeDescription,
+        context.l10n.graphShapeSummary,
+      ),
+      (
+        context.l10n.graphMove,
+        context.l10n.graphMoveDescription,
+        context.l10n.graphMoveSummary,
+      ),
     ];
-    const answers = ['Gather', 'Shape', 'Move'];
     final selected = nodes[_selectedFunctionNode];
 
     return Card(
@@ -182,10 +197,10 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Function Graph',
+              context.l10n.functionGraph,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const Text('Tap a step to see what it contributes.'),
+            Text(context.l10n.tapStepRole),
             for (var index = 0; index < nodes.length; index++)
               ListTile(
                 selected: _selectedFunctionNode == index,
@@ -195,7 +210,10 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
                       : Icons.radio_button_unchecked,
                 ),
                 title: Text(
-                  '${nodes[index].$1} · ${['collect energy', 'form a bolt', 'direct the result'][index]}',
+                  context.l10n.graphNodeSummary(
+                    nodes[index].$1,
+                    nodes[index].$3,
+                  ),
                 ),
                 onTap: () => setState(() => _selectedFunctionNode = index),
               ),
@@ -205,7 +223,7 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
             Text(selected.$2),
             const SizedBox(height: 16),
             Text(
-              'Quick check: Which step directs the formed effect toward its target?',
+              context.l10n.quickCheck,
               style: Theme.of(context).textTheme.titleSmall,
             ),
             RadioGroup<int>(
@@ -213,10 +231,10 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
               onChanged: (value) => setState(() => _functionAnswer = value),
               child: Column(
                 children: [
-                  for (var index = 0; index < answers.length; index++)
+                  for (var index = 0; index < nodes.length; index++)
                     RadioListTile<int>(
                       value: index,
-                      title: Text(answers[index]),
+                      title: Text(nodes[index].$1),
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                     ),
@@ -226,8 +244,8 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
             if (_functionAnswer != null)
               Text(
                 _functionAnswer == 2
-                    ? 'Correct — Move directs the effect to its target.'
-                    : 'Not quite. Move is the step that directs the effect to its target.',
+                    ? context.l10n.graphCorrectMove
+                    : context.l10n.graphWrongMove,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: _functionAnswer == 2
                       ? const Color(0xFF9EE3B7)
@@ -240,17 +258,17 @@ class _StoryScreenState extends ConsumerState<StoryScreen> {
     );
   }
 
-  Widget _castingMethodChoices() => const Card(
+  Widget _castingMethodChoices(BuildContext context) => Card(
     child: Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Full Chant is slower and stable.'),
-          SizedBox(height: 8),
-          Text('Chantless is faster and requires internalized encoding.'),
-          SizedBox(height: 8),
-          Text('Both methods perform the Function processing.'),
+          Text(context.l10n.fullChantSlowerStable),
+          const SizedBox(height: 8),
+          Text(context.l10n.chantlessFasterInternal),
+          const SizedBox(height: 8),
+          Text(context.l10n.bothPerformProcessing),
         ],
       ),
     ),

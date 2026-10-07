@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/app_shell.dart';
 import '../../../design_system/theme/astraea_theme.dart';
 import '../application/overview_providers.dart';
+import '../../../l10n/content_labels.dart';
+import '../../../l10n/l10n.dart';
 
 class AdventureScreen extends ConsumerWidget {
   const AdventureScreen({super.key});
@@ -13,7 +15,7 @@ class AdventureScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final adventure = ref.watch(adventureOverviewProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Adventure')),
+      appBar: AppBar(title: Text(context.l10n.adventure)),
       bottomNavigationBar: adventure.when(
         loading: () => null,
         error: (_, _) => null,
@@ -31,8 +33,8 @@ class AdventureScreen extends ConsumerWidget {
               ),
               label: Text(
                 progress.isComplete
-                    ? 'Start Ashfang Training Battle'
-                    : 'Continue Adventure',
+                    ? context.l10n.startAshfangBattle
+                    : context.l10n.continueAdventure,
               ),
             ),
           ),
@@ -43,16 +45,16 @@ class AdventureScreen extends ConsumerWidget {
         error: (error, _) => Center(
           child: TextButton(
             onPressed: () => ref.invalidate(adventureOverviewProvider),
-            child: const Text('Could not load chapter · Retry'),
+            child: Text(context.l10n.couldNotLoadChapterRetry),
           ),
         ),
         data: (progress) => ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
             AstraeaSectionHeader(
-              eyebrow: 'Chapter 01',
-              title: progress.chapterTitle,
-              subtitle: 'Your first steps into the Astraea Academy.',
+              eyebrow: context.l10n.chapter01,
+              title: localizedSceneTitle(context.l10n, progress.chapterSceneId),
+              subtitle: context.l10n.firstStepsAcademy,
             ),
             const SizedBox(height: 18),
             _ChapterMapCard(progress: progress),
@@ -61,7 +63,7 @@ class AdventureScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'STORY PATH',
+                  context.l10n.storyPath,
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 Text(
@@ -76,7 +78,13 @@ class AdventureScreen extends ConsumerWidget {
             for (var index = 0; index < progress.sceneCount; index++)
               _StoryStop(
                 number: index + 1,
-                title: _sceneTitles[index],
+                title: [
+                  context.l10n.sceneAcademyArrival,
+                  context.l10n.sceneAptitudeAssessment,
+                  context.l10n.sceneFunctionTheory,
+                  context.l10n.sceneChantAndChantless,
+                  context.l10n.scenePreparedDeck,
+                ][index],
                 isComplete: index < progress.completedScenes,
                 isCurrent:
                     index == progress.completedScenes && !progress.isComplete,
@@ -86,29 +94,27 @@ class AdventureScreen extends ConsumerWidget {
               Card(
                 child: ListTile(
                   leading: const Icon(Icons.flag_outlined),
-                  title: const Text('Chapter One complete'),
-                  subtitle: const Text(
-                    'Next, practice reading an enemy Function and finding its Weak Node.',
-                  ),
+                  title: Text(context.l10n.chapterOneComplete),
+                  subtitle: Text(context.l10n.nextPracticeFunction),
                 ),
               ),
               const SizedBox(height: 10),
               OutlinedButton.icon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.account_tree_outlined),
-                label: const Text('Practice Function Analysis'),
+                label: Text(context.l10n.practiceFunctionAnalysis),
               ),
               OutlinedButton.icon(
                 onPressed: () => context.go('/home'),
                 icon: const Icon(Icons.home_outlined),
-                label: const Text('Return Home'),
+                label: Text(context.l10n.returnHome),
               ),
             ] else ...[
               const SizedBox(height: 10),
               OutlinedButton.icon(
                 onPressed: () => context.push('/function-lab'),
                 icon: const Icon(Icons.account_tree_outlined),
-                label: const Text('Try Function Analysis Tutorial'),
+                label: Text(context.l10n.tryFunctionAnalysisTutorial),
               ),
             ],
           ],
@@ -117,13 +123,6 @@ class AdventureScreen extends ConsumerWidget {
     );
   }
 
-  static const _sceneTitles = [
-    'Academy Arrival',
-    'Aptitude Assessment',
-    'Function Theory',
-    'Chant and Chantless',
-    'Prepared Deck',
-  ];
 }
 
 class _ChapterMapCard extends StatelessWidget {
@@ -171,7 +170,7 @@ class _ChapterMapCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'CURRENT OBJECTIVE',
+                context.l10n.currentObjective,
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: AstraeaColors.gold,
                   letterSpacing: 1.5,
@@ -179,13 +178,18 @@ class _ChapterMapCard extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                progress.currentSceneTitle,
+                progress.currentSceneId == null
+                    ? context.l10n.chapterOneComplete
+                    : localizedSceneTitle(context.l10n, progress.currentSceneId!),
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
               ),
               Text(
-                'Chapter progress · ${progress.completedScenes} of ${progress.sceneCount} scenes',
+                context.l10n.chapterProgress(
+                  progress.completedScenes,
+                  progress.sceneCount,
+                ),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: AstraeaColors.pale.withValues(alpha: 0.8),
                 ),

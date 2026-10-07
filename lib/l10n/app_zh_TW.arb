@@ -564,5 +564,18 @@
       }
     }
   },
-  "couldNotLoadTraining": "無法載入訓練資料，請稍後再試。"
+  "couldNotLoadTraining": "無法載入訓練資料，請稍後再試。",
+  "confirmPreparedDeck": "確認 Prepared Deck",
+  "graphGather": "Gather",
+  "graphShape": "Shape",
+  "graphMove": "Move",
+  "graphGatherDescription": "收集這個 Function 執行時所需的能量。",
+  "graphShapeDescription": "把能量塑形成預定效果，例如能量彈。",
+  "graphMoveDescription": "把已形成的效果導向目標。",
+  "graphGatherSummary": "收集能量",
+  "graphShapeSummary": "形成能量彈",
+  "graphMoveSummary": "導向結果",
+  "graphNodeSummary": "{name} · {summary}",
+  "graphCorrectMove": "正確——Move 會把效果導向目標。",
+  "graphWrongMove": "還不對。負責把效果導向目標的是 Move。"
 }

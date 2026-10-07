@@ -25,10 +25,10 @@ final adventureOverviewProvider = FutureProvider<AdventureOverview>((
       : jsonDecode(saved.read<String>('payload')) as Map<String, dynamic>;
   final sceneIndex = progress?['sceneIndex'] as int? ?? 0;
   return AdventureOverview(
-    chapterTitle: scenes.first['title'] as String,
-    currentSceneTitle: sceneIndex >= scenes.length
-        ? 'Chapter One complete'
-        : (scenes[sceneIndex] as Map<String, dynamic>)['title'] as String,
+    chapterSceneId: (scenes.first as Map<String, dynamic>)['id'] as String,
+    currentSceneId: sceneIndex >= scenes.length
+        ? null
+        : (scenes[sceneIndex] as Map<String, dynamic>)['id'] as String,
     completedScenes: sceneIndex.clamp(0, scenes.length),
     sceneCount: scenes.length,
     isComplete: sceneIndex >= scenes.length,
@@ -65,15 +65,15 @@ final preparedDeckProvider = FutureProvider<PreparedDeckOverview>((ref) async {
 
 final class AdventureOverview {
   const AdventureOverview({
-    required this.chapterTitle,
-    required this.currentSceneTitle,
+    required this.chapterSceneId,
+    required this.currentSceneId,
     required this.completedScenes,
     required this.sceneCount,
     required this.isComplete,
   });
 
-  final String chapterTitle;
-  final String currentSceneTitle;
+  final String chapterSceneId;
+  final String? currentSceneId;
   final int completedScenes;
   final int sceneCount;
   final bool isComplete;

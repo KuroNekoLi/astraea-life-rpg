@@ -564,5 +564,28 @@
       }
     }
   },
-  "couldNotLoadTraining": "Could not load Training. Please try again."
+  "couldNotLoadTraining": "Could not load Training. Please try again.",
+  "confirmPreparedDeck": "Confirm Prepared Deck",
+  "graphGather": "Gather",
+  "graphShape": "Shape",
+  "graphMove": "Move",
+  "graphGatherDescription": "Collects the energy the Function will use.",
+  "graphShapeDescription": "Forms that energy into the intended effect, such as a bolt.",
+  "graphMoveDescription": "Directs the formed effect toward its target.",
+  "graphGatherSummary": "collect energy",
+  "graphShapeSummary": "form a bolt",
+  "graphMoveSummary": "direct the result",
+  "graphNodeSummary": "{name} · {summary}",
+  "@graphNodeSummary": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "graphCorrectMove": "Correct — Move directs the effect to its target.",
+  "graphWrongMove": "Not quite. Move is the step that directs the effect to its target."
 }
