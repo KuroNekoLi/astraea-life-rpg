@@ -2,10 +2,17 @@
 ## `COMBAT_SYSTEM.md`
 
 **版本：** v1.0  
-**狀態：** Working Specification  
+**狀態：** Historical Working Specification — combat-rule sections partially superseded  
 **隸屬文件：** `Life_RPG_Astraea_GDD_v1.1.md`  
+**目前規則權威：** [`COMBAT_RULES_V1_BASELINE.md`](COMBAT_RULES_V1_BASELINE.md)  
+**實作狀態：** [`../prototype/M5_COMBAT_CORE_STATUS.md`](../prototype/M5_COMBAT_CORE_STATUS.md)  
 **戰鬥定位：** Turn-Based Tactical JRPG + Function Analysis  
 **核心差異化：** 戰鬥不是單純交換傷害，而是理解、干涉、重組與反制敵方 Function。
+
+> **2026-10-07 supersession notice**  
+> 本文件保留早期設計脈絡，但其中 d20 Initiative、Round-based ordering、Seeded RNG attack resolution、每 Round Reaction 等早期內容已被 `COMBAT_RULES_V1_BASELINE.md` 的 locked v1 規則取代。  
+> 新實作必須採 Continuous / CTB-like Action Timeline、Action Delay、per-character Reaction Charge、deterministic Interrupt / Stability 與 Near / Mid / Far Zones。  
+> 若本文件任何段落與 `COMBAT_RULES_V1_BASELINE.md` 衝突，以後者為準。不要把標記為舊 Canon 的 d20 / RNG 規則重新帶回 CTB v1 engine。
 
 > 文件標記  
 > - **Canon**：已由 `WORLD_BIBLE.md`、`CHARACTERS.md`、`STORY_STRUCTURE.md` 確立。  

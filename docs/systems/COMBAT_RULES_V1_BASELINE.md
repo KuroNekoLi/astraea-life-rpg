@@ -1,16 +1,37 @@
 # Astraea Combat Rules v1 Baseline
 
-**Status:** Locked v1 baseline for combat design
-**Scope:** Rules and player-facing implications; implementation and numerical tuning are out of scope.
+**Status:** Locked v1 design baseline; M1–M5 headless CTB core implemented and CI-verified
+**Scope:** Normative combat rules and player-facing implications. Numerical tuning remains iterative.
 **Companion UX specification:** [`ASTRAEA_COMBAT_UX_FLOW_V1.md`](ASTRAEA_COMBAT_UX_FLOW_V1.md)
+**Implementation status:** [`../prototype/M5_COMBAT_CORE_STATUS.md`](../prototype/M5_COMBAT_CORE_STATUS.md)
 
-This document consolidates combat decisions for v1. It complements, rather than silently rewrites, the combat, spell, progression, and world documents listed in [Source alignment](#source-alignment-and-precedence). “Locked” means the rule is the current design baseline; it does not claim that it has been implemented or validated through playtesting.
+This document consolidates the current v1 combat decisions. It is the normative combat-rule source when older combat documents or legacy prototype code still describe d20 initiative, rounds, seeded attack RNG, or other superseded mechanics. “Locked” means the rule is the current design baseline. M1–M5 of the Pure Dart CTB core implement a substantial subset of these rules, while balance and player-facing Flutter integration remain separate work.
 
 ## Status labels
 
 - **Locked v1 Rules** — normative rules for v1 combat design.
+- **Implemented M1–M5** — represented in the Pure Dart CTB engine and covered by automated tests.
 - **Derived UX Implications** — presentation requirements that follow from locked rules.
 - **Open Balance Values/TBD** — formulas, tuning values, and outcomes that remain undecided.
+
+## Implementation alignment
+
+Current Pure Dart implementation lives under:
+
+```text
+lib/game_engine/combat/v1/
+```
+
+Automated coverage lives under:
+
+```text
+test/game_engine/combat/v1/
+```
+
+As of commit `1df164a53fd5917ae58b179e23a89178c9ae588c`, M1–M5 cover CTB Timeline, action resources, Zones, Mana, damage/resistance, Full Chant lifecycle, Reaction/Interrupt, Function Knowledge/Analysis/Weak Node, basic active-Function Counter behavior, deterministic enemy Pattern selection, reporting, and replay fingerprinting.
+
+This is **not** yet equivalent to a finished player-facing combat feature. The current Flutter Ashfang flow still requires migration onto the CTB v1 engine, and several locked rules such as full status-system breadth, Reverse Operation depth, Prepared SC UX, and Last Spell remain outside the current headless milestone implementation.
+
 
 ## Locked v1 Rules
 

@@ -399,8 +399,30 @@ Turn-Based Tactical JRPG
 Function Analysis
 ```
 
-P0 mechanics:
-- Initiative
+### Combat Baseline Amendment — 2026-10-07
+
+The original frozen v1.0 list below used the terms **Initiative** and **Seeded RNG** from the first combat prototype. Subsequent locked combat design decisions supersede those two implementation assumptions for the current Combat v1 engine.
+
+Current P0 combat timing / resolution baseline:
+
+```text
+Continuous / CTB-like Action Timeline
++ Action Delay
++ deterministic rule resolution
+```
+
+Therefore:
+
+- Do not implement d20 initiative for new Combat v1 work.
+- Do not use seeded attack-roll RNG as the default hit / Interrupt resolution model.
+- Reaction Charge refreshes on the character's formal Turn, not a global Round reset.
+- Spell Resolve and important Battlefield Functions may be Timeline Events.
+- The normative combat-rule source is `docs/systems/COMBAT_RULES_V1_BASELINE.md`.
+- Legacy d20 / seeded-RNG code remains transitional until the player-facing combat feature is migrated.
+
+Current P0 mechanics:
+- Continuous Action Timeline
+- Action Delay
 - Main Action
 - Quick Action
 - Movement
@@ -411,9 +433,9 @@ P0 mechanics:
 - 6-slot Prepared Deck
 - Function Graph
 - Weak Node
-- Interrupt
+- deterministic Interrupt / Stability
 - basic Counter pattern
-- Seeded RNG
+- deterministic enemy Pattern + Conditions
 - Post-Battle Report
 
 Prepared Deck is loadout, not random draw.
