@@ -91,9 +91,8 @@ class CombatImpactFlash extends StatelessWidget {
         tween: Tween(begin: 0.28, end: 0),
         duration: const Duration(milliseconds: 420),
         curve: Curves.easeOutCubic,
-        builder: (context, opacity, child) => ColoredBox(
-          color: color.withValues(alpha: opacity),
-        ),
+        builder: (context, opacity, child) =>
+            ColoredBox(color: color.withValues(alpha: opacity)),
       ),
     );
   }
