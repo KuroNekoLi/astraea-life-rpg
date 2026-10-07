@@ -31,6 +31,51 @@ void main() {
     expect(find.text('Interrupt'), findsOneWidget);
   });
 
+  testWidgets('guided player flow reaches victory through visible CTB states', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 700);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: localizedTestApp(home: const AshfangCombatV1Screen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Cast Fireball I'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Interrupt'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Analyze Modified Function'), findsOneWidget);
+    await tester.tap(find.text('Analyze Modified Function'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Weak Node: Stabilization'), findsOneWidget);
+    await tester.tap(find.text('Interrupt'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Begin Fireball II · Full Chant'), findsOneWidget);
+    await tester.tap(find.text('Begin Fireball II · Full Chant'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Full Chant is constructing'), findsOneWidget);
+    expect(find.textContaining('Fireball II Resolve'), findsOneWidget);
+
+    await tester.tap(find.text('Advance to Resolve'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Finish with Fireball I'), findsOneWidget);
+    await tester.tap(find.text('Finish with Fireball I'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Training battle complete'), findsOneWidget);
+  });
+
   testWidgets('renders core combat chrome in zh-TW', (tester) async {
     tester.view.physicalSize = const Size(1200, 700);
     tester.view.devicePixelRatio = 1;
@@ -49,5 +94,9 @@ void main() {
 
     expect(find.text('行動時間軸'), findsOneWidget);
     expect(find.text('施放 Fireball I'), findsOneWidget);
+
+    await tester.tap(find.text('施放 Fireball I'));
+    await tester.pumpAndSettle();
+    expect(find.text('保留 Reaction'), findsOneWidget);
   });
 }
