@@ -151,6 +151,107 @@ Spell Card（SC）是戰鬥前準備好的 **combat-ready Function template**。
 
 SC 可使用 Full Chant 或 Chantless。是否能對特定 SC／Tier Chantless，取決於施術者對該術式的理解與角色能力。Fireball I 等基礎術式多數學生可詠唱破棄；高階 Spell／Tier 通常只有更強或更熟練的施術者能做到。
 
+### 八大系統與代表 SC — 初版設計目錄
+
+八大系統分類已確定；下列 Spell Family 是代表性初版目錄，用途清晰並展示 Function-based magic。此目錄不表示所有 SC 都屬 MVP，也不鎖定最終平衡值。各 Signature、具體 Tier 開放的參數、Mana Cost、Complexity、要求與稀有度仍需逐張定義。
+
+| 系統 | 主要操作對象 | 代表性 Spell Family |
+| --- | --- | --- |
+| Elemental（元素） | 熱、冷、電、流體等自然現象 | Fireball、Flame Lance、Ice Lance、Lightning Bolt / Chain Lightning |
+| Kinetic（動力） | 力、速度、動量、向量 | Force Bolt、Vector Shift、Repulsion Field、Gravity Crush |
+| Spatial（空間） | 距離、位置、空間連接 | Blink、Position Swap、Space Fold、Spatial Severance |
+| Temporal（時間） | 局部時間速度、順序、延遲 | Slow、Haste、Delay、Temporal Anchor；Time Stop 為極高階代表 |
+| Life（生命） | 生物狀態、組織、恢復、強化 | Heal、Detox、Reinforce、Regeneration |
+| Mind / Information（精神／情報） | 感知、資訊、認知、記憶 | Detect、Illusion、Mind Link、Predictive Read |
+| Causality（因果） | 條件、觸發、結果機率、因果關係 | Trigger Mark、Misfortune Shift、Deferred Consequence、Outcome Lock |
+| Structural / Arcane（術式構造／奧術） | 魔法 Function 與 Function Graph | Analysis、Weak Node Scan、Stabilize、Dispel、Parameter Rewrite、Reverse Operation |
+
+目前每系約 3–4 個常規起始 Family 已足以形成第一版內容方向；此為內容規劃，不代表 MVP 必須一次實作全部 Family。最能展現 Astraea 身份的候選招牌術式為 **Vector Shift、Position Swap、Delay、Trigger Mark、Weak Node Scan、Parameter Rewrite、Reverse Operation**。Fireball、Heal、Slow 等熟悉術式可作為容易理解的入口。
+
+### Signature 與 Tier 示例
+
+完整 Signature 可包含比某 Tier 暴露給施術者更多的參數。未開放參數由術式模板處理，而不是從 Signature 中刪除：
+
+```text
+Fireball(
+  target,
+  power,
+  temperature,
+  radius,
+  velocity,
+  trajectory,
+  stability,
+  detonation
+)
+```
+
+初步控制範圍示例：
+
+```text
+Fireball I    → target, power
+Fireball II   → + velocity, radius
+Fireball III  → + trajectory, stability
+Fireball IV   → + detonation, advanced trajectory
+```
+
+這是單一 Family 的示例，不構成所有 SC 共用的 Tier 數或參數開放順序。Flame Lance 可有不同且較早複雜的 Signature：
+
+```text
+FlameLance(target, penetration, temperature, velocity, shape)
+```
+
+因此 Fireball III 和 Flame Lance I 可能在部分面向相近，但前者偏範圍與泛用，後者偏穿透與單體；不能僅憑 Tier 數字比較。
+
+其他代表 Signature 範例：
+
+```text
+ForceBolt(target, force, direction)
+VectorShift(object, old_vector, new_vector)
+RepulsionField(center, radius, force)
+GravityCrush(area, gravity_multiplier, duration)
+
+Blink(caster, destination)
+PositionSwap(targetA, targetB)
+SpaceFold(pointA, pointB, duration)
+SpatialSeverance(regionA, regionB)
+
+Slow(target, rate, duration)
+Haste(target, rate, duration)
+Delay(function, delay_time)
+TemporalAnchor(target, state_reference)
+
+Heal(target, recovery_amount)
+Detox(target, toxin_type)
+Reinforce(target, muscle_output, durability, duration)
+Regeneration(target, rate, duration)
+
+Detect(target_type, radius)
+Illusion(target, sensory_channel, content)
+MindLink(caster, ally, bandwidth)
+PredictiveRead(target, observed_behavior, horizon)
+
+TriggerMark(condition, execute)
+MisfortuneShift(event, probability_delta)
+DeferredConsequence(event, duration)
+OutcomeLock(event, permitted_result)
+
+Analyze(target_function)
+WeakNodeScan(function_graph)
+Stabilize(function, node)
+Dispel(active_function)
+ParameterRewrite(target_spell, parameter, new_value)
+ReverseOperation(active_function)
+```
+
+### 範圍與高階門檻
+
+- `PredictiveRead` 是根據已觀察資訊推測目標行動，不是預知未來。
+- Temporal 的 Slow、Haste、Delay 可作一般課程方向；Time Stop、Temporal Reversal、Return to Past 是大魔法或極高階術式。
+- Causality 的低階術式只能在有限條件、事件與機率範圍內運作。機率微調、Outcome Lock 與因果／歷史改寫的尺度須逐級受限；不得把全系統設定成禁術。
+- Structural / Arcane 的 Analysis 與 Weak Node Scan 是可由 SC 實現的術式方向。它們不等於每場戰鬥固定執行的免費開場掃描；熟悉 Signature 可直接使用既有知識，未知或改造術式才需要進一步分析。Analysis 類 SC 也不會保證找到 Weak Node。
+- `Dispel` 表示解除或終止 active Function，不代表完整反運算。`Reverse Operation` 是高階、受限的反運算術式方向，不保證任何 Function 都有可用反函數；仍受 Function 可逆性與 Counter-Function requirements 限制。
+- Resurrection／復活不納入目前目錄或規則；生命系是否存在此類效果維持未定，不以它推導世界規則。
+
 # 9. Prepared Deck
 
 **Canon**

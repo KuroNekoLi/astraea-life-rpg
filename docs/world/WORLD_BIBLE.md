@@ -57,20 +57,20 @@ World State A → B
 
 第一部不需要回答這個問題。即使 Institute Zero 掌握大量真相，也不代表它已理解該系統的最終本體。
 
-### 2.3 魔法大系統 — 分類暫定
+### 2.3 八大魔法系統 — 分類已確定
 
-魔法可依 Function 主要操作的 Reality 面向分為數個大系統。以下是目前候選分類，正式命名、邊界與完整清單仍為 **TBD**：
+目前採用以下八大系統，作為學院教學與 Spell 分類的主要框架。各系統精確邊界可以重疊；代表術式和 Tier 目錄見 `docs/systems/SPELL_FUNCTION_SYSTEM.md`，具體內容仍可持續設計與平衡：
 
-- Elemental（元素／自然現象）
-- Kinetic（運動／力量）
-- Spatial（空間）
-- Temporal（時間）
-- Life（生命）
-- Mind / Information（心智／資訊）
-- Causality（因果）
-- Structural / Arcane（結構／奧術；命名 TBD）
+- Elemental（元素／自然現象）：操作熱、冷、電、流體等自然現象。
+- Kinetic（動力）：操作力、速度、動量與向量。
+- Spatial（空間）：操作距離、位置與空間連接。
+- Temporal（時間）：操作局部時間速度、順序與延遲。
+- Life（生命）：操作生物狀態、組織、恢復與強化。
+- Mind / Information（精神／情報）：操作感知、資訊、認知與記憶。
+- Causality（因果）：操作有限條件、觸發、結果機率與因果關係。
+- Structural / Arcane（術式構造／奧術）：直接分析、穩定或干涉魔法 Function。
 
-系統分類本身不代表稀有度或力量階級。Temporal 與 Causality 是學院可正常教授的魔法系統；學生可學習緩速（Slow）等受限低階術式。Time Stop、Temporal Reversal、Return to Past，以及改寫現實或歷史因果等，屬大魔法或極高階術式，一般學生無法接觸。其門檻應由 Tier、Complexity、使用要求、稀有度與存取限制表達，不把整個系統定義為禁術。
+系統分類本身不代表稀有度或力量階級。Temporal 與 Causality 是學院可正常教授的魔法系統；學生可學習 Slow 等低階術式。Time Stop、Temporal Reversal、Return to Past，以及改寫現實或歷史因果等，屬大魔法或極高階術式，一般學生無法接觸。其門檻應由 Tier、Complexity、使用要求、稀有度與存取限制表達，不把整個系統定義為禁術。
 
 ## 3. Function 與 Function Graph
 
