@@ -54,13 +54,14 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
             for (final category in GrowthPotentialCategory.values)
               Card(
                 child: ListTile(
-                  title: Text(
-                    switch (category) {
-                      GrowthPotentialCategory.physical => context.l10n.physicalPotential,
-                      GrowthPotentialCategory.cognitive => context.l10n.cognitivePotential,
-                      GrowthPotentialCategory.communication => context.l10n.communicationPotential,
-                    },
-                  ),
+                  title: Text(switch (category) {
+                    GrowthPotentialCategory.physical =>
+                      context.l10n.physicalPotential,
+                    GrowthPotentialCategory.cognitive =>
+                      context.l10n.cognitivePotential,
+                    GrowthPotentialCategory.communication =>
+                      context.l10n.communicationPotential,
+                  }),
                   trailing: Text('${value.balances[category] ?? 0}'),
                 ),
               ),
@@ -90,7 +91,10 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                             ),
                             option.availablePotential,
                             option.quote.potentialCost,
-                            localizedAttribute(context.l10n, option.quote.attribute),
+                            localizedAttribute(
+                              context.l10n,
+                              option.quote.attribute,
+                            ),
                           ),
                         ),
                       const SizedBox(height: 12),
@@ -121,7 +125,9 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
                 child: ListTile(
                   title: Text(context.l10n.analysisGrowthActive),
                   subtitle: Text(
-                    context.l10n.permanentAnalysisGrowth(value.analysisPermanentGrowth),
+                    context.l10n.permanentAnalysisGrowth(
+                      value.analysisPermanentGrowth,
+                    ),
                   ),
                   trailing: const Icon(Icons.auto_awesome),
                 ),
@@ -191,9 +197,9 @@ class _TrainingPreviewScreenState extends ConsumerState<TrainingPreviewScreen> {
       ref.invalidate(trainingPotentialProvider);
       ref.invalidate(characterProfileProvider);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.trainingComplete)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(context.l10n.trainingComplete)));
       }
     } finally {
       if (mounted) setState(() => _training = false);
@@ -214,7 +220,10 @@ class _TrainingOptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final detail = localizedTrainingDefinition(context.l10n, option.definitionId);
+    final detail = localizedTrainingDefinition(
+      context.l10n,
+      option.definitionId,
+    );
     final category = option.quote.potentialCategory;
     final categoryLabel = localizedPotentialCategory(context.l10n, category);
     return Card(
@@ -225,7 +234,12 @@ class _TrainingOptionCard extends StatelessWidget {
           children: [
             Text(detail.$1, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
-            Text(context.l10n.trainingPotentialToAttribute(categoryLabel, detail.$2)),
+            Text(
+              context.l10n.trainingPotentialToAttribute(
+                categoryLabel,
+                detail.$2,
+              ),
+            ),
             const SizedBox(height: 6),
             Text(
               detail.$3,
@@ -261,7 +275,8 @@ class _TrainingOptionCard extends StatelessWidget {
                       : option.canTrain
                       ? context.l10n.trainAttribute(detail.$2)
                       : context.l10n.needMorePotential(
-                          option.quote.potentialCost - option.availablePotential,
+                          option.quote.potentialCost -
+                              option.availablePotential,
                           categoryLabel,
                         ),
                 ),

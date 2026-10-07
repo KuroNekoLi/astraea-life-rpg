@@ -96,7 +96,10 @@ class CharacterProfileScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 18),
-              Text(context.l10n.attributesSection, style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                context.l10n.attributesSection,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               const SizedBox(height: 10),
               GridView.builder(
                 itemCount: AttributeType.values.length,
@@ -151,7 +154,9 @@ class CharacterProfileScreen extends ConsumerWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 3),
                                   child: Text(
-                                    context.l10n.trainedDelta(attributeValue.permanentGrowth),
+                                    context.l10n.trainedDelta(
+                                      attributeValue.permanentGrowth,
+                                    ),
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall
