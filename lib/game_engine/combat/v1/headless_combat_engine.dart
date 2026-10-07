@@ -5,6 +5,7 @@ import 'combat_models.dart';
 ///
 /// M1: Timeline, Move, Main Action, Mana, damage/resistance, Guard and KO.
 /// M2: Full Chant / Chantless lifecycle and recovery.
+/// M3: Quick Actions, Reaction charges and deterministic Interrupt/Stability.
 final class HeadlessCombatEngineV1 {
   const HeadlessCombatEngineV1();
 
@@ -93,7 +94,10 @@ final class HeadlessCombatEngineV1 {
           continue;
         }
 
-        final refreshedActor = actor.copyWith(guardDamageReductionPercent: 0);
+        final refreshedActor = actor.copyWith(
+          guardDamageReductionPercent: 0,
+          reactionAvailable: true,
+        );
         final actors = _replaceActor(state.combatants, refreshedActor);
         final nextState = BattleStateV1(
           combatants: actors,
@@ -211,6 +215,176 @@ final class HeadlessCombatEngineV1 {
       units: units,
       actionDelay: action.actionDelay,
       log: log,
+    );
+  }
+
+  BattleStateV1 useQuickAction(
+    BattleStateV1 state,
+    UseQuickActionCommandV1 command,
+  ) {
+    final turn = _requireActorTurn(state, command.actorId);
+    if (turn.quickUsed) {
+      throw StateError('Quick Action is already spent for this turn');
+    }
+    final actor = state.actor(command.actorId);
+    if (actor.mana < command.action.manaCost) {
+      throw StateError('Insufficient Mana');
+    }
+    final paidActor = actor.copyWith(
+      mana: actor.mana - command.action.manaCost,
+    );
+    return BattleStateV1(
+      combatants: _replaceActor(state.combatants, paidActor),
+      timeline: state.timeline,
+      activeFunctions: state.activeFunctions,
+      currentTime: state.currentTime,
+      nextSequence: state.nextSequence,
+      revision: state.revision + 1,
+      activeTurn: turn.copyWith(quickUsed: true),
+      outcome: state.outcome,
+      eventLog: [
+        ...state.eventLog,
+        'quickAction:${actor.id}:${command.action.id}',
+      ],
+    );
+  }
+
+  BattleStateV1 interruptFunction(
+    BattleStateV1 state,
+    InterruptFunctionCommandV1 command,
+  ) {
+    _ensureBattleActive(state);
+    final function = state.function(command.functionId);
+    if (function.status != ActiveFunctionStatusV1.casting ||
+        state.currentTime >= function.resolveAt) {
+      throw StateError('Interrupt window is closed');
+    }
+
+    final interrupter = state.actor(command.actorId);
+    final caster = state.actor(function.casterId);
+    if (!interrupter.isActive || interrupter.side == caster.side) {
+      throw StateError('Interrupt must target an opposing casting Function');
+    }
+    if (interrupter.mana < command.interrupt.manaCost) {
+      throw StateError('Insufficient Mana');
+    }
+
+    final units = {for (final unit in state.combatants) unit.id: unit};
+    var functions = state.activeFunctions.toList();
+    var timeline = state.timeline.toList();
+    var nextSequence = state.nextSequence;
+    ActiveTurnV1? activeTurn = state.activeTurn;
+
+    if (command.asReaction) {
+      if (!interrupter.reactionAvailable) {
+        throw StateError('Reaction charge is not available');
+      }
+      if (function.reactionConsumed) {
+        throw StateError('This trigger window already resolved a Party Reaction');
+      }
+      if (state.castingFunctionFor(interrupter.id) != null &&
+          !command.interrupt.castingCompatible) {
+        throw StateError('Reaction is not Casting-Compatible');
+      }
+      units[interrupter.id] = interrupter.copyWith(
+        mana: interrupter.mana - command.interrupt.manaCost,
+        reactionAvailable: false,
+      );
+      functions = [
+        for (final candidate in functions)
+          if (candidate.id == function.id)
+            candidate.copyWith(reactionConsumed: true)
+          else
+            candidate,
+      ];
+    } else {
+      _requireActorTurn(state, command.actorId);
+      units[interrupter.id] = interrupter.copyWith(
+        mana: interrupter.mana - command.interrupt.manaCost,
+      );
+      activeTurn = null;
+    }
+
+    final success = command.interrupt.interruptPower >= function.stability;
+    final log = <String>[
+      ...state.eventLog,
+      'interruptAttempt:${interrupter.id}:${function.id}',
+    ];
+
+    if (success) {
+      final refund = function.manaCost ~/ 2;
+      final currentCaster = units[caster.id]!;
+      units[caster.id] = currentCaster.copyWith(
+        mana: (currentCaster.mana + refund)
+            .clamp(0, currentCaster.maxMana)
+            .toInt(),
+      );
+      functions = functions
+          .where((candidate) => candidate.id != function.id)
+          .toList();
+      timeline = timeline
+          .where((event) => event.functionId != function.id)
+          .toList();
+      if (units[caster.id]!.isActive) {
+        timeline.add(
+          TimelineEventV1(
+            id: 'turn:${caster.id}:$nextSequence',
+            type: TimelineEventType.characterTurn,
+            scheduledAt: state.currentTime + function.recoveryDelay,
+            sequence: nextSequence,
+            actorId: caster.id,
+          ),
+        );
+        nextSequence++;
+      }
+      log
+        ..add('interrupted:${interrupter.id}:${function.id}')
+        ..add('manaRefund:${caster.id}:$refund');
+    } else {
+      final reducedStability =
+          (function.stability - command.interrupt.stabilityDamage)
+              .clamp(0, function.stability)
+              .toInt();
+      functions = [
+        for (final candidate in functions)
+          if (candidate.id == function.id)
+            candidate.copyWith(
+              stability: reducedStability,
+              reactionConsumed: command.asReaction
+                  ? true
+                  : candidate.reactionConsumed,
+            )
+          else
+            candidate,
+      ];
+      log.add(
+        'interruptFailed:${interrupter.id}:${function.id}:stability=$reducedStability',
+      );
+    }
+
+    if (!command.asReaction) {
+      timeline.add(
+        TimelineEventV1(
+          id: 'turn:${interrupter.id}:$nextSequence',
+          type: TimelineEventType.characterTurn,
+          scheduledAt: state.currentTime + command.interrupt.actionDelay,
+          sequence: nextSequence,
+          actorId: interrupter.id,
+        ),
+      );
+      nextSequence++;
+    }
+
+    return BattleStateV1(
+      combatants: units.values,
+      timeline: timeline,
+      activeFunctions: functions,
+      currentTime: state.currentTime,
+      nextSequence: nextSequence,
+      revision: state.revision + 1,
+      activeTurn: activeTurn,
+      outcome: state.outcome,
+      eventLog: log,
     );
   }
 

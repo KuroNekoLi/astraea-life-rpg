@@ -26,6 +26,7 @@ final class CombatantStateV1 {
     required this.zone,
     this.condition = CombatantCondition.active,
     this.guardDamageReductionPercent = 0,
+    this.reactionAvailable = true,
   }) {
     if (id.trim().isEmpty ||
         maxHp < 1 ||
@@ -58,6 +59,7 @@ final class CombatantStateV1 {
   final BattleZone zone;
   final CombatantCondition condition;
   final int guardDamageReductionPercent;
+  final bool reactionAvailable;
 
   bool get isActive => condition == CombatantCondition.active;
 
@@ -67,6 +69,7 @@ final class CombatantStateV1 {
     BattleZone? zone,
     CombatantCondition? condition,
     int? guardDamageReductionPercent,
+    bool? reactionAvailable,
   }) {
     return CombatantStateV1(
       id: id,
@@ -82,6 +85,7 @@ final class CombatantStateV1 {
       condition: condition ?? this.condition,
       guardDamageReductionPercent:
           guardDamageReductionPercent ?? this.guardDamageReductionPercent,
+      reactionAvailable: reactionAvailable ?? this.reactionAvailable,
     );
   }
 }
@@ -101,6 +105,7 @@ final class ActiveFunctionV1 {
     required this.startedAt,
     required this.resolveAt,
     required this.recoveryDelay,
+    this.reactionConsumed = false,
   }) : targetZones = Set.unmodifiable(targetZones) {
     if (id.trim().isEmpty ||
         actionId.trim().isEmpty ||
@@ -129,10 +134,12 @@ final class ActiveFunctionV1 {
   final int startedAt;
   final int resolveAt;
   final int recoveryDelay;
+  final bool reactionConsumed;
 
   ActiveFunctionV1 copyWith({
     ActiveFunctionStatusV1? status,
     int? stability,
+    bool? reactionConsumed,
   }) {
     return ActiveFunctionV1(
       id: id,
@@ -148,6 +155,7 @@ final class ActiveFunctionV1 {
       startedAt: startedAt,
       resolveAt: resolveAt,
       recoveryDelay: recoveryDelay,
+      reactionConsumed: reactionConsumed ?? this.reactionConsumed,
     );
   }
 }
@@ -183,13 +191,22 @@ final class TimelineEventV1 {
 }
 
 final class ActiveTurnV1 {
-  const ActiveTurnV1({required this.actorId, this.moveUsed = false});
+  const ActiveTurnV1({
+    required this.actorId,
+    this.moveUsed = false,
+    this.quickUsed = false,
+  });
 
   final String actorId;
   final bool moveUsed;
+  final bool quickUsed;
 
-  ActiveTurnV1 copyWith({bool? moveUsed}) {
-    return ActiveTurnV1(actorId: actorId, moveUsed: moveUsed ?? this.moveUsed);
+  ActiveTurnV1 copyWith({bool? moveUsed, bool? quickUsed}) {
+    return ActiveTurnV1(
+      actorId: actorId,
+      moveUsed: moveUsed ?? this.moveUsed,
+      quickUsed: quickUsed ?? this.quickUsed,
+    );
   }
 }
 

@@ -44,6 +44,43 @@ final class CombatActionDefinitionV1 {
   bool get dealsDamage => rawDamage > 0;
 }
 
+final class QuickActionDefinitionV1 {
+  QuickActionDefinitionV1({required this.id, this.manaCost = 0}) {
+    if (id.trim().isEmpty || manaCost < 0) {
+      throw ArgumentError('Invalid Quick Action definition');
+    }
+  }
+
+  final String id;
+  final int manaCost;
+}
+
+final class InterruptDefinitionV1 {
+  InterruptDefinitionV1({
+    required this.id,
+    required this.interruptPower,
+    required this.actionDelay,
+    this.stabilityDamage = 0,
+    this.manaCost = 0,
+    this.castingCompatible = false,
+  }) {
+    if (id.trim().isEmpty ||
+        interruptPower < 0 ||
+        actionDelay < 1 ||
+        stabilityDamage < 0 ||
+        manaCost < 0) {
+      throw ArgumentError('Invalid Interrupt definition');
+    }
+  }
+
+  final String id;
+  final int interruptPower;
+  final int actionDelay;
+  final int stabilityDamage;
+  final int manaCost;
+  final bool castingCompatible;
+}
+
 final class FullChantDefinitionV1 {
   FullChantDefinitionV1({
     required this.id,
@@ -96,6 +133,25 @@ final class UseActionCommandV1 extends CombatCommandV1 {
 
   final CombatActionDefinitionV1 action;
   final String? targetId;
+}
+
+final class UseQuickActionCommandV1 extends CombatCommandV1 {
+  const UseQuickActionCommandV1(super.actorId, {required this.action});
+
+  final QuickActionDefinitionV1 action;
+}
+
+final class InterruptFunctionCommandV1 extends CombatCommandV1 {
+  const InterruptFunctionCommandV1(
+    super.actorId, {
+    required this.functionId,
+    required this.interrupt,
+    this.asReaction = true,
+  });
+
+  final String functionId;
+  final InterruptDefinitionV1 interrupt;
+  final bool asReaction;
 }
 
 final class BeginFullChantCommandV1 extends CombatCommandV1 {
