@@ -178,11 +178,117 @@ Fireball(
 
 已知 Signature 不代表已知本次施法的實際威力、穩定性或是否被修改。
 
+## 7.2 Spell Family 與 Tier — Canon
+
+同一個 Spell Family 具有一個完整 Signature；不同 Tier 不代表完全不同的魔法，而是對同一完整 Signature 開放不同程度的控制權。
+
+例如完整 Fireball Signature：
+
+```text
+Fireball(
+    power,
+    direction,
+    velocity,
+    radius,
+    temperature,
+    stability,
+    trajectory,
+    detonation,
+    ...
+)
+```
+
+### Tier I
+
+只開放少數核心 parameters，其餘由標準模板提供。
+
+```text
+Fireball I
+controllable:
+- target
+- basic power
+
+templated:
+- velocity
+- radius
+- temperature
+- stability
+- trajectory
+- detonation
+```
+
+### Higher Tier
+
+Tier 越高：
+- 可控制／覆寫的 parameters 越多；
+- Function Graph / runtime control burden 通常越複雜；
+- Mana Cost 通常更高；
+- Chantless difficulty 通常更高；
+- 對 caster 的 Processing / Precision / Efficiency / Output 要求可能提高。
+
+因此 Tier 代表的是 **同一 Spell Family 中術式控制與結構能力的深化**，不是單純的 damage rank。
+
+同時，Tier **不是跨 Spell Family 的全球戰力刻度**。
+
+例如：
+
+```text
+Fireball III
+≈
+Flame Lance I
+```
+
+可能在某些輸出或複雜度面向接近，但不代表兩者必須具有相同傷害、Mana Cost、Graph 或戰術角色。
+
+不同 Spell Family 可以有完全不同的基礎難度與起始強度。
+
+## 7.3 Tier 與 Caster Strength — Canon
+
+低 Tier 不會因高 Tier 解鎖而在世界觀上自動失去價值。
+
+同一個低階 Spell 可以因 caster 的：
+- Mana Output
+- Efficiency
+- Precision
+- mastery / understanding
+
+而產生遠高於普通人的效果。
+
+因此以下情況合法：
+
+```text
+Expert Fireball I
+>
+Ordinary Fireball III
+```
+
+Spell Tier 描述術式本身的控制層級；caster strength 描述誰在執行它。兩者不可混為單一戰力數字。
+
 # 8. Spell Card
 
 **Canon**
 
-Spell Card 是已構築完成 Function / Function Graph 的可保存、攜帶、載入與重複提交形式。
+Spell Card（SC）是某個已學會 Spell / Tier 的 **combat-ready prepared function template**。
+
+它保存或承載：
+- Spell Family / Tier
+- 對應 Function Graph
+- Signature 與該 Tier 可控制 parameters
+- locked / templated parameters
+- execution / encoding 結構
+- 本場戰鬥可快速呼叫所需的 prepared state
+
+SC 不是「擁有這張卡才學會這個魔法」。
+
+角色理論上可以理解、學會並在非戰鬥情境使用大量基礎 Spell；SC 的存在是為了把有限數量的術式預先構築成戰鬥中可以快速、安全調用的 Prepared Function。
+
+因此：
+
+```text
+Learned Spell Knowledge
+≠
+Prepared SC Loadout
+```
 
 不是 collectible-gacha card。
 
@@ -190,17 +296,28 @@ Spell Card 是已構築完成 Function / Function Graph 的可保存、攜帶、
 
 **Canon**
 
-戰鬥前載入可快速執行的 Spell Card。
+魔法師在戰鬥前只能維持有限數量的 Prepared Functions，因此必須選擇有限數量的 SC 作為本場戰鬥 Loadout。
+
+限制不是「角色只會這幾個魔法」，而是：
+
+```text
+Learned spell library
+→ prepare finite set of Functions
+→ battle-ready SC loadout
+```
 
 Scene 5：
 ```text
 Deck Limit = 6
 ```
 
+MVP 固定為 6 張。未來是否讓角色能力改變 Prepared Function capacity：**TBD**。
+
 **Proposal：**
 - 全部 6 張可直接存取
 - 不採 random draw
-- 限制由 Mana / action economy / condition / complexity 決定；cooldown 為 optional rule，MVP 預設可為 null
+- 戰鬥中只能使用 Prepared SC
+- 限制由 Mana / action economy / condition / complexity / casting method 決定；cooldown 為 optional rule，MVP 預設可為 null
 
 # 10. Casting Method
 
@@ -279,6 +396,39 @@ ordinary caster Full Chant output
 1. Precision / Efficiency 型：低浪費、高控制，能自行承擔大量 construction / encoding。
 2. Capacity / Output 型：控制未必最精密，但巨量 Mana 讓最終輸出仍遠高於一般人。
 
+
+# 12.1 Chantless Eligibility by SC Tier
+
+詠唱或詠唱破棄是 **執行 SC 的方式**，不是另一張卡。
+
+角色能否對某張 SC 使用 Chantless，取決於：
+- 對該 Spell / Tier 的理解與熟練程度；
+- Tier / Complexity；
+- Processing；
+- Precision；
+- 其他 Spell-specific requirements。
+
+基礎術式可以非常容易進入 Chantless。
+
+例如：
+
+```text
+Fireball I
+→ 幾乎所有完成基礎訓練的學生都可詠唱破棄
+```
+
+高 Tier 或高階 Spell Family 則可能只有優秀施術者能安全詠唱破棄。
+
+```text
+Fireball III
+→ ordinary student: Full Chant
+→ skilled caster: Chantless possible
+
+High-complexity Spell I
+→ Chantless may already require exceptional ability
+```
+
+因此不能用「所有 Tier N 都要求同一 Mastery」的全球規則；每個 Spell Tier 應定義自己的 Chantless requirement。
 
 # 13. Complexity
 
@@ -473,6 +623,52 @@ K4 Counter / Reverse path known
 - paid gacha
 - premium-only power spell
 
+# 23.1 Magic System Classification and SC Progression
+
+**Canon direction**
+
+Spell 會被歸入若干魔法系統（Magic Systems / Schools；正式分類名稱與清單 **TBD**）。
+
+角色取得／分配某一魔法系統的成長點數後，可以將其投入該系統內的 SC，增加該 SC 的經驗。
+
+概念流程：
+
+```text
+Magic System growth points
+↓
+allocate to compatible SC
+↓
+SC Tier XP
+↓
+Tier XP full
+↓
+unlock next Tier
+```
+
+例如：
+
+```text
+Fire-system points
+↓
+Fireball I XP
+↓
+Fireball I mastered
+↓
+Fireball II unlocked
+```
+
+Tier 升級代表：
+- 開放更多 controllable parameters；
+- 增加術式能力上限；
+- 通常提高 Mana Cost；
+- 通常提高 Complexity / Chantless burden。
+
+**尚未決定：**
+- 系統分類的正式名稱與數量；
+- 戰鬥實際使用是否也直接提供 SC XP；
+- 升到 Tier II 後 Tier I 是否仍可作為獨立 Prepared SC 使用；
+- Tier XP 曲線與點數成本。
+
 # 24. Function Construction
 
 **Proposal**
@@ -490,35 +686,69 @@ Node
 
 # 25. Parameter Binding
 
-Spell Card 可在施放時綁定：
+每個 Spell Family 先定義完整 Signature；各 Tier 再定義其中哪些 parameters 對 caster 開放。
+
+Parameter 必須區分：
+- **Signature parameters**：完整術式可接受哪些參數。
+- **Tier-exposed parameters**：此 Tier 允許 caster 控制哪些參數。
+- **Templated parameters**：此 Tier 尚未開放，使用 SC 內建模板／標準值。
+- **Runtime values**：本次 execution 實際綁定的值。
+
+例如：
+
+```text
+Fireball I
+exposed:
 - target
 - power
-- range
-- duration
 
-Parameter Binding 必須區分：
-- **Signature parameters**：術式定義允許哪些參數。
-- **Runtime values**：本次 execution 實際綁定的數值。
+templated:
+- velocity
+- radius
+- stability
+- trajectory
+```
 
-Analysis 可用來估算或揭露 runtime values，但角色可能早已知道 Signature。
+```text
+Fireball II
+exposed:
+- target
+- power
+- velocity
+- radius
 
-哪些 parameter 可變由 Card 定義。
+templated:
+- advanced trajectory
+- detonation behavior
+```
+
+Analysis 可用來估算或揭露敵方 runtime values，但角色可能早已知道該 Spell 的完整 Signature 與標準 Tier template。
 
 # 26. Spell Data Model
 
 ```text
 SpellDefinition
 ├── id
+├── family_id
 ├── name_key
+├── magic_system_id
+├── full_signature
+├── tiers[]
 ├── graph_id
 ├── category
 ├── casting_methods
-├── base_mana_cost
-├── complexity
-├── requirements
-├── cooldown_rule?      # optional/null in MVP
 ├── tags
 └── unlock_condition
+
+SpellTierDefinition
+├── tier
+├── exposed_parameters[]
+├── templated_parameters{}
+├── base_mana_cost
+├── complexity
+├── chantless_requirements
+├── graph_variant?
+└── tier_unlock_requirement
 ```
 
 # 27. Function Graph Data Model
