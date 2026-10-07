@@ -640,7 +640,7 @@ class _StageAction extends StatelessWidget {
         title: context.l10n.combatFullChantCastingTitle,
         body: context.l10n.combatFullChantCastingBody,
         badges: [context.l10n.combatFireballII, context.l10n.combatFullChant],
-        actionLabel: context.l10n.combatAdvanceTimeline,
+        actionLabel: context.l10n.combatHoldFormation,
         onPressed: controller.resolveHeroFireballIIFullChant,
       ),
       AshfangTutorialStageV1.heroFinisher => _ActionCard(
@@ -781,30 +781,65 @@ class _MiniFunctionGraph extends StatelessWidget {
     final weak = AstraeaColors.gold;
     return Row(
       children: [
-        _GraphNode(color: normal),
+        Expanded(
+          child: _GraphNode(
+            label: context.l10n.combatNodeCompression,
+            color: normal,
+          ),
+        ),
         Expanded(child: Divider(color: normal)),
-        _GraphNode(color: revealed ? weak : normal),
+        Expanded(
+          child: _GraphNode(
+            label: context.l10n.combatNodeStabilization,
+            color: revealed ? weak : normal,
+          ),
+        ),
         Expanded(child: Divider(color: normal)),
-        _GraphNode(color: normal),
+        Expanded(
+          child: _GraphNode(
+            label: context.l10n.combatNodeTrajectory,
+            color: normal,
+          ),
+        ),
       ],
     );
   }
 }
 
 class _GraphNode extends StatelessWidget {
-  const _GraphNode({required this.color});
+  const _GraphNode({required this.label, required this.color});
+  final String label;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 28,
-      height: 28,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: color, width: 2),
-        boxShadow: [
-          BoxShadow(color: color.withValues(alpha: 0.18), blurRadius: 10),
+    return Semantics(
+      label: label,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: color, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: color.withValues(alpha: 0.18),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
         ],
       ),
     );
