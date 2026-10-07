@@ -102,6 +102,7 @@ void main() {
         type: TimelineEventType.spellResolve,
         scheduledAt: 10,
         actorId: 'hero',
+        functionId: 'function:fireball-1',
       );
 
       final heroTurn = engine.advance(state).state;

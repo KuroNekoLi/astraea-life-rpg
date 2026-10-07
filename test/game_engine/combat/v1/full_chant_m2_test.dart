@@ -230,6 +230,6 @@ void main() {
     state = engine.resolveTimelineEvent(ready.state, ready.event);
 
     expect(state.actor('enemy').hp, 200);
-    expect(state.eventLog, contains('fullChantFailed:hero:fireball-ii-full'));
+    expect(state.eventLog, contains('functionFailed:hero:fireball-ii-full'));
   });
 }
