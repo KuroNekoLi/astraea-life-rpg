@@ -7,6 +7,15 @@
 
 本文件描述玩家進入一場 Astraea 回合制戰鬥後，從讀取戰場、選擇行動、執行 Spell Card（SC）到理解結果的完整 UX flow。場景例子是三人小隊對上學院的 **Ashfang Training Construct**；具體敵方數值、角色能力、回合順序與技能效果以遊戲內容資料為準，本文件不定義平衡數值。
 
+### 戰鬥方向前提：Landscape-only
+
+**戰鬥畫面只採 Landscape。** 這是本 UX v1 的硬性版面前提，不是「支援橫向」的可選模式，也不設計 Portrait 戰鬥版面。三名隊員、Action Order、敵方 Intent、Casting State、SC 與 Reaction 同時需要可讀；直向會迫使玩家頻繁開抽屜或切頁，破壞戰場與情報的連續性。
+
+- 主要設計比例以 **16:9** 為基準，同時適配較寬的 **18:9、19.5:9、20:9** 手機畫面。
+- 較寬畫面的額外空間優先給中央 Battlefield；左右資訊欄設合理最大寬度，不隨螢幕無限制放大。
+- 尊重左右安全區、相機開孔、圓角及手勢導覽區；重要按鈕與文字不得落入遮蔽或難觸及區域。
+- 這項方向是 UX 提案，不是世界觀 canon；若平台需求改變，需回頭修訂本文件與版面驗收條件。
+
 ### 核心原則
 
 1. **易懂 JRPG 作為表層，Function 作為深層。** 新手先能讀懂誰要行動、敵人要做什麼、有哪些指令。進階玩家才逐步使用 Chant、Analysis、Function Graph、Weak Node 與 Counter-Function。
@@ -47,38 +56,55 @@ Encounter intro
 
 ## 3. Battle HUD：版面與資訊層級
 
-### 建議的窄螢幕優先配置
+### Landscape Battle HUD 架構
 
 ```text
-┌──────────────────────────────────┐
-│ ROUND 2       行動順序            │
-│ 主角 → Ashfang → Rio → Yuma       │
-│                  └─ Fireball 完成 │
-├──────────────────────────────────┤
-│                                  │
-│       ASHFANG TRAINING            │
-│          CONSTRUCT                │
-│       HP ███████░░                │
-│                                  │
-│ Intent  Fireball I · 已知術式     │
-│ Casting Full Chant · 進度 2/3     │
-│ Target  主角 · 約 1 次友方行動後  │
-│                                  │
-│        [Battlefield / Units]      │
-├──────────────────────────────────┤
-│ 主角       Yuma        Rio        │
-│ HP 142/160  HP …       HP …       │
-│ MP 72/100   MP …       MP …       │
-│ Reaction ●  ●          ●          │
-├──────────────────────────────────┤
-│ 主角的回合 · Main Action          │
-│ Attack  Technique  SC             │
-│ Analyze  Guard      Move           │
-│ Quick Action: 可用／已使用         │
-└──────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ROUND 2       Ashfang — FIREBALL I / FULL CHANT → resolves in 2 actions     │
+├─────────────┬───────────────────────────────────────────┬────────────────────┤
+│ ACTION      │                                           │ CURRENT: HERO      │
+│ ORDER       │                BATTLEFIELD                │ HP 140/160         │
+│             │                                           │ MP 74/100          │
+│ Ashfang     │                  ASHFANG                  │ Reaction ●         │
+│ Rio         │                    🔥                     │                    │
+│ Yuma        │                                           │ [ Attack ]         │
+│ 🔥 Cast     │      Hero          Yuma          Rio       │ [ Technique ]      │
+│ Hero        │                                           │ [ SC ]             │
+│             │                                           │ [ Analyze ]        │
+│             │                                           │ [ Guard ]          │
+│             │                                           │ [ Move ]           │
+├─────────────┴───────────────────────────────────────────┴────────────────────┤
+│ HERO  HP ██████ MP ████   YUMA ██████   RIO ██████     Active Status…       │
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-桌面版可將隊伍狀態放在側欄、行動選單放在底部；資訊的優先順序一致。
+建議初始空間比例：Action Order 約 **12–15%**、Battlefield 約 **57–62%**、Command Area 約 **23–28%**。中央戰場必須保持最大；這些比例是 layout 起點，需由實機尺寸與可讀性驗證。桌面或平板可按可用寬度調整欄寬，但不可改成直向戰鬥資訊架構。
+
+### 左側垂直 Action Order
+
+Turn Order 固定以左側垂直列呈現，能容納角色與非角色事件：
+
+```text
+ACTION ORDER
+[ Hero ]
+   ↓
+[ Rio ]
+   ↓
+[ 🔥 Fireball Resolve ]
+   ↓
+[ Ashfang ]
+   ↓
+[ Yuma ]
+```
+
+除角色外，可列入 Fireball Resolve、Space Fold expires、Status tick、Boss Function 等影響戰局的事件。顯示 advance / delay 等時間軸變化時，更新位置並說明原因。戰鬥行動選擇期間此列保持可見。
+
+### 版面切換：保持戰場連續可見
+
+- SC、施法模式、參數與目標選擇都使用**右側 Context Panel / Side Drawer**，不要切換成全畫面多層選單。
+- Panel 展開時中央 Battlefield 仍可辨認，Action Order、敵人、Intent、目標與 Casting progress 不得被遮掉或模糊到無法判斷；必要時可收窄戰場，但不可隱藏戰場。
+- Analysis 使用同一右側區域，作為與戰場並列的 Analysis workspace；Graph 可視覺上連結到敵方施法，但不跳出成獨立全畫面工具。
+- Reaction 使用中央 overlay，聚焦即將發生的事件；背景戰場與 Action Order 仍可見。不要為 Reaction 開啟右側選單。
 
 ### 資訊層級
 
@@ -104,6 +130,22 @@ Encounter intro
 1. **Preparing / Chanting：** Spell 尚未完成，Interrupt window 開啟；顯示已辨識名稱或「Unknown Spell」，以及可確認的目標／範圍資訊。
 2. **Active / Resolved：** Spell 已成立或正在作用；不再把 Interrupt 當作可用解法，轉而提示 Dodge、Guard、Counter 或 Reverse Operation（僅在角色有可用能力且條件符合時）。
 3. **Interrupted：** 顯示施法被中止、原因及敵方後續狀態；若僅打斷部分 Function，應明確說明效果而不假定整招消失。
+
+### Reaction Window Overlay
+
+當 Ashfang 的 Fireball 即將完成且 Rio 有合法 Reaction 時，中央出現清楚但不遮死戰場的 overlay：
+
+```text
+┌────────────────────────────┐
+│ ⚡ REACTION WINDOW          │
+│ Fireball I is being cast.  │
+│ Rio can interrupt.          │
+│ [ INTERRUPT SHOT ]          │
+│ [ SAVE REACTION ]           │
+└────────────────────────────┘
+```
+
+同步聚焦左側 Action Order 上的 Fireball resolve event，讓玩家明白正在阻止時間軸上的哪件事。按鈕文字、技能名稱與選項依角色實際能力產生；「Interrupt Shot」僅是示意。Reaction 是否暫停解析及可選時間仍為 TBD。
 
 ## 4. 可選行動與 Action 類別
 
@@ -137,24 +179,23 @@ Encounter intro
 ### 標準 flow
 
 ```text
-SC 指令
-→ Prepared SC drawer
+Battlefield remains visible
+→ SC 指令，右側展開 Prepared SC drawer
 → 選擇 SC / Tier
-→ 選擇 Full Chant 或 Chantless
-→ 顯示該 Tier 可控制的 parameters
-→ 選擇 Target / Area
+→ 同一 Context Panel 顯示 Full Chant / Chantless
+→ 同一 Panel 顯示該 Tier 可控制的 parameters
+→ 同一 Panel 選擇 Target / Area，戰場同步預覽
 → 確認執行
-→ 顯示 Mana、預估效果、耗時／Interrupt window 與可見風險
-→ 執行並更新 Casting State / Turn Order
+→ 更新 Casting State / 左側 Action Order
 ```
 
 ### 每一步的資訊
 
-1. **Prepared SC drawer：** 只列出本場已 Prepared 的 SC；每列含名稱、Tier、簡短用途、Mana 狀態與可用性。已學會但未準備的 Spell 不應看起來可直接施放；可用提示說明「戰前可加入 Prepared Deck」。
+1. **Prepared SC drawer：** 右側展開，且只列出本場已 Prepared 的 SC；每列含名稱、Tier、簡短用途、Mana 狀態與可用性。已學會但未準備的 Spell 不應看起來可直接施放；可用提示說明「戰前可加入 Prepared Deck」。保持中央戰場與左側 Action Order 可見，玩家選擇 SC 時仍能追蹤敵人、Intent、目標和剩餘事件。
 2. **選 SC：** 同一 Spell Family 可展開不同 Tier。比較時突出控制差異與資源差異，不把 Tier 做成純傷害排行。
 3. **Full Chant / Chantless：** 只顯示該角色、該 SC Tier 當下可用的模式。Full Chant 預覽一般較穩定／完整、施法時間較長且有 Interrupt window；Chantless 速度較快、由施術者承擔更多運算負擔，可能犧牲穩定度、Efficiency、Precision 或輸出。避免固定倍率承諾，除非內容資料明確提供。
-4. **Parameters：** 僅呈現該 Tier 開放控制的項目；其他參數以模板／預設摘要呈現。以語意選項及滑桿呈現允許範圍，不暴露需要玩家輸入的函數值。
-5. **Target：** 使用戰場直接點選、目標列或範圍預覽。清楚顯示施法對象與可能波及的隊友／場景。
+4. **Parameters：** 在同一 Context Panel 內呈現該 Tier 開放控制的項目；其他參數以模板／預設摘要呈現。以語意選項及滑桿呈現允許範圍，不暴露需要玩家輸入的函數值。
+5. **Target：** 在同一 Panel 使用戰場直接點選、目標列或範圍預覽。Battlefield 保持可見，清楚顯示施法對象與可能波及的隊友／場景。
 6. **Confirm：** 一次檢視模式、主要選項、目標、Mana、預計解析時點與可能的 Interrupt window。確認後才提交行動；可返回前一步調整。
 
 ### 例：Fireball I
@@ -199,6 +240,7 @@ Signature 可辨識不代表本次 runtime parameters 全知。若目標、範�
 → 選 Analyze
 → 顯示 Analysis progress / 本次取得的情報
 → 摘要 Graph 結構、危險條件及可供決策的候選點
+→ 右側 Analysis workspace 展示決策所需資訊
 → 玩家依情報選 Interrupt、移動、Guard、Counter 或 Reverse 路線
 ```
 
@@ -257,7 +299,7 @@ Spell 已完成並 active / 正在 resolve
 ### Progressive disclosure
 
 - 預設戰鬥 HUD 顯示「結果與決策」層，不常駐完整 Graph。
-- 使用 Analysis 或主動展開後，先顯示 Graph 摘要／關鍵路徑；可點節點查看已知效果、依賴與可信度。
+- 使用 Analysis 或主動展開後，右側 Analysis workspace 先顯示 Graph 摘要／關鍵路徑；可點節點查看已知效果、依賴與可信度，Battlefield 與 Action Order 持續可見。
 - 用線型、標籤及文字輔助表示已知、推測與未知；色彩不能是唯一區分方式。
 - 潛在 Weak Node 使用「候選／可能」標記，並指出信心或尚缺資訊（具體信心模型 TBD）。
 - 只有當節點與行動決策相關時才突出；完整 Graph 可作為可選深度資訊，不阻塞一般戰鬥節奏。
@@ -297,6 +339,9 @@ Spell 已完成並 active / 正在 resolve
 以下為可觀察的 UX 驗收目標，具體量化門檻需 playtest 後設定：
 
 - 玩家能在不打開次級頁面的情況下找到當前角色、敵方 Intent、Casting State 與行動順序。
+- 戰鬥只以 Landscape 呈現；16:9 與更寬手機比例下，三欄資訊和安全區皆可用，沒有 Portrait fallback。
+- 中央 Battlefield 在一般指令、SC/Target 選擇及 Analysis workspace 開啟期間持續可辨認，且保持為最大視覺區。
+- Action Order 固定在左側並能顯示角色及重要非角色解析事件；Reaction overlay 不會遮住其目標事件。
 - 標準 Fireball 被辨識時，玩家不會被迫 Analysis 才能看到名稱或嘗試一般應對。
 - 玩家能在施法前分辨 Full Chant 與 Chantless 的主要取捨及預計完成時點。
 - 玩家能從 drawer 看出 SC 必須已 Prepared，且不同 Tier 是同 Family 的不同控制權配置。
@@ -324,20 +369,26 @@ Spell 已完成並 active / 正在 resolve
 | Reaction 事件閃過或被忽略 | 事件聚焦、清楚期限與文字提示；暫停／自動解析策略仍待定。 |
 | 教學戰腳本為了劇情違反行動規則 | 腳本遵守 Initiative、Action 與 Reaction 規則；若無合法 Interrupt 時機，改用 encounter 佈局而非暗改規則。 |
 
-## 14. 外部參考方向（非 Canon）
+## 14. 外部視覺參考與 Agent Guardrails（非 Canon）
 
-以下僅用來討論可讀性與互動節奏；Astraea 不應照搬其規則、美術或進度系統：
+以下作品供實作 agent 研究**資訊架構與互動可讀性**，不作為 canon 或規則來源。參考結構，不複製視覺風格、品牌元素或素材：
 
-- **Octopath Traveler：** 可參考行動順序與弱點資訊的快速可讀性；Astraea 的 Function / Analysis 是自有系統，不等同其 Break 機制。
-- **Honkai: Star Rail：** 可參考少量主要輸入與清楚 action order 的注意力配置；Astraea 的行動解析與施法事件應依自身規則設計。
-- **Persona 5：** 可參考快速 command access 與降低選單操作負擔；不代表採用其戰鬥流程。
-- **Sea of Stars：** 可參考敵方蓄力期間給玩家明確反應窗口的可讀性；Astraea 使用 Signature、Casting State 與 Interrupt 時機，不複製 Locks 機制。
+- **Honkai: Star Rail：** 研究 Landscape 戰鬥構圖、左側 Action Order、中央戰場、底部隊伍狀態與少量主要指令；Astraea 的事件時間軸與規則依自身系統設計。不得複製 icon、角色肖像處理、HUD、字體或品牌視覺。
+- **Octopath Traveler II：** 研究戰場佔主要面積、Next Turn 預測與角色 HP/SP 持續可讀的資訊層級；Astraea 的 Function / Analysis 不等同其弱點或 Break 機制。
+- **Persona 5 Royal：** 研究常用 command 的快速存取與選擇回饋；不複製 radial graphic language、字體、紅黑風格或戰鬥流程。
+- **Sea of Stars：** 研究敵人 channeling 強力攻擊時的 telegraph 與可見取消窗口；轉譯為 Astraea 的 Known Spell Signature → Casting State → Action Order Resolve Event → Interrupt Window，不複製 Locks 機制。
 
-這些作品是 UX 討論的參照，不構成 Astraea canon、規則來源或機制承諾。
+### Astraea 視覺與資訊設計護欄
+
+- 中央戰場永遠是最大視覺區，避免把整體做成儀表板或「科技 HUD」。
+- Analysis 應以魔法陣、節點、連線、術式幾何與 Function dependency 建立 Astraea 自己的視覺語言；避免終端機、駭客介面或程式碼視窗的既視感。
+- 外部作品只作為資訊架構參考，不採用其素材、品牌配色、字體、排版細節或角色展示方式。
+- 常用指令不要埋在多層 menu；SC 流程用右側 Context Panel 原地推進，戰場與 Action Order 保持可見。
+- 實作交付需同時檢查 16:9 基準與更寬手機比例、安全區與觸控可達性；不得以 Portrait 戰鬥作為 fallback。
 
 ## 15. Open Questions / TBD
 
-1. 戰鬥的最終視角與裝置適配：窄螢幕直向、橫向或依平台切換？
+1. Landscape-only 前提下，各平台的實際可用安全畫布與最小支援尺寸為何？
 2. Turn Order 的預測精度：Reaction、Interrupt、速度變化後如何即時重排？Cast completion 在 initiative 中的解析單位為何？
 3. Reaction 觸發時是否暫停戰鬥、提供限時選擇，或採其他非即時制流程？錯過反應時的預設行為？
 4. SC drawer 的實際欄位、比較方式、Prepared Deck 數量與戰鬥中切換限制如何呈現？MVP deck limit 六張見相關系統文件。
