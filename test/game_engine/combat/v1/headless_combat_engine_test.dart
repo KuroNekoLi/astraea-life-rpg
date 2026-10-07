@@ -94,15 +94,14 @@ void main() {
       expect(engine.advance(next).event.actorId, 'ashfang');
     });
 
-    test('spell resolve and battlefield events share the same timeline', () {
+    test('battlefield events share the same timeline', () {
       var state = battle();
       state = engine.scheduleEvent(
         state,
         id: 'spell:fireball-1',
-        type: TimelineEventType.spellResolve,
+        type: TimelineEventType.battlefieldFunction,
         scheduledAt: 10,
         actorId: 'hero',
-        functionId: 'function:fireball-1',
       );
 
       final heroTurn = engine.advance(state).state;
@@ -123,7 +122,7 @@ void main() {
       );
 
       final next = engine.advance(afterHero);
-      expect(next.event.type, TimelineEventType.spellResolve);
+      expect(next.event.type, TimelineEventType.battlefieldFunction);
       expect(next.event.id, 'spell:fireball-1');
       expect(next.state.currentTime, 10);
     });
