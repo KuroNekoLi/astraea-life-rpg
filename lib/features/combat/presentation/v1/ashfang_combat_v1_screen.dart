@@ -680,35 +680,44 @@ class _ActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AstraeaColors.panel,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Text(
-              body,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AstraeaColors.panel,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(title, style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  Text(
+                    body,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AstraeaColors.muted,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      for (final badge in badges) Chip(label: Text(badge)),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: [for (final badge in badges) Chip(label: Text(badge))],
-            ),
-            const SizedBox(height: 14),
-            FilledButton(onPressed: onPressed, child: Text(actionLabel)),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          FilledButton(onPressed: onPressed, child: Text(actionLabel)),
+        ],
       ),
     );
   }
@@ -721,51 +730,58 @@ class _AnalysisAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AstraeaColors.panel,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AstraeaColors.starlight.withValues(alpha: 0.22),
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AstraeaColors.panel,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AstraeaColors.starlight.withValues(alpha: 0.22),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    context.l10n.combatModifiedAnalysisTitle,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    context.l10n.combatModifiedAnalysisBody,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AstraeaColors.muted,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    context.l10n.combatFunctionStructure,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  _MiniFunctionGraph(revealed: view.weakNodeRevealed),
+                  const SizedBox(height: 10),
+                  Text(
+                    view.weakNodeRevealed
+                        ? context.l10n.combatStructureRevealed
+                        : context.l10n.combatStructureUnknown,
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              context.l10n.combatModifiedAnalysisTitle,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              context.l10n.combatModifiedAnalysisBody,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              context.l10n.combatFunctionStructure,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            const SizedBox(height: 8),
-            _MiniFunctionGraph(revealed: view.weakNodeRevealed),
-            const SizedBox(height: 10),
-            Text(
-              view.weakNodeRevealed
-                  ? context.l10n.combatStructureRevealed
-                  : context.l10n.combatStructureUnknown,
-            ),
-            const SizedBox(height: 14),
-            FilledButton.icon(
-              onPressed: controller.analyzeModifiedFireball,
-              icon: const Icon(Icons.search),
-              label: Text(context.l10n.combatAnalyzeModified),
-            ),
-          ],
-        ),
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            onPressed: controller.analyzeModifiedFireball,
+            icon: const Icon(Icons.search),
+            label: Text(context.l10n.combatAnalyzeModified),
+          ),
+        ],
       ),
     );
   }
