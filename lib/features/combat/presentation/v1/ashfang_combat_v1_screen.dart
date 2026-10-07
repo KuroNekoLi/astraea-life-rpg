@@ -265,6 +265,8 @@ class _EnemyIntentRibbon extends StatelessWidget {
         context.l10n.combatIntentModifiedFireball,
       AshfangTutorialStageV1.heroFullChant =>
         context.l10n.combatIntentHeroFullChant,
+      AshfangTutorialStageV1.heroFullChantCasting =>
+        context.l10n.combatFullChantCastingTitle,
       AshfangTutorialStageV1.heroFinisher => context.l10n.combatIntentFinisher,
       AshfangTutorialStageV1.victory => context.l10n.combatIntentVictory,
       _ => context.l10n.combatIntentHeroTurn,
@@ -569,6 +571,7 @@ class _RootCommands extends StatelessWidget {
       AshfangTutorialStageV1.modifiedAnalysis => 'analyze',
       AshfangTutorialStageV1.heroChantless ||
       AshfangTutorialStageV1.heroFullChant ||
+      AshfangTutorialStageV1.heroFullChantCasting ||
       AshfangTutorialStageV1.heroFinisher => 'sc',
       _ => '',
     };
@@ -633,6 +636,13 @@ class _StageAction extends StatelessWidget {
         actionLabel: context.l10n.combatBeginFullChant,
         onPressed: controller.beginHeroFireballIIFullChant,
       ),
+      AshfangTutorialStageV1.heroFullChantCasting => _ActionCard(
+        title: context.l10n.combatFullChantCastingTitle,
+        body: context.l10n.combatFullChantCastingBody,
+        badges: [context.l10n.combatFireballII, context.l10n.combatFullChant],
+        actionLabel: context.l10n.combatAdvanceTimeline,
+        onPressed: controller.resolveHeroFireballIIFullChant,
+      ),
       AshfangTutorialStageV1.heroFinisher => _ActionCard(
         title: context.l10n.combatFinisherTitle,
         body: context.l10n.combatFinisherBody,
@@ -640,8 +650,14 @@ class _StageAction extends StatelessWidget {
         actionLabel: context.l10n.combatFinishFireballI,
         onPressed: controller.finishWithFireballI,
       ),
-      AshfangTutorialStageV1.victory => _VictoryPanel(controller: controller),
-      AshfangTutorialStageV1.defeat => _VictoryPanel(controller: controller),
+      AshfangTutorialStageV1.victory => _EndPanel(
+        controller: controller,
+        victory: true,
+      ),
+      AshfangTutorialStageV1.defeat => _EndPanel(
+        controller: controller,
+        victory: false,
+      ),
       _ => const SizedBox.shrink(),
     };
   }
@@ -868,9 +884,10 @@ class _ReactionOverlay extends StatelessWidget {
   }
 }
 
-class _VictoryPanel extends StatelessWidget {
-  const _VictoryPanel({required this.controller});
+class _EndPanel extends StatelessWidget {
+  const _EndPanel({required this.controller, required this.victory});
   final AshfangCombatV1Controller controller;
+  final bool victory;
 
   @override
   Widget build(BuildContext context) {
@@ -885,13 +902,19 @@ class _VictoryPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            context.l10n.combatVictoryTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(color: AstraeaColors.gold),
+            victory
+                ? context.l10n.combatVictoryTitle
+                : context.l10n.combatDefeatTitle,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: victory ? AstraeaColors.gold : AstraeaColors.coral,
+            ),
           ),
           const SizedBox(height: 8),
-          Text(context.l10n.combatVictoryBody),
+          Text(
+            victory
+                ? context.l10n.combatVictoryBody
+                : context.l10n.combatDefeatBody,
+          ),
           const SizedBox(height: 14),
           FilledButton(
             onPressed: controller.reset,
