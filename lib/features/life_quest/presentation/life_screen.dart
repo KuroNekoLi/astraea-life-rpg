@@ -282,13 +282,13 @@ class QuestCompletionScreen extends ConsumerWidget {
       body: quests.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) =>
-            Center(child: Text('Could not load quest: $error')),
+            Center(child: Text(context.l10n.couldNotLoadQuest('$error'))),
         data: (items) {
           final quest = items
               .where((item) => item['id'] == questId)
               .firstOrNull;
           if (quest == null) {
-            return const Center(child: Text('Quest not found'));
+            return Center(child: Text(context.l10n.questNotFound));
           }
           final repo = repository.asData?.value;
           if (repo == null) {
@@ -311,7 +311,7 @@ class QuestCompletionScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      quest['title'] as String,
+                      localizedQuestTitle(context.l10n, quest['id'] as String),
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 16),
