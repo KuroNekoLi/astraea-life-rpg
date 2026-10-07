@@ -33,11 +33,14 @@ final class AshfangRematchV1Session {
   bool get weakNodeRevealed =>
       rioKnowledge?.revealedWeakNodeIds.contains('stabilization') ?? false;
 
-  bool get canReact =>
-      phase == AshfangRematchPhaseV1.reactionWindow &&
-      enemyCastingFunction != null &&
-      state.actor('rio').isActive &&
-      state.actor('rio').reactionAvailable;
+  bool get canReact {
+    final function = enemyCastingFunction;
+    return phase == AshfangRematchPhaseV1.reactionWindow &&
+        function != null &&
+        !function.reactionConsumed &&
+        state.actor('rio').isActive &&
+        state.actor('rio').reactionAvailable;
+  }
 
   void reset() {
     _ashfangTurns = 0;
@@ -125,8 +128,10 @@ final class AshfangRematchV1Session {
         ),
       ),
     );
+    final activeFunction = state.castingFunctionFor('ashfang');
     if (state.actor('rio').reactionAvailable &&
-        state.castingFunctionFor('ashfang') != null) {
+        activeFunction != null &&
+        !activeFunction.reactionConsumed) {
       phase = AshfangRematchPhaseV1.reactionWindow;
       return;
     }
