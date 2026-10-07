@@ -266,7 +266,7 @@ class _EnemyIntentRibbon extends StatelessWidget {
       AshfangTutorialStageV1.heroFullChant =>
         context.l10n.combatIntentHeroFullChant,
       AshfangTutorialStageV1.heroFullChantCasting =>
-        context.l10n.combatFullChantCastingTitle,
+        context.l10n.combatIntentWhileHeroCasting,
       AshfangTutorialStageV1.heroFinisher => context.l10n.combatIntentFinisher,
       AshfangTutorialStageV1.victory => context.l10n.combatIntentVictory,
       _ => context.l10n.combatIntentHeroTurn,
