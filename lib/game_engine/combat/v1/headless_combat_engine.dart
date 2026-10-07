@@ -286,7 +286,9 @@ final class HeadlessCombatEngineV1 {
         throw StateError('Reaction charge is not available');
       }
       if (function.reactionConsumed) {
-        throw StateError('This trigger window already resolved a Party Reaction');
+        throw StateError(
+          'This trigger window already resolved a Party Reaction',
+        );
       }
       if (state.castingFunctionFor(interrupter.id) != null &&
           !command.interrupt.castingCompatible) {
@@ -313,10 +315,7 @@ final class HeadlessCombatEngineV1 {
 
     var weakNodeBonus = 0;
     if (command.weakNodeId != null) {
-      final knowledge = state.knowledgeFor(
-        interrupter.id,
-        function.actionId,
-      );
+      final knowledge = state.knowledgeFor(interrupter.id, function.actionId);
       if (knowledge == null ||
           !knowledge.revealedWeakNodeIds.contains(command.weakNodeId)) {
         throw StateError('Weak Node has not been revealed to this combatant');
@@ -507,14 +506,13 @@ final class HeadlessCombatEngineV1 {
     if (command.counter.requiresReversibility && !function.reversible) {
       throw StateError('Function is not reversible');
     }
-    if (command.counter.compatibleTags.intersection(function.counterTags).isEmpty) {
+    if (command.counter.compatibleTags
+        .intersection(function.counterTags)
+        .isEmpty) {
       throw StateError('Counter is not compatible with this Function');
     }
     if (command.counter.requiresCounterPath) {
-      final knowledge = state.knowledgeFor(
-        counterUser.id,
-        function.actionId,
-      );
+      final knowledge = state.knowledgeFor(counterUser.id, function.actionId);
       if (knowledge == null ||
           knowledge.level.index < FunctionKnowledgeLevelV1.counterPath.index ||
           knowledge.knownCounterTags
@@ -535,7 +533,9 @@ final class HeadlessCombatEngineV1 {
         throw StateError('Reaction charge is not available');
       }
       if (function.reactionConsumed) {
-        throw StateError('This trigger window already resolved a Party Reaction');
+        throw StateError(
+          'This trigger window already resolved a Party Reaction',
+        );
       }
       if (state.castingFunctionFor(counterUser.id) != null &&
           !command.counter.castingCompatible) {
@@ -647,10 +647,7 @@ final class HeadlessCombatEngineV1 {
       nextSequence: state.nextSequence + 1,
       revision: state.revision + 1,
       outcome: state.outcome,
-      eventLog: [
-        ...state.eventLog,
-        'fullChantStarted:${actor.id}:${spell.id}',
-      ],
+      eventLog: [...state.eventLog, 'fullChantStarted:${actor.id}:${spell.id}'],
     );
   }
 
@@ -711,7 +708,9 @@ final class HeadlessCombatEngineV1 {
   ) {
     _ensureBattleActive(state);
     if (state.activeTurn != null) {
-      throw StateError('Timeline events cannot resolve during a character turn');
+      throw StateError(
+        'Timeline events cannot resolve during a character turn',
+      );
     }
     if (event.scheduledAt != state.currentTime) {
       throw StateError('Timeline event is not ready at the current time');

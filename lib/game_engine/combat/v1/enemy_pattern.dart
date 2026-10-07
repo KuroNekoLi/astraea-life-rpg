@@ -30,8 +30,7 @@ final class EnemyPatternConditionV1 {
             maxTurnIndex != null &&
             minTurnIndex! > maxTurnIndex!) ||
         (minMana != null && minMana! < 0) ||
-        (maxHpPercent != null &&
-            (maxHpPercent! < 0 || maxHpPercent! > 100)) ||
+        (maxHpPercent != null && (maxHpPercent! < 0 || maxHpPercent! > 100)) ||
         (requiredPreviousIntentId != null &&
             requiredPreviousIntentId!.trim().isEmpty)) {
       throw ArgumentError('Invalid enemy Pattern condition');
@@ -61,8 +60,7 @@ final class EnemyPatternConditionV1 {
     if (minMana != null && actor.mana < minMana!) {
       return false;
     }
-    if (maxHpPercent != null &&
-        actor.hp * 100 > actor.maxHp * maxHpPercent!) {
+    if (maxHpPercent != null && actor.hp * 100 > actor.maxHp * maxHpPercent!) {
       return false;
     }
     if (targetZones.isNotEmpty && !targetZones.contains(target.zone)) {
@@ -120,8 +118,7 @@ final class EnemyPatternV1 {
   EnemyPatternV1({required Iterable<EnemyPatternRuleV1> rules})
     : rules = List.unmodifiable(rules) {
     if (this.rules.isEmpty ||
-        this.rules.map((rule) => rule.id).toSet().length !=
-            this.rules.length) {
+        this.rules.map((rule) => rule.id).toSet().length != this.rules.length) {
       throw ArgumentError('Enemy Pattern needs unique authored rules');
     }
   }
@@ -136,19 +133,18 @@ final class EnemyPatternV1 {
   }) {
     final actor = state.actor(actorId);
     final target = state.actor(targetId);
-    if (!actor.isActive ||
-        !target.isActive ||
-        actor.side == target.side) {
+    if (!actor.isActive || !target.isActive || actor.side == target.side) {
       throw StateError('Enemy Pattern requires active opposing actors');
     }
 
-    final ordered = [
-      for (var index = 0; index < rules.length; index++)
-        (rule: rules[index], index: index),
-    ]..sort((a, b) {
-      final byPriority = b.rule.priority.compareTo(a.rule.priority);
-      return byPriority != 0 ? byPriority : a.index.compareTo(b.index);
-    });
+    final ordered =
+        [
+          for (var index = 0; index < rules.length; index++)
+            (rule: rules[index], index: index),
+        ]..sort((a, b) {
+          final byPriority = b.rule.priority.compareTo(a.rule.priority);
+          return byPriority != 0 ? byPriority : a.index.compareTo(b.index);
+        });
 
     for (final entry in ordered) {
       if (entry.rule.condition.matches(

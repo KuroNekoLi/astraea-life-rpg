@@ -10,7 +10,13 @@ enum DamageType { physical, magic }
 
 enum TimelineEventType { characterTurn, spellResolve, battlefieldFunction }
 
-enum ActiveFunctionStatusV1 { casting, active, interrupted, resolved, countered }
+enum ActiveFunctionStatusV1 {
+  casting,
+  active,
+  interrupted,
+  resolved,
+  countered,
+}
 
 enum FunctionKnowledgeLevelV1 { unknown, intent, nodes, weakNode, counterPath }
 
@@ -52,8 +58,7 @@ final class FunctionKnowledgeV1 {
       signatureId: signatureId,
       level: level ?? this.level,
       knownStability: knownStability ?? this.knownStability,
-      revealedWeakNodeIds:
-          revealedWeakNodeIds ?? this.revealedWeakNodeIds,
+      revealedWeakNodeIds: revealedWeakNodeIds ?? this.revealedWeakNodeIds,
       knownCounterTags: knownCounterTags ?? this.knownCounterTags,
       reversibilityKnown: reversibilityKnown ?? this.reversibilityKnown,
     );
