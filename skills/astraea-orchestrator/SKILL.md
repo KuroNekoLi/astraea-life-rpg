@@ -1,7 +1,7 @@
 ---
 name: astraea-orchestrator
 description: Orchestrate Astraea MVP work across product, game design, narrative, Flutter architecture, implementation, review, QA, and real-player validation. Use as the default coordinator for substantial feature work, milestones, cross-spec changes, vertical-slice implementation, and release readiness.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Astraea Orchestrator
@@ -686,7 +686,7 @@ Every dispatched implementation task should contain:
 - spec:
 - design:
 - ADR:
-- Figma/reference:
+- visual reference (optional):
 
 ## Acceptance Criteria
 - AC-01 ...

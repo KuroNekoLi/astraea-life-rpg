@@ -1,7 +1,7 @@
 ---
 name: astraea-combat-designer
 description: Design and review Astraea's turn-based tactical combat, Function Graph, Weak Node, reactions, spells, encounters, enemy intent, and Counter-Function mechanics. Use for combat rules, card balance, boss design, encounter tutorials, and combat UX.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Astraea Combat Designer
@@ -392,7 +392,7 @@ For every encounter define:
 ## Encounter
 Name:
 Purpose:
-Expected rounds:
+Expected duration / Party Main Actions:
 
 ## Player Skill Being Tested
 - ...

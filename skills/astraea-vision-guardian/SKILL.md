@@ -1,7 +1,7 @@
 ---
 name: astraea-vision-guardian
 description: Protect Astraea Life RPG's product identity, player-respect principles, and cross-spec invariants. Use for scope review, feature proposals, economy/progression changes, retention mechanics, monetization, quest design, and any change that risks turning the product into a productivity app with RPG skin.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Astraea Vision Guardian

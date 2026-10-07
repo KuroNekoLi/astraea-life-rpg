@@ -1,7 +1,7 @@
 ---
 name: astraea-game-director
 description: Direct Astraea as a coherent JRPG. Use for core loop, progression, player fantasy, feature prioritization, retention through play, content pacing, MVP cuts, and cross-system game design decisions.
-version: "1.0.0"
+version: "1.1.0"
 ---
 
 # Astraea Game Director
