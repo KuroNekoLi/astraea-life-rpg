@@ -122,7 +122,6 @@ class AdventureScreen extends ConsumerWidget {
       ),
     );
   }
-
 }
 
 class _ChapterMapCard extends StatelessWidget {
@@ -180,7 +179,10 @@ class _ChapterMapCard extends StatelessWidget {
               Text(
                 progress.currentSceneId == null
                     ? context.l10n.chapterOneComplete
-                    : localizedSceneTitle(context.l10n, progress.currentSceneId!),
+                    : localizedSceneTitle(
+                        context.l10n,
+                        progress.currentSceneId!,
+                      ),
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),

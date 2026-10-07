@@ -46,7 +46,9 @@ class DeckScreen extends ConsumerWidget {
                       child: Text(
                         value.selectedSpellIds.isEmpty
                             ? context.l10n.noDeckPrepared
-                            : context.l10n.preparedCount(value.selectedSpellIds.length),
+                            : context.l10n.preparedCount(
+                                value.selectedSpellIds.length,
+                              ),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
@@ -57,13 +59,19 @@ class DeckScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 14),
             if (value.selectedSpells.isNotEmpty) ...[
-              Text(context.l10n.readySection, style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                context.l10n.readySection,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               const SizedBox(height: 8),
               for (final spell in value.selectedSpells)
                 _SpellCardTile(spell: spell, selected: true),
               const SizedBox(height: 12),
             ],
-            Text(context.l10n.cardLibrary, style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              context.l10n.cardLibrary,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             const SizedBox(height: 8),
             LayoutBuilder(
               builder: (context, constraints) {
