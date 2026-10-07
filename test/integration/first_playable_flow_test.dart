@@ -208,6 +208,11 @@ void main() {
       await tester.tap(find.text('Begin Fireball II · Full Chant'));
       await tester.pumpAndSettle();
 
+      expect(find.text('Full Chant is constructing'), findsOneWidget);
+      expect(find.textContaining('Fireball II Resolve'), findsOneWidget);
+      await tester.tap(find.text('Hold Formation'));
+      await tester.pumpAndSettle();
+
       await tester.ensureVisible(find.text('Finish with Fireball I'));
       await tester.tap(find.text('Finish with Fireball I'));
       await tester.pumpAndSettle();
