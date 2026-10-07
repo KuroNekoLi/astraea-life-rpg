@@ -131,7 +131,10 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
         body: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Text(context.l10n.ashfangTrainingConstruct, style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              context.l10n.ashfangTrainingConstruct,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 8),
             Text(context.l10n.enemyFunctionPath),
             const SizedBox(height: 8),
@@ -158,13 +161,18 @@ class _FunctionLabScreenState extends ConsumerState<FunctionLabScreen> {
                           ? Icons.visibility
                           : Icons.circle_outlined,
                     ),
-                    title: Text(localizedFunctionNodeType(context.l10n, node.type)),
+                    title: Text(
+                      localizedFunctionNodeType(context.l10n, node.type),
+                    ),
                     subtitle: Text(_nodeState(context, node.id)),
                   ),
                 ),
               ),
             const SizedBox(height: 8),
-            Text(_feedbackText(context), style: Theme.of(context).textTheme.bodyLarge),
+            Text(
+              _feedbackText(context),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             const SizedBox(height: 16),
             if (_function!.activeNodeId == 'lock-target' &&
                 !_knowledge.revealedWeakNodeIds.contains('lock-target'))

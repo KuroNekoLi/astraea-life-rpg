@@ -49,20 +49,11 @@ class AshfangCombatV1Screen extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Flexible(
-                  flex: 14,
-                  child: _TimelineRail(view: view),
-                ),
-                Flexible(
-                  flex: 60,
-                  child: _Battlefield(view: view),
-                ),
+                Flexible(flex: 14, child: _TimelineRail(view: view)),
+                Flexible(flex: 60, child: _Battlefield(view: view)),
                 Flexible(
                   flex: 26,
-                  child: _ContextPanel(
-                    view: view,
-                    controller: controller,
-                  ),
+                  child: _ContextPanel(view: view, controller: controller),
                 ),
               ],
             ),
@@ -114,9 +105,9 @@ class _TimelineRail extends StatelessWidget {
           const Spacer(),
           Text(
             context.l10n.combatTrainingArena,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AstraeaColors.muted,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(color: AstraeaColors.muted),
           ),
         ],
       ),
@@ -182,10 +173,7 @@ class _Battlefield extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF102647),
-            Color(0xFF071426),
-          ],
+          colors: [Color(0xFF102647), Color(0xFF071426)],
         ),
       ),
       child: Column(
@@ -250,9 +238,7 @@ class _Battlefield extends StatelessWidget {
                 if (view.enemyCastingFunction != null)
                   Align(
                     alignment: const Alignment(0.18, -0.35),
-                    child: _FunctionOrb(
-                      revealed: view.weakNodeRevealed,
-                    ),
+                    child: _FunctionOrb(revealed: view.weakNodeRevealed),
                   ),
               ],
             ),
@@ -279,10 +265,8 @@ class _EnemyIntentRibbon extends StatelessWidget {
         context.l10n.combatIntentModifiedFireball,
       AshfangTutorialStageV1.heroFullChant =>
         context.l10n.combatIntentHeroFullChant,
-      AshfangTutorialStageV1.heroFinisher =>
-        context.l10n.combatIntentFinisher,
-      AshfangTutorialStageV1.victory =>
-        context.l10n.combatIntentVictory,
+      AshfangTutorialStageV1.heroFinisher => context.l10n.combatIntentFinisher,
+      AshfangTutorialStageV1.victory => context.l10n.combatIntentVictory,
       _ => context.l10n.combatIntentHeroTurn,
     };
     return Container(
@@ -305,11 +289,7 @@ class _EnemyIntentRibbon extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           Expanded(
-            child: Text(
-              intent,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            child: Text(intent, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
           if (view.enemyCastingFunction != null) ...[
             const SizedBox(width: 12),
@@ -319,9 +299,9 @@ class _EnemyIntentRibbon extends StatelessWidget {
                   : context.l10n.combatStabilityValue(
                       view.rioKnowledge!.knownStability!,
                     ),
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: AstraeaColors.starlight,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium?.copyWith(color: AstraeaColors.starlight),
             ),
           ],
         ],
@@ -367,10 +347,7 @@ class _ActorToken extends StatelessWidget {
         ),
         boxShadow: [
           if (active || casting)
-            BoxShadow(
-              color: accent.withValues(alpha: 0.18),
-              blurRadius: 18,
-            ),
+            BoxShadow(color: accent.withValues(alpha: 0.18), blurRadius: 18),
         ],
       ),
       child: Column(
@@ -444,9 +421,9 @@ class _FeedbackBar extends StatelessWidget {
         _feedbackText(context, view.feedback),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: AstraeaColors.pale,
-        ),
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: AstraeaColors.pale),
       ),
     );
   }
@@ -500,9 +477,7 @@ class _PartyStatus extends StatelessWidget {
                 ),
               ),
               Icon(
-                actor.reactionAvailable
-                    ? Icons.bolt
-                    : Icons.bolt_outlined,
+                actor.reactionAvailable ? Icons.bolt : Icons.bolt_outlined,
                 size: 14,
                 color: actor.reactionAvailable
                     ? AstraeaColors.gold
@@ -511,16 +486,13 @@ class _PartyStatus extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          LinearProgressIndicator(
-            value: actor.hp / actor.maxHp,
-            minHeight: 4,
-          ),
+          LinearProgressIndicator(value: actor.hp / actor.maxHp, minHeight: 4),
           const SizedBox(height: 3),
           Text(
             context.l10n.combatMana(actor.mana, actor.maxMana),
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AstraeaColors.muted,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(color: AstraeaColors.muted),
           ),
         ],
       ),
@@ -529,10 +501,7 @@ class _PartyStatus extends StatelessWidget {
 }
 
 class _ContextPanel extends StatelessWidget {
-  const _ContextPanel({
-    required this.view,
-    required this.controller,
-  });
+  const _ContextPanel({required this.view, required this.controller});
 
   final AshfangCombatV1ViewState view;
   final AshfangCombatV1Controller controller;
@@ -581,7 +550,9 @@ class _ContextPanel extends StatelessWidget {
           const SizedBox(height: 14),
           _RootCommands(stage: view.stage),
           const SizedBox(height: 14),
-          Expanded(child: _StageAction(view: view, controller: controller)),
+          Expanded(
+            child: _StageAction(view: view, controller: controller),
+          ),
         ],
       ),
     );
@@ -647,10 +618,7 @@ class _StageAction extends StatelessWidget {
       AshfangTutorialStageV1.heroChantless => _ActionCard(
         title: context.l10n.combatTutorialChantlessTitle,
         body: context.l10n.combatTutorialChantlessBody,
-        badges: [
-          context.l10n.combatFireballI,
-          context.l10n.combatChantless,
-        ],
+        badges: [context.l10n.combatFireballI, context.l10n.combatChantless],
         actionLabel: context.l10n.combatCastFireballI,
         onPressed: controller.heroFireballIChantless,
       ),
@@ -661,29 +629,19 @@ class _StageAction extends StatelessWidget {
       AshfangTutorialStageV1.heroFullChant => _ActionCard(
         title: context.l10n.combatFullChantTitle,
         body: context.l10n.combatFullChantBody,
-        badges: [
-          context.l10n.combatFireballII,
-          context.l10n.combatFullChant,
-        ],
+        badges: [context.l10n.combatFireballII, context.l10n.combatFullChant],
         actionLabel: context.l10n.combatBeginFullChant,
         onPressed: controller.beginHeroFireballIIFullChant,
       ),
       AshfangTutorialStageV1.heroFinisher => _ActionCard(
         title: context.l10n.combatFinisherTitle,
         body: context.l10n.combatFinisherBody,
-        badges: [
-          context.l10n.combatFireballI,
-          context.l10n.combatChantless,
-        ],
+        badges: [context.l10n.combatFireballI, context.l10n.combatChantless],
         actionLabel: context.l10n.combatFinishFireballI,
         onPressed: controller.finishWithFireballI,
       ),
-      AshfangTutorialStageV1.victory => _VictoryPanel(
-        controller: controller,
-      ),
-      AshfangTutorialStageV1.defeat => _VictoryPanel(
-        controller: controller,
-      ),
+      AshfangTutorialStageV1.victory => _VictoryPanel(controller: controller),
+      AshfangTutorialStageV1.defeat => _VictoryPanel(controller: controller),
       _ => const SizedBox.shrink(),
     };
   }
@@ -721,23 +679,18 @@ class _ActionCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               body,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AstraeaColors.muted,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
             ),
             const SizedBox(height: 12),
             Wrap(
               spacing: 6,
               runSpacing: 6,
-              children: [
-                for (final badge in badges) Chip(label: Text(badge)),
-              ],
+              children: [for (final badge in badges) Chip(label: Text(badge))],
             ),
             const SizedBox(height: 14),
-            FilledButton(
-              onPressed: onPressed,
-              child: Text(actionLabel),
-            ),
+            FilledButton(onPressed: onPressed, child: Text(actionLabel)),
           ],
         ),
       ),
@@ -772,9 +725,9 @@ class _AnalysisAction extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               context.l10n.combatModifiedAnalysisBody,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AstraeaColors.muted,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
             ),
             const SizedBox(height: 16),
             Text(
@@ -849,8 +802,7 @@ class _ReactionOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final modified =
-        view.stage == AshfangTutorialStageV1.modifiedInterrupt;
+    final modified = view.stage == AshfangTutorialStageV1.modifiedInterrupt;
     return Positioned.fill(
       child: ColoredBox(
         color: Colors.black.withValues(alpha: 0.48),
@@ -934,9 +886,9 @@ class _VictoryPanel extends StatelessWidget {
         children: [
           Text(
             context.l10n.combatVictoryTitle,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AstraeaColors.gold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: AstraeaColors.gold),
           ),
           const SizedBox(height: 8),
           Text(context.l10n.combatVictoryBody),
@@ -1020,9 +972,7 @@ String _timelineLabel(
   TimelineEventV1 event,
 ) {
   if (event.type == TimelineEventType.characterTurn) {
-    return context.l10n.combatTimelineTurn(
-      _actorName(context, event.actorId!),
-    );
+    return context.l10n.combatTimelineTurn(_actorName(context, event.actorId!));
   }
 
   ActiveFunctionV1? function;
@@ -1047,8 +997,7 @@ String _feedbackText(
   BuildContext context,
   AshfangTutorialFeedbackV1 feedback,
 ) => switch (feedback) {
-  AshfangTutorialFeedbackV1.opening =>
-    context.l10n.combatFeedbackOpening,
+  AshfangTutorialFeedbackV1.opening => context.l10n.combatFeedbackOpening,
   AshfangTutorialFeedbackV1.heroChantlessResolved =>
     context.l10n.combatFeedbackHeroChantless,
   AshfangTutorialFeedbackV1.knownFireballCasting =>
@@ -1069,8 +1018,6 @@ String _feedbackText(
     context.l10n.combatFeedbackHeroFullChantCasting,
   AshfangTutorialFeedbackV1.heroFullChantResolved =>
     context.l10n.combatFeedbackHeroFullChantResolved,
-  AshfangTutorialFeedbackV1.victory =>
-    context.l10n.combatFeedbackVictory,
-  AshfangTutorialFeedbackV1.defeat =>
-    context.l10n.combatFeedbackDefeat,
+  AshfangTutorialFeedbackV1.victory => context.l10n.combatFeedbackVictory,
+  AshfangTutorialFeedbackV1.defeat => context.l10n.combatFeedbackDefeat,
 };

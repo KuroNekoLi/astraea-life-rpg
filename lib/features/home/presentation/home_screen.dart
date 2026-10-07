@@ -223,7 +223,10 @@ class _TodayQuests extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(context.l10n.today, style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              context.l10n.today,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             TextButton(
               onPressed: () => context.go('/life'),
               child: Text(context.l10n.allQuests),
@@ -251,10 +254,18 @@ class _TodayQuests extends StatelessWidget {
                   Card(
                     child: ListTile(
                       leading: _domainBadge(quest['domain'] as String),
-                      title: Text(localizedQuestTitle(context.l10n, quest['id'] as String)),
+                      title: Text(
+                        localizedQuestTitle(
+                          context.l10n,
+                          quest['id'] as String,
+                        ),
+                      ),
                       subtitle: Text(
                         context.l10n.questMetaShort(
-                          localizedDomain(context.l10n, quest['domain'] as String),
+                          localizedDomain(
+                            context.l10n,
+                            quest['domain'] as String,
+                          ),
                           quest['durationMinutes'] as int,
                         ),
                       ),
@@ -379,7 +390,9 @@ class _PilotMeasurementControlState
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(
-              currentlyEnabled ? context.l10n.commonTurnOff : context.l10n.commonEnable,
+              currentlyEnabled
+                  ? context.l10n.commonTurnOff
+                  : context.l10n.commonEnable,
             ),
           ),
         ],
@@ -399,8 +412,10 @@ class _PilotMeasurementControlState
     child: ListTile(
       title: Text(context.l10n.optionalPilotMeasurement),
       subtitle: Text(
-      _enabled == true ? context.l10n.pilotOnLocalOnly : context.l10n.pilotOffDefault,
-    ),
+        _enabled == true
+            ? context.l10n.pilotOnLocalOnly
+            : context.l10n.pilotOffDefault,
+      ),
       trailing: _enabled == null
           ? const Icon(Icons.hourglass_top)
           : Switch(value: _enabled!, onChanged: (_) => _changeConsent()),

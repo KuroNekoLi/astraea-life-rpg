@@ -1,9 +1,6 @@
 import 'dart:io';
 
-const _roots = <String>[
-  'lib/app',
-  'lib/features',
-];
+const _roots = <String>['lib/app', 'lib/features'];
 
 final _candidatePatterns = <RegExp>[
   RegExp(r'''\bText\(\s*(?:const\s+)?(['"])(.*?)\1'''),

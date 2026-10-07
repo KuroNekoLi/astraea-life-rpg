@@ -101,10 +101,15 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
                       vertical: 5,
                     ),
                     leading: _LifeDomainIcon(domain: quest['domain'] as String),
-                    title: Text(localizedQuestTitle(context.l10n, quest['id'] as String)),
+                    title: Text(
+                      localizedQuestTitle(context.l10n, quest['id'] as String),
+                    ),
                     subtitle: Text(
                       context.l10n.questMetaShort(
-                        localizedDomain(context.l10n, quest['domain'] as String),
+                        localizedDomain(
+                          context.l10n,
+                          quest['domain'] as String,
+                        ),
                         quest['durationMinutes'] as int,
                       ),
                     ),
@@ -138,10 +143,18 @@ class _LifeScreenState extends ConsumerState<LifeScreen> {
                           children: [
                             for (final template in templates)
                               ListTile(
-                                title: Text(localizedQuestTitle(sheetContext.l10n, template.id)),
+                                title: Text(
+                                  localizedQuestTitle(
+                                    sheetContext.l10n,
+                                    template.id,
+                                  ),
+                                ),
                                 subtitle: Text(
                                   sheetContext.l10n.questMetaShort(
-                                    localizedDomain(sheetContext.l10n, template.domain),
+                                    localizedDomain(
+                                      sheetContext.l10n,
+                                      template.domain,
+                                    ),
                                     template.durationMinutes,
                                   ),
                                 ),
@@ -318,7 +331,10 @@ class QuestCompletionScreen extends ConsumerWidget {
                     Text(
                       context.l10n.lifeXpReward(
                         quote.xp,
-                        localizedDomain(context.l10n, quest['domain'] as String),
+                        localizedDomain(
+                          context.l10n,
+                          quest['domain'] as String,
+                        ),
                       ),
                     ),
                     Text(
@@ -442,7 +458,11 @@ class _LifeQuestTimerScreenState extends ConsumerState<LifeQuestTimerScreen> {
                   }
                   if (mounted) setState(() => _paused = !_paused);
                 },
-                child: Text(_paused ? context.l10n.commonResume : context.l10n.commonPause),
+                child: Text(
+                  _paused
+                      ? context.l10n.commonResume
+                      : context.l10n.commonPause,
+                ),
               ),
               FilledButton(
                 onPressed: () =>

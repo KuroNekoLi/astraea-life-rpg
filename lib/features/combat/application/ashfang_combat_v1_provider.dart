@@ -15,9 +15,7 @@ final class AshfangCombatV1ViewState {
     required this.feedback,
   });
 
-  factory AshfangCombatV1ViewState.fromSession(
-    AshfangCombatV1Session session,
-  ) {
+  factory AshfangCombatV1ViewState.fromSession(AshfangCombatV1Session session) {
     return AshfangCombatV1ViewState(
       battle: session.state,
       stage: session.stage,

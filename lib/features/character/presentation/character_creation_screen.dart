@@ -50,7 +50,9 @@ class _CharacterCreationScreenState
                   _name.text.trim().isNotEmpty
               ? _save
               : null,
-          child: Text(_saving ? context.l10n.saving : context.l10n.commonContinue),
+          child: Text(
+            _saving ? context.l10n.saving : context.l10n.commonContinue,
+          ),
         ),
       ),
     ),
@@ -197,4 +199,3 @@ class _CharacterCreationScreenState
     }
   }
 }
-
