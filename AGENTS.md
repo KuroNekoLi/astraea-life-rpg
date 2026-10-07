@@ -91,6 +91,14 @@ docs/prototype/WIREFRAME_SPEC.md
 docs/prototype/FIRST_PLAYABLE_PROTOTYPE.md
 docs/product/MVP_VERTICAL_SLICE.md
 docs/prototype/PROTOTYPE_IMPLEMENTATION_PLAN.md
+docs/systems/ASTRAEA_COMBAT_UX_FLOW_V1.md
+```
+
+## Visual Assets
+
+```text
+docs/art/ASTRAEA_VISUAL_PROMPT_PLAYBOOK.md
+skills/astraea-visual-asset-director/SKILL.md
 ```
 
 ## Technical
@@ -194,6 +202,7 @@ astraea-game-director
 astraea-combat-designer
 astraea-narrative-director
 astraea-real-player-playtester
+astraea-visual-asset-director
 ```
 
 ---
@@ -284,9 +293,26 @@ Keep these in pure Dart domain/game-engine code.
 
 # 9. Design Authority
 
-Figma is the visual source of truth for approved high-fidelity UI.
+There is currently no required Figma artifact for Astraea implementation.
+
+For current work, visual authority comes from:
+
+```text
+approved project specs
++ approved existing assets
++ current Flutter implementation
++ docs/art/ASTRAEA_VISUAL_PROMPT_PLAYBOOK.md
+```
+
+If a future task supplies an approved Figma file or high-fidelity reference, use it for that specific UI.
 
 Generated illustration assets are content.
+
+The project owner has approved ChatGPT Images 2.5 for suitable fictional Astraea image assets. Route non-trivial generation through:
+
+```text
+skills/astraea-visual-asset-director/SKILL.md
+```
 
 Flutter UI owns:
 
@@ -300,6 +326,8 @@ Flutter UI owns:
 - progress
 
 Do not bake UI text into spell artwork.
+
+Use generated art for content such as spell artwork, enemy concepts, backgrounds, cut-ins, magical phenomenon art, or tutorial illustrations. Do not replace precise interactive UI with generated raster screenshots.
 
 ---
 

@@ -267,6 +267,7 @@ Route to:
 - `astraea-vision-guardian` for product identity conflicts
 - `astraea-combat-designer` for tactical mechanics
 - `astraea-narrative-director` for canon/story implications
+- `astraea-visual-asset-director` for generated art / visual-content production
 - Architect for implementation boundaries
 - PM for scope and milestone authority
 

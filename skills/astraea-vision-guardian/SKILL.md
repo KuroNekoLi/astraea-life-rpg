@@ -190,6 +190,16 @@ Any proposal affecting progression/economy semantics must be routed to the relev
 
 ---
 
+## Visual Identity Escalation
+
+When a major generated visual materially shapes product identity, review it together with:
+
+```text
+astraea-visual-asset-director
+```
+
+The Vision Guardian evaluates whether the result still feels like a genuine RPG rather than productivity software decoration. It does not art-direct individual pixels.
+
 ## Inputs
 
 Read, when available:

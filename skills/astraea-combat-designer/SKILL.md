@@ -39,68 +39,74 @@ Resolve
 
 ## Canonical Combat Foundation
 
-Unless an approved baseline says otherwise:
-
-### Initiative
+The authoritative combat rules are:
 
 ```text
-d20 + Processing modifier
+docs/systems/COMBAT_RULES_V1_BASELINE.md
 ```
 
-### Attack
+Older d20 / Round / seeded attack-RNG rules are superseded for Combat v1.
+
+### Action Timeline
+
+Combat uses:
 
 ```text
-d20 + Attack Bonus vs Defense
+Continuous / CTB-like Action Timeline
++ Action Delay
 ```
 
-- natural 1: miss
-- natural 20: critical / enhanced result
-- beginner expected hit rate: about 60–75%
-- deterministic seeded RNG preferred for replay/debugging
+Character Turns, Spell Resolve events, and important Battlefield Functions may share the Timeline.
 
-### Turn Economy
+Different actions may create different next-action timing.
+
+### Action Economy
+
+Formal Turn baseline:
 
 ```text
-Turn Start
-↓
-Status Resolution
-↓
-Movement
-↓
-Main Action
-↓
-Quick Action
-↓
-Turn End
+Optional Move
+→ Optional Quick
+→ Main
+→ End Turn
 ```
 
-Movement, Main Action, and Quick Action may be ordered flexibly when rules allow.
-
-Reaction occurs outside the actor's turn.
-
-Typical reaction budget:
-
-```text
-1 Reaction / round
-```
+- one Main Action
+- up to one Quick Action
+- one free Normal Move to an adjacent Zone
+- Reaction occurs outside the reacting character's Turn
+- each character holds at most one Reaction Charge
+- Reaction Charge refreshes at that character's formal Turn start
+- a Trigger Window resolves at most one Party Reaction
 
 ### Positioning
 
-MVP preference:
+MVP uses:
 
 ```text
-Zone + Relative Range
+Near
+↔
+Mid
+↔
+Far
 ```
 
-Examples:
+Normal Move changes one adjacent Zone. Special movement uses a Technique or SC.
 
-- Close
-- Near
-- Far
+### Deterministic Resolution
 
-Do not introduce a full grid unless the encounter value justifies it.
+Do not reintroduce generic d20 attack resolution as the Combat v1 default.
 
----
+Important combat decisions should preserve readable cause and effect.
+
+Interrupt baseline:
+
+```text
+Interrupt Power >= current Function Stability
+→ BREAK
+```
+
+Otherwise the Function continues unless another explicit rule applies.
 
 ## Prepared Deck
 
@@ -350,11 +356,13 @@ Avoid party members that differ only by damage color.
 
 ## Encounter Length
 
-Targets:
+Use action / encounter-time targets rather than global Round counts because Combat v1 uses a continuous Timeline.
 
-- normal battle: 3–6 rounds
-- tutorial: ≤ 8 rounds
-- boss: longer through phases, not HP sponge design
+Current balance target:
+
+- normal battle: approximately 2–4 minutes and roughly 8–15 Party Main Actions
+- elite: longer only when added mechanics justify it
+- boss: longer through phases and evolving decisions, not HP sponge design
 
 ---
 
@@ -415,8 +423,9 @@ How does understanding outperform raw damage?
 How is the mechanic communicated without relying only on color?
 
 ## Deterministic Test Cases
-- seed:
-- expected:
+- initial state:
+- action / event sequence:
+- expected state:
 ```
 
 ---

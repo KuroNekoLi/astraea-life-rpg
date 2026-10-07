@@ -181,19 +181,25 @@ PM
 → QA / content validation
 ```
 
-## T5 — UI / UX
+## T5 — UI / UX / Visual Assets
 
 Route:
 
 ```text
 PM
 → UX/UI Designer
+→ relevant domain specialist
+→ astraea-visual-asset-director when new visual content is required
 → astraea-vision-guardian when product identity is affected
 → Architect for screen/state ownership
 → Flutter Engineer
 → Visual QA
 → astraea-real-player-playtester
 ```
+
+Do not block on Figma unless the task actually provides or requires an approved Figma artifact.
+
+When an illustration or visual content asset is needed, prefer existing approved assets first. If no suitable asset exists, the Visual Asset Director may use ChatGPT Images 2.5 according to the project playbook.
 
 ## T6 — Pure Engineering
 
@@ -385,6 +391,19 @@ Owns:
 - spoiler boundaries
 - story coherence
 
+### `astraea-visual-asset-director`
+
+Owns:
+
+- visual-asset routing
+- image-generation briefs
+- ChatGPT Images 2.5 use when appropriate
+- generated-asset review
+- UI/art separation
+- visual integration fitness
+
+Does not own combat rules, canon, UI architecture, or product scope.
+
 ### Game Writer
 
 Owns:
@@ -435,7 +454,7 @@ Owns:
 
 - deterministic combat engine
 - commands / reducers
-- seeded RNG
+- CTB Timeline and Action Delay runtime
 - encounter runtime
 - Function execution
 
@@ -606,10 +625,18 @@ Read:
 ```text
 AGENTS.md
 SPEC_BASELINE_v1.0.md
+COMBAT_RULES_V1_BASELINE.md
 COMBAT_SYSTEM.md
 SPELL_FUNCTION_SYSTEM.md
 FLUTTER_ARCHITECTURE.md
 relevant code
+```
+
+If combat work needs new visual content, additionally read:
+
+```text
+docs/art/ASTRAEA_VISUAL_PROMPT_PLAYBOOK.md
+skills/astraea-visual-asset-director/SKILL.md
 ```
 
 Do not automatically load full Story Bible.
