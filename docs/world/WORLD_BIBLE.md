@@ -57,6 +57,21 @@ World State A → B
 
 第一部不需要回答這個問題。即使 Institute Zero 掌握大量真相，也不代表它已理解該系統的最終本體。
 
+### 2.3 魔法大系統 — 分類暫定
+
+魔法可依 Function 主要操作的 Reality 面向分為數個大系統。以下是目前候選分類，正式命名、邊界與完整清單仍為 **TBD**：
+
+- Elemental（元素／自然現象）
+- Kinetic（運動／力量）
+- Spatial（空間）
+- Temporal（時間）
+- Life（生命）
+- Mind / Information（心智／資訊）
+- Causality（因果）
+- Structural / Arcane（結構／奧術；命名 TBD）
+
+系統分類本身不代表稀有度或力量階級。Temporal 與 Causality 是學院可正常教授的魔法系統；學生可學習緩速（Slow）等受限低階術式。Time Stop、Temporal Reversal、Return to Past，以及改寫現實或歷史因果等，屬大魔法或極高階術式，一般學生無法接觸。其門檻應由 Tier、Complexity、使用要求、稀有度與存取限制表達，不把整個系統定義為禁術。
+
 ## 3. Function 與 Function Graph
 
 Spell 可以被拆解為 Function Graph。複雜術式不是單一步驟，而是由多個子 Function 串接而成。
@@ -180,6 +195,16 @@ Spell Card 不是「擁有這張卡才會這個魔法」的收藏卡牌邏輯，
 因此戰鬥前會把一組 Spell Card 放入 Prepared Deck，等於事先載入本場戰鬥可快速呼叫的術式。
 
 Scene 5 的教學上限固定為 6 張。
+
+Spell Card（SC）是戰鬥前準備好的 **combat-ready Function template**。角色理論上可使用所有已學會的基礎魔法；但戰鬥中只能快速使用有限數量的 Prepared SC，因為魔法師能同時維持的 Prepared Functions 有限。MVP 上限為 6 張。此限制是施法準備與維持能力，不表示角色只學會或只擁有這些魔法。
+
+### 5.4 Spell Family、Signature 與 Tier
+
+每個 Spell Family 有完整 Signature。SC Tier 表示該 Tier 對完整 Signature 開放多少可控 parameters；未開放的部分由術式模板處理。Tier 越高通常帶來較高 Mana Cost、Complexity 與 Chantless 負擔，但各 Spell Family 的 Tier 不可直接橫向比較。例如 Fireball III 可能只在部分面向約等於 Flame Lance I。
+
+解鎖較高 Tier 不會移除低 Tier。不同 Tier 的 SC 可各自獨立準備；高熟練者的 Fireball I 也可能比一般施術者的 Fireball III 更強。Tier 描述的是可控制的術式層級，不是固定的角色強度排序。
+
+SC 可選擇 Full Chant 或 Chantless。能否 Chantless 取決於施術者對該 SC／Tier 的理解與個人能力；多數學生可對 Fireball I 等基礎術式詠唱破棄，高階 Spell 或 Tier 通常只有更熟練、能力更強者能詠唱破棄。
 
 ## 6. Last Spell
 

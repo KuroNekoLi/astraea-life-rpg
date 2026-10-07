@@ -481,6 +481,8 @@ Scene 5 教學：
 Prepared Deck limit = 6
 ```
 
+Spell Card（SC）是戰鬥前準備好的 combat-ready Function template。角色理論上可使用所有已學會的基礎魔法；MVP 的 6 張上限限制可在戰鬥中快速呼叫並維持的 Prepared Functions，不限制學習或擁有的魔法。
+
 ## Proposal
 
 Prepared Deck 是：
@@ -722,7 +724,11 @@ Counter path known
 
 # 21. Analysis Action
 
-Analysis 不只是：
+熟悉的常用 Spell Signature 由學生事先認識，可直接預判、打斷或防禦。Analysis 不是每場戰鬥固定執行的開場掃描，也不要求重新尋找已知術式的 Weak Node。
+
+Analysis 主要用於未知、改造、複合或高階術式，幫助角色揭露尚未掌握的資訊。它不會自動使所有 Spell 可被 Counter。
+
+Analysis 可用於：
 
 ```text
 Scan enemy weakness.
@@ -794,7 +800,7 @@ Spell completely disappears
 
 # 24. Interrupt
 
-Interrupt 是最基礎的 Function interference。
+Interrupt 是在施法完成前打斷 caster 或 casting 的手段；例如打斷詠唱、破壞正在形成的 Function node，或利用 timing 迫使施法失敗。它不是對已完成 Spell 的反制。
 
 可能由：
 
@@ -816,6 +822,8 @@ Interrupt 是最基礎的 Function interference。
 影響。
 
 公式：**TBD**。
+
+當 Spell 已形成或 Function 已 active，應依情況使用 dodge、guard、Counter-Function 或 Reverse Operation。Interrupt 與這些完成施法後的應對分開判定。
 
 ---
 

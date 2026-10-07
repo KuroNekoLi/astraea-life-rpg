@@ -139,6 +139,18 @@ Spell Card 是已構築完成 Function / Function Graph 的可保存、攜帶、
 
 不是 collectible-gacha card。
 
+**Accepted design decision**
+
+Spell Card（SC）是戰鬥前準備好的 **combat-ready Function template**。角色理論上可使用所有已學會的基礎魔法；SC／Prepared Deck 的容量代表戰鬥中可快速呼叫、並能維持的 Prepared Functions 數量，不是角色學習或擁有魔法的上限。MVP Prepared SC 上限為 6。
+
+### Spell Family、Signature 與 Tier
+
+每個 Spell Family 有完整 Signature。Tier 對該 Signature 開放更多可控 parameters；其他細節由模板處理。Tier 越高通常 Mana Cost、Complexity 與 Chantless burden 越高，但不同 Spell Family 的 Tier 不可直接橫向比較。例如 Fireball III 可能只在某些面向約等於 Flame Lance I。
+
+解鎖高 Tier 後，既有低 Tier 仍保留且可獨立 Prepared。角色能同時準備不同 Tier；高熟練者的 Fireball I 可以比一般人的 Fireball III 更強。Tier 表示可控術式層級，不保證跨 Family 的絕對強度。
+
+SC 可使用 Full Chant 或 Chantless。是否能對特定 SC／Tier Chantless，取決於施術者對該術式的理解與角色能力。Fireball I 等基礎術式多數學生可詠唱破棄；高階 Spell／Tier 通常只有更強或更熟練的施術者能做到。
+
 # 9. Prepared Deck
 
 **Canon**
@@ -149,6 +161,8 @@ Scene 5：
 ```text
 Deck Limit = 6
 ```
+
+MVP 中，6 是角色可維持的 Prepared Functions 數量上限。Prepared Deck 是戰鬥快速呼叫的術式配置；未放入 Deck 不代表角色沒有學會該魔法。
 
 **Proposal：**
 - 全部 6 張可直接存取
@@ -233,13 +247,15 @@ Weak Node 是 Function Graph 中最適合干涉的節點。
 
 # 17. Interrupt
 
-Interrupt 會：
+Interrupt 是在施法完成前，打斷施術者或正在進行的 casting。依干涉點與時機，可能：
 - cancel
 - delay
 - destabilize
 - force retarget
 - increase cost
 - expose downstream node
+
+施法完成、Spell 已形成或 Function 已 active 後，處理方式屬於迴避、防禦、Counter 或 Reverse Operation，不稱為 Interrupt。
 
 # 18. Reversibility
 
@@ -290,6 +306,8 @@ K4 Counter Path Known
 ```
 
 可跨戰鬥保存。
+
+常用 Spell Signature 的學生本來就知道其基本運作，可依已知術式直接預判、打斷或防禦。Analysis 不是固定的開場「找 Weak Node」動作；主要用於未知、改造、複合或高階術式，以揭露尚未知的結構、Weak Node 或 Counter path。已知資訊不需要每場重新分析。
 
 # 22. Spell Acquisition
 

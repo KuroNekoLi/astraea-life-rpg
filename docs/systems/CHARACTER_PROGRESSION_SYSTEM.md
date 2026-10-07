@@ -351,6 +351,27 @@ Mana Control Drill
 - 推進 1–2 Attribute
 - 有 diminishing return
 
+## 16.1 Spell Card (SC) Growth — Accepted Design
+
+SC 成長和 Attribute Training 是兩條不同的成長軌道。Life Quest／真實世界成長提供可自由分配的 **Magic System Points**，玩家可將點數投入與該點數相容的 SC，形成主要 SC XP 來源。相容的魔法系統分類及精確換算公式仍可由內容與平衡規則定義。
+
+```text
+Life Quest / real-world growth
+→ Magic System Points
+→ invest in a compatible SC
+→ that SC gains allocated XP
+```
+
+實戰中實際使用某張 SC，該 SC 自動取得 Practical XP，作為次要熟練來源。Practical XP 只能歸屬於實際使用的 SC，不可自由轉投其他 SC。實戰熟練必須採 diminishing returns 或 per-battle / per-period cap，避免反覆刷戰取代真實世界成長；具體數值 **TBD**。
+
+```text
+Allocated SC XP + Practical SC XP
+→ fill that SC Tier XP
+→ unlock the next Tier when full
+```
+
+兩種 XP 共同推進該 SC 的 Tier XP。解鎖更高 Tier 不會移除低 Tier；各 Tier SC 保留並可獨立 Prepared。SC Tier、Spell Family 的完整 Signature、參數控制範圍與詠唱要求依 `SPELL_FUNCTION_SYSTEM.md` 定義。
+
 # 17. Respec
 
 **GDD Proposal**
