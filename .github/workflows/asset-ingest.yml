@@ -1,0 +1,34 @@
+name: Runtime Asset Ingest
+on:
+  push:
+    branches:
+      - tmp-clean-room-assets
+    paths:
+      - '.asset_ingest/READY'
+permissions:
+  contents: write
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild and verify runtime assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/images/combat
+          cat .asset_ingest/bg_*.txt | tr -d '\n' | base64 -d > assets/images/combat/combat_bg_astraea_training_hall_v01.webp
+          cat .asset_ingest/ashfang_*.txt | tr -d '\n' | base64 -d > assets/images/combat/enemy_ashfang_training_v01.webp
+          test "$(git hash-object assets/images/combat/combat_bg_astraea_training_hall_v01.webp)" = "6b8fcccc1b6b4bdc619365ba62eebd0034bf5285"
+          test "$(git hash-object assets/images/combat/enemy_ashfang_training_v01.webp)" = "76e93177f4f83cb05d1a4b4826f2f658136411d3"
+          test "$(sha256sum assets/images/combat/combat_bg_astraea_training_hall_v01.webp | cut -d' ' -f1)" = "8511cff84c80b534c5c00905cdeb592ba67c798186f1dccb90bf9af6ec243806"
+          test "$(sha256sum assets/images/combat/enemy_ashfang_training_v01.webp | cut -d' ' -f1)" = "be5ed408f9e5136a9cfb01bcf53d400e5c0578e4b187257e527782c5542d2a24"
+      - name: Commit verified binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/images/combat/combat_bg_astraea_training_hall_v01.webp assets/images/combat/enemy_ashfang_training_v01.webp
+          git commit -m "chore: ingest clean-room combat runtime assets"
+          git push origin HEAD:tmp-clean-room-assets

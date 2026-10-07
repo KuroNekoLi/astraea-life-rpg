@@ -2,10 +2,10 @@ name: Flutter M0
 on:
   push:
     branches:
-      - tmp-clean-room-assets
+      - master
   pull_request:
 permissions:
-  contents: write
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
