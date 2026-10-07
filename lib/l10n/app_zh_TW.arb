@@ -722,5 +722,6 @@
   "combatHoldFormation": "維持陣形",
   "combatNodeCompression": "壓縮",
   "combatNodeStabilization": "穩定",
-  "combatNodeTrajectory": "軌跡"
+  "combatNodeTrajectory": "軌跡",
+  "combatIntentWhileHeroCasting": "Fireball II 解析前，Ashfang 仍可能行動。"
 }
