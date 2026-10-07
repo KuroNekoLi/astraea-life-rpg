@@ -40,28 +40,16 @@ class AshfangRematchV1Screen extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Flexible(
-                  flex: 14,
-                  child: _RematchTimeline(view: view),
-                ),
-                Flexible(
-                  flex: 60,
-                  child: _RematchBattlefield(view: view),
-                ),
+                Flexible(flex: 14, child: _RematchTimeline(view: view)),
+                Flexible(flex: 60, child: _RematchBattlefield(view: view)),
                 Flexible(
                   flex: 26,
-                  child: _RematchCommands(
-                    view: view,
-                    controller: controller,
-                  ),
+                  child: _RematchCommands(view: view, controller: controller),
                 ),
               ],
             ),
             if (view.phase == AshfangRematchPhaseV1.reactionWindow)
-              _RematchReactionOverlay(
-                view: view,
-                controller: controller,
-              ),
+              _RematchReactionOverlay(view: view, controller: controller),
           ],
         ),
       ),
@@ -107,9 +95,9 @@ class _RematchTimeline extends StatelessWidget {
           const Spacer(),
           Text(
             context.l10n.combatFreePractice,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AstraeaColors.muted,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(color: AstraeaColors.muted),
           ),
         ],
       ),
@@ -173,9 +161,9 @@ class _RematchBattlefield extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.combatEnemyIntent,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: AstraeaColors.gold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: AstraeaColors.gold),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -293,9 +281,9 @@ class _RematchBattlefield extends StatelessWidget {
               context.l10n.combatRematchSubtitle,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AstraeaColors.muted,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
             ),
           ),
         ],
@@ -353,10 +341,7 @@ class _BattleActor extends StatelessWidget {
 }
 
 class _RematchCommands extends StatelessWidget {
-  const _RematchCommands({
-    required this.view,
-    required this.controller,
-  });
+  const _RematchCommands({required this.view, required this.controller});
 
   final AshfangRematchV1ViewState view;
   final AshfangRematchV1Controller controller;
@@ -421,9 +406,9 @@ class _RematchCommands extends StatelessWidget {
               context.l10n.combatRematchPlayerTurn(
                 _actorName(context, actorId!),
               ),
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: AstraeaColors.starlight,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge?.copyWith(color: AstraeaColors.starlight),
             ),
             const SizedBox(height: 4),
             Text(context.l10n.combatHp(actor.hp, actor.maxHp)),
@@ -468,9 +453,9 @@ class _RematchCommands extends StatelessWidget {
                 view.enemyCastingFunction == null
                     ? context.l10n.combatRematchNoCastingHint
                     : context.l10n.combatRematchCastingHint,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AstraeaColors.muted,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AstraeaColors.muted),
               ),
             ],
           ] else ...[
@@ -488,10 +473,7 @@ class _RematchCommands extends StatelessWidget {
 }
 
 class _RematchReactionOverlay extends StatelessWidget {
-  const _RematchReactionOverlay({
-    required this.view,
-    required this.controller,
-  });
+  const _RematchReactionOverlay({required this.view, required this.controller});
 
   final AshfangRematchV1ViewState view;
   final AshfangRematchV1Controller controller;
@@ -526,8 +508,7 @@ class _RematchReactionOverlay extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     FilledButton.icon(
-                      onPressed: () =>
-                          controller.interruptEnemyFunction(),
+                      onPressed: () => controller.interruptEnemyFunction(),
                       icon: const Icon(Icons.bolt),
                       label: Text(context.l10n.combatRematchInterrupt),
                     ),
@@ -538,9 +519,7 @@ class _RematchReactionOverlay extends StatelessWidget {
                           exploitWeakNode: true,
                         ),
                         icon: const Icon(Icons.hub_outlined),
-                        label: Text(
-                          context.l10n.combatRematchExploitWeakNode,
-                        ),
+                        label: Text(context.l10n.combatRematchExploitWeakNode),
                       ),
                     ],
                     const SizedBox(height: 8),
