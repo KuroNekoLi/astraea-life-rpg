@@ -87,6 +87,59 @@ Function Graph 同時具有三個用途：
 
 這套 Function Graph 是 Astraea 的核心差異化系統之一，應維持自製，不由通用 addon 接管。
 
+### 3.1 Spell Signature 與學院基礎知識
+
+常用 Spell 具有可被辨識與教學的標準 Signature。Signature 描述一個術式接受哪些參數、基本效果與主要結構，而不是某一次施法的實際輸入值。
+
+例如：
+
+```text
+Fireball(
+    power,
+    direction,
+    velocity,
+    radius,
+    temperature,
+    stability,
+    ...
+)
+```
+
+Astraea 的學生在學院教育中會學習常用魔法的：
+
+- Spell name / intent
+- 標準 Signature
+- 典型 Function Graph
+- 常見詠唱與視覺徵兆
+- 基本防禦、迴避與 Interrupt timing
+
+因此，受過正規教育的學生看到敵方開始施放標準 Fireball 時，通常不需要先使用 Analysis 才知道那是火球術。
+
+但「知道 Signature」不等於知道該次施法的 runtime parameters。敵方仍可能：
+
+- 提高 power；
+- 改變 velocity / radius；
+- 使用異常 stability；
+- 加入 homing、delayed trigger 等修改；
+- 改寫標準 Graph；
+- 使用自創、複合或未知術式。
+
+### 3.2 Analysis 的世界觀定位
+
+Analysis 的核心不是「每次戰鬥先掃描 Weak Node」，而是將未知資訊轉換成可採取行動的戰鬥情報。
+
+對已知標準術式，角色通常可以直接依既有知識預判與應對。Analysis 主要用於：
+
+- unknown signature；
+- modified spell；
+- composite spell；
+- 高階／自創術式；
+- 需要確認 runtime parameters；
+- 需要重建 Function Graph；
+- 需要尋找可逆節點、Weak Node 或 Counter path。
+
+Weak Node 是 Analysis **可能得到的高價值結果之一**，不是 Analysis 必然產生的答案，也不是所有 Spell 都一定存在明顯 Weak Node。
+
 ## 4. 媒介、詠唱與施法
 
 所有施法都必須經過某種「意圖 → 可執行 request」的轉換。
@@ -113,6 +166,8 @@ Full Chant 不是向神祕存在祈禱，而是一種高結構化的外部 compu
 
 因此初學者即使 Computation 或 Processing 不高，仍能依靠完整詠唱穩定施法。
 
+在相同施術者、相同 Spell 與近似資源投入下，Full Chant 通常能提供較高的 Stability、較完整的 parameter binding 與較高的有效輸出；代價是施法時間較長，也因此提供對手明確的 Interrupt window。
+
 ### 4.2 Chantless
 
 Chantless 並不是「沒有媒介」或「沒有計算」。
@@ -130,6 +185,15 @@ Human → Mental Encoding → Magic System
 ```
 
 Chantless 因此通常要求更高的 Processing、Computation、Precision 或相關天賦。
+
+Chantless 的戰術本質是以更高的個人運算／控制負擔換取速度與反應性。對多數施術者而言，省略完整詠唱通常會造成有效輸出、Efficiency、Precision 或 Stability 的下降，因此「詠唱破棄」通常比同一施術者的完整詠唱弱。
+
+但這不是硬性倍率規則。真正的天才如果擁有極高的 Processing、Precision、Efficiency，或單純擁有壓倒性的 Mana Capacity / Output，即使使用 Chantless，其最終威力仍可能高於一般學生的 Full Chant。
+
+因此世界中可以存在兩種不同的「天才」表現：
+
+1. **精密／效率型**：以極高控制精度與轉換效率，低浪費地完成術式，甚至不需要完整詠唱提供輔助。
+2. **容量／輸出型**：控制未必最精細，但 Mana Capacity / Output 極高，即使轉換效率較差，最終效果仍遠超一般人。
 
 ## 5. Spell 與 Spell Card
 
@@ -229,7 +293,34 @@ CompressSpace(normal) → compressed
 ExpandSpace(compressed) → normal
 ```
 
-### 7.1 限制
+### 7.1 與 Interrupt 的區分
+
+Interrupt 與反運算處理的是不同時間點。
+
+若敵方仍在詠唱／建構已知 Spell：
+
+```text
+Caster
+→ Chant / Encoding
+→ Function construction
+→ (not yet completed)
+```
+
+最直接的做法通常是透過攻擊、Stun、Silence、位移、干擾術式或其他機制中斷施法。對 Fireball 這類學生已知 Signature 的標準術式，這是正常且常見的戰鬥應對，不需要先進行深度 Analysis 或反運算。
+
+只有當 Spell 已經形成、Function 已進入 active execution，或無法再透過打斷施術者停止時，反運算／Counter-Function 才具有獨立戰術價值。
+
+可簡化為：
+
+```text
+施法尚未完成
+→ Interrupt caster / casting process
+
+Spell 已形成或 Function 已 active
+→ Dodge / Guard / Counter / Reverse Operation
+```
+
+### 7.2 限制
 
 不是所有 Function 都存在完整、唯一的反函數。
 
@@ -254,6 +345,15 @@ Mana 是施法者可觀察、可管理的施法成本。
 - Mana Output
 - Efficiency
 - Ambient Sync
+
+魔法師的「強」不應只以單一 Mana 數值描述。至少應區分：
+
+- **Mana Capacity**：總魔力量。
+- **Mana Output / Throughput**：短時間內可安全投入多少魔力。
+- **Efficiency**：投入魔力有多少真正轉換成術式效果。
+- **Precision / Control**：能多精確地控制 Function parameters 與 execution。
+
+因此「高效率的小容量天才」與「效率普通但輸出巨大的人」都可以合理成為頂尖魔法師，只是戰鬥風格完全不同。
 
 ### 8.2 Reality Cost
 
